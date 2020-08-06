@@ -189,6 +189,7 @@ public class CartesianPlane implements GraphicsInterface {
 
         // if index == -1 then no sample is under the mouse
         if(index != -1) {
+            System.out.println(index+" colored");
             samples.get(index).setColor(col);
             samples.get(index).setCategory(value);
             return true;

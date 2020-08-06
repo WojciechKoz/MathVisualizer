@@ -2,16 +2,21 @@ import java.awt.*;
 
 public class SideMenu extends Menu {
     private int currentY, yOffset;
+    private final int smallFont, normalFont, bigFont;
 
     SideMenu(Graphics2D g2, int width, int height) {
         super(g2, width, height, null, "");
         currentY = 0;
         yOffset = 0;
+
+        smallFont = (int)(width/10.0);
+        normalFont = (int)(width/9.0);
+        bigFont = (int)(width/8.0);
     }
 
     void addButtons(String[] labels, int heightOfButton) {
         for (String label : labels) {
-            buttons.add(new ClickableButton(0, currentY + yOffset, width, heightOfButton, label, 24));
+            buttons.add(new ClickableButton(0, currentY + yOffset, width, heightOfButton, label, bigFont));
             currentY += heightOfButton;
         }
     }
@@ -62,12 +67,13 @@ public class SideMenu extends Menu {
     }
 
     public void addSlider(String title, double lowerBound, double upperBound, double height, boolean discrete) {
-        buttons.add(new Slider(0, currentY+yOffset, width, (int)height, title, 20, lowerBound, upperBound, discrete));
+        buttons.add(new Slider(0, currentY+yOffset, width, (int)height, title, normalFont, 
+                    lowerBound, upperBound, discrete));
         currentY += height;
     }
 
     public void addSampleLabel(Sample sample, double height) {
-        buttons.add(new SampleLabelButton(0, currentY+yOffset, width, (int)height, sample, 15));
+        buttons.add(new SampleLabelButton(0, currentY+yOffset, width, (int)height, sample, smallFont));
         currentY += height;
     }
 
@@ -92,7 +98,7 @@ public class SideMenu extends Menu {
     }
 
     public void addMatrixLabel(Matrix2x2 matrix, double height) {
-        buttons.add(new MatrixLabelButton(0, currentY+yOffset, width, (int)height, matrix, 17));
+        buttons.add(new MatrixLabelButton(0, currentY+yOffset, width, (int)height, matrix, smallFont));
         currentY += height;
     }
 
@@ -110,7 +116,7 @@ public class SideMenu extends Menu {
     }
 
     public void addValueLabel(String title, String value, double buttonHeight) {
-        buttons.add(new ValueLabelButton(0, currentY+yOffset, width, (int) buttonHeight, title, value, 20));
+        buttons.add(new ValueLabelButton(0, currentY+yOffset, width, (int) buttonHeight, title, value, normalFont));
         currentY += buttonHeight;
     }
 
