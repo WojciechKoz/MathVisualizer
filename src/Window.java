@@ -7,7 +7,7 @@ public class Window extends JFrame {
     private final int HEIGHT = (int)screenSize.getHeight();
 
     public Window() {
-        setTitle("MLV v0.1");
+        setTitle("MV v0.4");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -16,5 +16,12 @@ public class Window extends JFrame {
         Panel panel = new Panel(WIDTH, HEIGHT, this);
         add(panel);
         setVisible(true);
+
+        GraphicsConfiguration config = this.getGraphicsConfiguration();
+        Rectangle bounds = config.getBounds();
+        Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(config);
+
+        int y = insets.top - this.getHeight();
+        System.out.println(y);
     }
 }

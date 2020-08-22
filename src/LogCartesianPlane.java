@@ -46,6 +46,12 @@ public class LogCartesianPlane extends CartesianPlane {
         menu.draw();
     }
 
+    void addNewSample(double x, double y) {
+        super.addNewSample(x, y);
+        samples.get(samples.size() - 1).setCategory(0);
+        samples.get(samples.size() - 1).setColor(new Color(130, 130, 130));
+    }
+
     @Override
     public void onRightClick(double mouseX, double mouseY) {
         super.onRightClick(mouseX, mouseY);
@@ -96,6 +102,14 @@ public class LogCartesianPlane extends CartesianPlane {
         menu.updateLabel("w", "["+MathUtils.round(wx, 2)+", "+MathUtils.round(wy, 2)+"]");
         menu.updateLabel("bias", Double.toString(MathUtils.round(bias, 2)));
         menu.updateLabel("y", MathUtils.round(a, 2)+"x " + (b > 0 ? "+ " : "- ") + MathUtils.round(abs(b), 2));
+
+        // predictions
+        for(Sample sample: samples) {
+            if(sample.category() == 0) {
+                int predictedCategory = MathUtils.sigmoid(wx*sample.getX() + wy*sample.getY() + bias) > 0.5 ? 1:0;
+                sample.setPredictedColor(predictedCategory == 1 ? new Color(255, 100, 100) : new Color(100, 100, 255));
+            }
+        }
     }
 
     boolean twoClassesExists() {
@@ -104,7 +118,7 @@ public class LogCartesianPlane extends CartesianPlane {
         for(Sample sample: samples) {
             if(sample.category() == 1) {
                 pos = true;
-            } else if(sample.category() == 0){
+            } else if(sample.category() == 2){
                 neg = true;
             }
             if(pos && neg) return true;

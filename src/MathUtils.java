@@ -16,7 +16,7 @@ public class MathUtils {
     }
 
     static double mean(ArrayList<Double> numbers) {
-        float sum = 0;
+        double sum = 0;
         for(Double num: numbers) sum += num;
         return sum / numbers.size();
     }
@@ -64,6 +64,19 @@ public class MathUtils {
 
         for(int i = 0; i < xs.size(); i++) {
             xs.set(i, xs.get(i) - mean);
+        }
+    }
+
+    static void zeroCenterSamples(ArrayList<Sample> samples) {
+        double meanX = mean(getXs(samples));
+        double meanY = mean(getYs(samples));
+
+        moveAllSamples(samples, -meanX, -meanY);
+    }
+
+    static void moveAllSamples(ArrayList<Sample> samples, double dx, double dy) {
+        for(int i = 0; i < samples.size(); i++) {
+            samples.get(i).move(dx, dy);
         }
     }
 
@@ -166,26 +179,43 @@ public class MathUtils {
         return 1.0 / (1.0 + exp(-x));
     }
 
+    public static double sigmoidPrime(double x) {
+        return sigmoid(x)*(1 - sigmoid(x));
+    }
+
     public static double[] LogisticRegressionParameters(ArrayList<Sample> samples, int epochs, double eta) {
         // should be random values but with constant initial values, line looks more stable
+
+        ArrayList<Sample> trainingSamples = new ArrayList<>();
+
+        for(Sample sample: samples) {
+            if(sample.category() == 1 || sample.category() == 2) {
+                trainingSamples.add(sample);
+            }
+        }
+
+        double meanX = mean(getXs(trainingSamples));
+        double meanY = mean(getYs(trainingSamples));
+        zeroCenterSamples(trainingSamples);
+
         double wx = 0.1;
         double wy = -0.1;
         double bias = 0.2;
 
         for(int i = 0; i < epochs; i++) {
-            Collections.shuffle(samples);
-            for(Sample sample: samples) {
-                if(sample.category() != 0 && sample.category() != 1) continue;
-
-                double output = sigmoid(wx*sample.getX() + wy*sample.getY() + bias);
-                double error = eta*(sample.category() - output);
+            Collections.shuffle(trainingSamples);
+            for(Sample sample: trainingSamples) {
+                double input = wx*sample.getX() + wy*sample.getY() + bias;
+                double output = sigmoid(input);
+                double error = eta*(sample.category()-1 - output)*sigmoidPrime(input);
 
                 wx += error*sample.getX();
                 wy += error*sample.getY();
                 bias += error;
             }
         }
-        return new double[] {wx, wy, bias};
+        moveAllSamples(trainingSamples, meanX, meanY);
+        return new double[] {wx, wy, bias - (wx*meanX + wy*meanY)};
     }
 
     public static double round(double value, int i) {

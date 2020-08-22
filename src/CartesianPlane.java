@@ -189,7 +189,6 @@ public class CartesianPlane implements GraphicsInterface {
 
         // if index == -1 then no sample is under the mouse
         if(index != -1) {
-            System.out.println(index+" colored");
             samples.get(index).setColor(col);
             samples.get(index).setCategory(value);
             return true;
@@ -247,6 +246,18 @@ public class CartesianPlane implements GraphicsInterface {
     }
 
     /**
+     * Adds new sample when right mouse button was pressed.
+     * Initial place of this new sample is place of mouse position
+     * @param x - Initial x coordinate (in cartesian plane simulation)
+     * @param y - Initial y coordiante (in cartesian plane simulation)
+     */
+    void addNewSample(double x, double y) {
+        Sample sample = new Sample(x, y);
+        samples.add(sample);
+        menu.addSampleLabel(sample, height/20.0);
+    }
+
+    /**
      * If some sample is under the mouse then removes that sample, if not creates new one in the mouse place
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
@@ -259,9 +270,7 @@ public class CartesianPlane implements GraphicsInterface {
             menu.removeSampleLabel(samples.get(toRemove));
             samples.remove(toRemove);
         } else {
-            Sample sample = new Sample(simulationX(mouseX), simulationY(mouseY));
-            samples.add(sample);
-            menu.addSampleLabel(sample, height/20.0);
+            addNewSample(simulationX(mouseX), simulationY(mouseY));
         }
     }
 
@@ -331,12 +340,13 @@ public class CartesianPlane implements GraphicsInterface {
                 linesVisibility = !linesVisibility;
                 break;
 
-            case '1': colorSelectedSample(new Color(100, 100, 255), 0); break;
-            case '2': colorSelectedSample(new Color(255, 100, 100), 1); break;
-            case '3': colorSelectedSample(new Color(100, 255, 100), 2); break;
-            case '4': colorSelectedSample(new Color(200, 200, 50), 3); break;
-            case '5': colorSelectedSample(new Color(200, 50, 200), 4); break;
-            case '6': colorSelectedSample(new Color(50, 200, 200), 5); break;
+            case '0': colorSelectedSample(new Color(130, 130, 130), Character.getNumericValue(key)); break;
+            case '1': colorSelectedSample(new Color(100, 100, 255), Character.getNumericValue(key)); break;
+            case '2': colorSelectedSample(new Color(255, 100, 100), Character.getNumericValue(key)); break;
+            case '3': colorSelectedSample(new Color(100, 255, 100), Character.getNumericValue(key)); break;
+            case '4': colorSelectedSample(new Color(200, 200, 50), Character.getNumericValue(key)); break;
+            case '5': colorSelectedSample(new Color(200, 50, 200), Character.getNumericValue(key)); break;
+            case '6': colorSelectedSample(new Color(50, 200, 200), Character.getNumericValue(key)); break;
         }
 
     }
