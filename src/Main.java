@@ -5,6 +5,14 @@ public class Main {
     }
 }
 
+/* FIXME
+    Known bugs:
+    -   mouse position while key pressing is not relative to the program window but to the screen
+        (doesn't work when there is no fullscreen)
+    -   Sometimes side menu doesn't stop scrolling down and instead it scrolls a little bit up.
+        (usually works so its hard to find the cause)
+ */
+
 /* TODO
     version 0.0
     - show plane origin in the center of the screen [checked]
@@ -43,7 +51,7 @@ public class Main {
     - scroll in menu (with transparency) [checked]
     ...
     version 0.4
-    - refactor code
+    - refactor code [checked]
     - message box inside CartesianPlane
     - input numbers from keyboard
     - checkboxes buttons

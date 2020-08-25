@@ -4,9 +4,12 @@ import java.util.Arrays;
 
 import static java.lang.StrictMath.*;
 
+/**
+ * This class contains all abstract things you can do with 2x2 matrix
+ */
 public class Matrix2x2 {
     protected double a,b,c,d;
-    // [v1x, v1y, v2x, v2y, l1, l2]
+    // eigenvectors and values table looks like this [v1x, v1y, v2x, v2y, l1, l2]
     protected double[] eigenvectorsAndValues = new double[6];
 
     Matrix2x2(double a, double b, double c, double d) {
@@ -18,6 +21,7 @@ public class Matrix2x2 {
         computeEigenvectorsAndValues();
     }
 
+    /* not used
     Matrix2x2(ArrayList<Double> values) {
         if(values.size() == 4) {
             this.a = values.get(0);
@@ -30,28 +34,49 @@ public class Matrix2x2 {
 
         computeEigenvectorsAndValues();
     }
+     */
 
+    /**
+     * @return determinant of this matrix
+     */
     double det() {
         return a*d - b*c;
     }
 
+    /**
+     * @return trace of this matrix
+     */
     double trace() {
         return a+d;
     }
 
+    /**
+     * projects vector v onto this matrix space.
+     * @param v - projected vector
+     * @return A * v where A is this matrix
+     */
     Sample project(Sample v) {
         return new Sample(a*v.getX() + b*v.getY(), c*v.getX() + d*v.getY());
     }
 
+    /* not used
     Matrix2x2 dot(Matrix2x2 other) {
         return new Matrix2x2(a*other.a + b*other.c, a*other.b + b*other.d,
                 c*other.a + d*other.c, c*other.b + d*other.d);
     }
+    */
 
+
+    /**
+     * @return transpose matrix (in 2x2 case just swap b and c)
+     */
     Matrix2x2 transpose() {
         return new Matrix2x2(a, c, b, d);
     }
 
+    /**
+     * @return inverse matrix of this one. If matrix is singular returns 0 matrix.
+     */
     Matrix2x2 inverse() {
         double det = det();
         if(det == 0) {
@@ -60,7 +85,14 @@ public class Matrix2x2 {
         return new Matrix2x2(d/det, -c/det, -b/det, a/det);
     }
 
-    void computeEigenvectorsAndValues() {
+    /**
+     * computes real eigenvectors and eigenvalues.
+     * If eigenvalues are supposed to be complex or matrix is singular
+     * then all eigenvectors and eigenvalues are equal to 0.
+     * Lengths of eigenvectors are equal to corresponding eigenvalues (NOT 1 !!)
+     * Results are saved in @code{realEigenvectorsAndValues}.
+     */
+    protected void computeEigenvectorsAndValues() {
         if(trace()*trace() < 4*det() || singular()) {
             eigenvectorsAndValues = new double[] {0,0,0,0,0,0};
             return;
@@ -83,10 +115,16 @@ public class Matrix2x2 {
         eigenvectorsAndValues = new double[] {v1x, v1y, v2x, v2y, lambda_1, lambda_2};
     }
 
+    /**
+     * @return previously computed eigenvectors and eigenvalues.
+     */
     double[] realEig() {
         return eigenvectorsAndValues;
     }
 
+    /**
+     * @return returns eigenvectors which has bigger corresponding eigenvalue.
+     */
     ArrayList<Double> greaterEigenvector() {
         if(eigenvectorsAndValues[4] > eigenvectorsAndValues[5]) {
             new ArrayList<>(Arrays.asList(eigenvectorsAndValues[0], eigenvectorsAndValues[1]));
@@ -94,28 +132,48 @@ public class Matrix2x2 {
         return new ArrayList<>(Arrays.asList(eigenvectorsAndValues[2], eigenvectorsAndValues[3]));
     }
 
+    /**
+     * Checks if matrix is almost singular to avoid drawing numerous lines in matrix grid.
+     * @return true if matrix is almost singular
+     * (determinant is small, one of basis is almost 0 vector or two basis are almost parallel)
+     */
     boolean almostSingular() {
         return abs(det()) < 0.03 || abs((a*b+c*d)/(sqrt(a*a+c*c)*sqrt(b*b+d*d))) > 0.999 || a*a+c*c < 0.01 || b*b + d*d < 0.01 ;
     }
 
+    /**
+     * checks whether matrix is singular.
+     * @return true if matrix is singular otherwise false.
+     */
     boolean singular() {
         return det() == 0.0;
     }
 
     String getName() { return "A"; }
 
-    public void setValues(Matrix2x2 covarianceMatrix) {
-        a = covarianceMatrix.a;
-        b = covarianceMatrix.b;
-        c = covarianceMatrix.c;
-        d = covarianceMatrix.d;
+    /**
+     * sets new values to avoid creating a new matrix.
+     * Creating a new matrix started to become a problem when buttons have pointer to its matrix.
+     * This way is easier.
+     * @param other - other matrix whose values this matrix should copy
+     */
+    public void setValues(Matrix2x2 other) {
+        a = other.a;
+        b = other.b;
+        c = other.c;
+        d = other.d;
         computeEigenvectorsAndValues();
     }
 }
 
-
+/**
+ * Class which inherits all math standing behind 2x2 matrix and adds graphical methods to
+ * draw this matrix and all its traits
+ */
 class GraphicsMatrix2x2 extends Matrix2x2 {
+    // radius of circle which ends matrix base and that matrix base can be moved dragging this circle.
     private final double radius = 0.1;
+    // variables that control matrix shift
     private boolean xBasisSelected, yBasisSelected;
 
     GraphicsMatrix2x2(double a, double b, double c, double d) {
@@ -123,16 +181,19 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
         deselect();
     }
 
+    /* not used
     GraphicsMatrix2x2(ArrayList<Double> values) {
         super(values);
         deselect();
     }
+     */
 
     GraphicsMatrix2x2(Matrix2x2 matrix) {
         super(matrix.a, matrix.b, matrix.c, matrix.d);
         deselect();
     }
 
+    /* not used anymore
     boolean moveXBasis(double mx, double my) { // mx and my should be converted to cartesian values
         return (mx - a)*(mx - a) + (my - c)*(my - c) <= radius*radius;
     }
@@ -140,58 +201,87 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
     boolean moveYBasis(double mx, double my) { // mx and my should be converted to cartesian values
         return (mx - b)*(mx - b) + (my - d)*(my - d) <= radius*radius;
     }
+    */
 
+    /**
+     * checks if some of basis is moved by the mouse.
+     * @return true if one of the basis are moving.
+     */
     boolean isSelected() { return xBasisSelected || yBasisSelected; }
 
+    /**
+     * sets all variables that control matrix shift to false. Means that no base is moving.
+     */
     void deselect() {
         xBasisSelected = false;
         yBasisSelected = false;
     }
 
-    void selectBasis(double x, double y) {
-        if(MathUtils.dist(x, y, a, c) < radius) {
+    /**
+     * checks if one of the basis is under the mouse. If it is then sets its selected to true
+     * @param mouseX - x coordinate of point where lays the mouse (in simulation units not real pixel values)
+     * @param mouseY - y coordinate of point where lays the mouse (in simulation units not real pixel values)
+     */
+    void selectBasis(double mouseX, double mouseY) {
+        if(MathUtils.dist(mouseX, mouseY, a, c) < radius) {
             xBasisSelected = true;
-        } else if(MathUtils.dist(x, y, b, d) < radius) {
+        } else if(MathUtils.dist(mouseX, mouseY, b, d) < radius) {
             yBasisSelected = true;
         }
     }
 
-    void moveBasis(double x, double y) {
+    /**
+     * moves base which is selected to current mouse position.
+     * @param mouseX - x coordinate of point where lays the mouse (in simulation units not real pixel values)
+     * @param mouseY - y coordinate of point where lays the mouse (in simulation units not real pixel values)
+     */
+    void moveBase(double mouseX, double mouseY) {
         if(xBasisSelected) {
-            a = x;
-            c = y;
+            a = mouseX;
+            c = mouseY;
             computeEigenvectorsAndValues();
         } else if(yBasisSelected) {
-            b = x;
-            d = y;
+            b = mouseX;
+            d = mouseY;
             computeEigenvectorsAndValues();
         }
     }
 
-    void drawBasis(Graphics2D g2, double scale, Point2D camera, boolean active) {
+    /**
+     * draws two vectors representing the basis of this matrix.
+     * @param g2 - graphical context
+     * @param plane - cartesian plane
+     * @param circleAtTheEnd - if true then at the end of vectors small circles are drawn
+     */
+    void drawBasis(Graphics2D g2, CartesianPlane plane, boolean circleAtTheEnd) {
         g2.setColor(new Color(255, 0, 0));
-        DrawUtils.line(-camera.x * scale, camera.y * scale, (a - camera.x)*scale, -(c - camera.y)*scale, g2);
-        if(active) DrawUtils.circle((a - camera.x)*scale, -(c - camera.y)*scale, scale*radius, g2);
+        plane.drawVector(a, c);
+        if(circleAtTheEnd) DrawUtils.circle(plane.screenX(a), plane.screenY(c), plane.scale*radius);
 
         g2.setColor(new Color(0, 255, 0));
-        DrawUtils.line(-camera.x * scale, camera.y * scale, (b - camera.x)*scale, -(d - camera.y)*scale, g2);
-        if(active) DrawUtils.circle((b - camera.x)*scale, -(d - camera.y)*scale, scale*radius, g2);
+        plane.drawVector(b, d);
+        if(circleAtTheEnd) DrawUtils.circle(plane.screenX(b), plane.screenY(d), plane.scale*radius);
     }
 
-    void drawEigenvectors(Graphics2D g2, double scale, Point2D camera) {
+    /**
+     * Draws eigenvectors as a vector scaled by its eigenvalue.
+     * @param g2 - graphics context
+     * @param plane - current cartesian plane
+     */
+    void drawEigenvectors(Graphics2D g2, CartesianPlane plane) {
         g2.setColor(new Color(255,255,255));
         g2.setStroke(new BasicStroke(2));
 
-        DrawUtils.line(-camera.x*scale, camera.y*scale,
-                (eigenvectorsAndValues[0] - camera.x)*scale,
-                -(eigenvectorsAndValues[1] - camera.y)*scale, g2);
-
-        DrawUtils.line(-camera.x*scale, camera.y*scale,
-                (eigenvectorsAndValues[2] - camera.x)*scale,
-                -(eigenvectorsAndValues[3] - camera.y)*scale, g2);
+        plane.drawVector(eigenvectorsAndValues[0], eigenvectorsAndValues[1]);
+        plane.drawVector(eigenvectorsAndValues[2], eigenvectorsAndValues[3]);
     }
 
-    void drawAxes(Graphics2D g2, double scale, Point2D camera, CartesianPlane plane) {
+    /**
+     * Draws x and y axis as lines. X-axis is red and Y-axis is blue.
+     * @param g2 - graphics context
+     * @param plane - current cartesian plane
+     */
+    void drawAxes(Graphics2D g2, CartesianPlane plane) {
         g2.setStroke(new BasicStroke(3));
         g2.setColor(new Color(255, 0, 0));
         plane.drawStraightLine(c/a, 0);
@@ -199,29 +289,56 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
         plane.drawStraightLine(d/b, 0);
     }
 
+    /**
+     * Draws basis of transposition of this matrix using @code{drawOtherMatrixBasis}.
+     * color of these basis is blue and at the end of each base there are small circles.
+     * red circle ends the x-base and blue ends the y-base.
+     * @param g2 - graphics context
+     * @param plane - current cartesian plane
+     */
     void drawTranspose(Graphics2D g2, CartesianPlane plane) {
         g2.setColor(new Color(100, 100, 255));
         g2.setStroke(new BasicStroke(2));
         drawOtherMatrixBasis(transpose(), g2, plane);
     }
 
+    /**
+     * Draws basis of inversion of this matrix using @code{drawOtherMatrixBasis}.
+     * color of these basis is yellow and at the end of each base there are small circles.
+     * red circle ends the x-base and blue ends the y-base.
+     * @param g2 - graphics context
+     * @param plane - current cartesian plane
+     */
     void drawInverse(Graphics2D g2, CartesianPlane plane) {
         g2.setColor(new Color(230, 180, 0));
         g2.setStroke(new BasicStroke(2));
         drawOtherMatrixBasis(inverse(), g2, plane);
     }
 
-    void drawOtherMatrixBasis(Matrix2x2 matrix, Graphics2D g2, CartesianPlane plane) {
-        g2.drawLine((int)plane.screenX(0), (int)plane.screenY(0), (int)plane.screenX(matrix.a), (int)plane.screenY(matrix.c));
-        g2.drawLine((int)plane.screenX(0), (int)plane.screenY(0), (int)plane.screenX(matrix.b), (int)plane.screenY(matrix.d));
+    /**
+     * Draws vectors representing the basis of some matrix. At the end of these basis two circles are drawn
+     * to distinguish x-base from y-base. x-base has red circle and y-base has blue one.
+     * @param matrix - matrix to be drawn
+     * @param g2 - graphics context
+     * @param plane - current cartesian plane
+     */
+    private void drawOtherMatrixBasis(Matrix2x2 matrix, Graphics2D g2, CartesianPlane plane) {
+        plane.drawVector(matrix.a, matrix.c);
+        plane.drawVector(matrix.b, matrix.d);
 
         g2.setColor(new Color(255, 0, 0));
-        DrawUtils.circle(plane.screenX(matrix.a), plane.screenY(matrix.c), radius*plane.scale, g2);
+        DrawUtils.circle(plane.screenX(matrix.a), plane.screenY(matrix.c), radius*plane.scale);
         g2.setColor(new Color(0, 255, 0));
-        DrawUtils.circle(plane.screenX(matrix.b), plane.screenY(matrix.d), radius*plane.scale, g2);
+        DrawUtils.circle(plane.screenX(matrix.b), plane.screenY(matrix.d), radius*plane.scale);
     }
 
-    void drawEigenlines(Graphics2D g2, CartesianPlane plane) {
+    /**
+     * draws every vector (line) that satisfy Ax = lx. If eigenvalues are imaginary or matrix is singular
+     * then draws nothing
+     * @param g2 - graphics context
+     * @param plane - current cartesian plane
+     */
+    void drawEigenvectorsLines(Graphics2D g2, CartesianPlane plane) {
         if(eigenvectorsAndValues[0] == 0 || eigenvectorsAndValues[2] == 0) {
             return; // matrix is singular or has imaginary eigenvalues
         }
@@ -231,6 +348,12 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
         plane.drawStraightLine(eigenvectorsAndValues[3]/eigenvectorsAndValues[2], 0);
     }
 
+    /**
+     * draws a parallelogram which two of its sides are basis of matrix and the other two are parallel to them.
+     * Area of this quadrangle equals to absolute value of determinant of this matrix.
+     * @param g2 - graphics context
+     * @param plane - current cartesian plane
+     */
     void drawDeterminant(Graphics2D g2, CartesianPlane plane) {
         g2.setColor(new Color(255, 255, 100, 120));
         g2.fillPolygon(
@@ -238,6 +361,16 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
                 new int[]{(int)plane.screenY(0), (int)plane.screenY(c), (int)plane.screenY(c+d), (int)plane.screenY(d)}, 4);
     }
 
+    /**
+     * Draws (using drawParallelLines function) a bunch of lines parallel to the axis of this matrix and
+     * separated from each other by length of the base of this matrix.
+     * Draws only lines which are visible on the screen.
+     * lines parallel to x-axis are reddish and ones which are parallel to y-axis are greenish
+     * @param g2 - graphics context
+     * @param scale - scale in the cartesian plane simulation
+     * @param camera - point where lies top left corner of the screen in cartesian plane simulation units.
+     * @param plane - current cartesian plane
+     */
     void drawGrid(Graphics2D g2, double scale, Point2D camera, CartesianPlane plane) {
         if(almostSingular()) {
             return;
@@ -246,46 +379,50 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
 
         g2.setColor(new Color(255, 0, 0, 130));
         double direction = c/a;
-        double freeCoefficient = abs(b*c/a-d);
-        drawParallelLines(direction, freeCoefficient, camera, scale, plane, g2);
+        double y_intercept = abs(b*c/a-d);
+        drawParallelLines(direction, y_intercept, camera, scale, plane);
 
         g2.setColor(new Color(0, 255, 0, 130));
         direction = d/b;
-        freeCoefficient = abs(c-a*d/b);
-        drawParallelLines(direction, freeCoefficient, camera, scale, plane, g2);
+        y_intercept = abs(c-a*d/b);
+        drawParallelLines(direction, y_intercept, camera, scale, plane);
     }
 
-    private void drawParallelLines(double direction, double freeCoefficient, Point2D camera, double scale,
-                                   CartesianPlane plane, Graphics2D g2) {
-        if(freeCoefficient < 0.001) return;
+    /**
+     * Draws lines with given slope separated from each other by yInterceptIncrement.
+     * Draws only these lines that appear on the screen.
+     *
+     * @param slope - slope of each drawn line (since all of them are parallel)
+     * @param yInterceptIncrement - distance between closest lines
+     * @param scale - scale in the cartesian plane simulation
+     * @param camera - point where lies top left corner of the screen in cartesian plane simulation units.
+     * @param plane - current cartesian plane
+     */
+    private void drawParallelLines(double slope, double yInterceptIncrement, Point2D camera, double scale,
+                                   CartesianPlane plane) {
+        if(yInterceptIncrement < 0.001) return;
 
-        if(Double.isInfinite(direction)) {
+        if(Double.isInfinite(slope)) {
+            // is a is infinite draws parallel vertical lines
             for (int i = (int) ceil(camera.x); i < ceil(camera.x) + floor(plane.width / scale) + 1; i++) {
-                DrawUtils.line((i - camera.x) * scale, 0, (i - camera.x) * scale, plane.height, g2);
-            }
-        } else if(direction >= 0) {
-            int i = 1;
-            while (direction * camera.getX() + i * freeCoefficient < camera.getY()) {
-                plane.drawStraightLine(direction, i * freeCoefficient);
-                i++;
-            }
-
-            i = -1;
-            while (direction * (camera.getX()+plane.width/scale) + i * freeCoefficient > camera.getY() - plane.height/scale) {
-                plane.drawStraightLine(direction, i * freeCoefficient);
-                i--;
+                DrawUtils.line((i - camera.x) * scale, 0, (i - camera.x) * scale, plane.height);
             }
         } else {
-            int i = -1;
-            while (direction * camera.getX() + i * freeCoefficient > camera.getY() - plane.height/scale) {
-                plane.drawStraightLine(direction, i * freeCoefficient);
-                i--;
+            double bAtStartingPoint, bAtEndingPoint;
+
+            if(slope >= 0) { // when a>0 starting point is at the bottom right corner
+                             // and ending point is at the top left corner of the screen
+                bAtStartingPoint = camera.getY() - plane.height / scale - slope * (camera.getX() + plane.width / scale);
+                bAtEndingPoint = camera.getY() - slope * camera.getX();
+            } else { // when a<0 starting point is at the bottom right corner and ending point
+                     // is at the top right corner of the screen
+                bAtStartingPoint = camera.getY() - plane.height/scale - slope*camera.getX();
+                bAtEndingPoint = camera.getY() - slope*(camera.getX() + plane.width/scale);
             }
 
-            i = 1;
-            while (direction * (camera.getX()+plane.width/scale) + i * freeCoefficient < camera.getY()) {
-                plane.drawStraightLine(direction, i * freeCoefficient);
-                i++;
+            for(int i = (int)ceil(bAtStartingPoint/yInterceptIncrement);
+                    i <= floor(bAtEndingPoint/yInterceptIncrement); i++) {
+                plane.drawStraightLine(slope, i*yInterceptIncrement);
             }
         }
     }

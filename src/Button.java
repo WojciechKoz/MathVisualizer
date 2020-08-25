@@ -130,8 +130,8 @@ class ClickableButton extends Button {
         super.draw(g2);
 
         g2.setColor(textCol);
-        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize), g2);
-        DrawUtils.drawCenteredString(label, x+width/2, y+height/2, g2);
+        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize));
+        DrawUtils.drawCenteredString(label, x+width/2, y+height/2);
     }
 
     /**
@@ -209,12 +209,12 @@ class Slider extends Button {
         super.draw(g2);
 
         g2.setColor(textCol);
-        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize), g2);
+        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize));
 
         // prints label+": "+roundedValue where roundedValue has two decimal places if discrete variable is false
         // or int(value) if discrete is true
         String fullLabel = label+": " + (discrete ? Integer.toString((int)(value)) : MathUtils.round(value, 2));
-        DrawUtils.drawCenteredString(fullLabel, x+width/2, y+height/4, g2);
+        DrawUtils.drawCenteredString(fullLabel, x+width/2, y+height/4);
 
         // draws a bar
         int sliderWidth = width/20;
@@ -284,8 +284,8 @@ class LabelButton extends Button {
         super.draw(g2);
 
         g2.setColor(textCol);
-        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize), g2);
-        DrawUtils.drawCenteredString(label, x+width/2, y+height/2, g2);
+        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize));
+        DrawUtils.drawCenteredString(label, x+width/2, y+height/2);
     }
 
     /**
@@ -335,13 +335,13 @@ class SampleLabelButton extends Button {
 
         // draws small circle symbolizing chosen sample
         g2.setColor(sample.getColor());
-        DrawUtils.circle(x+width/8.0, y+height/2.0, min(width/10, height/4), g2);
+        DrawUtils.circle(x+width/8.0, y+height/2.0, min(width/10, height/4));
 
         // prints label with its
         g2.setColor(textCol);
-        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize), g2);
+        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize));
         label = "X: "+MathUtils.round(sample.getX(),2)+", Y: "+MathUtils.round(sample.getY(),2);
-        DrawUtils.drawStringWithRightAlignment(label, (int)(x+width*0.95), y+height/2, g2);
+        DrawUtils.drawStringWithRightAlignment(label, (int)(x+width*0.95), y+height/2);
     }
 
     /**
@@ -418,26 +418,26 @@ class MatrixLabelButton extends Button {
         String text;
 
         // first, prints matrix name and equal sign (and update labelWidth at the end)
-        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize), g2);
+        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize));
         text = matrix.getName() + " = ";
-        DrawUtils.drawStringWithLeftAlignment(text, x+labelWidth, y+height/2, g2);
-        labelWidth += DrawUtils.stringWidth(text, g2);
+        DrawUtils.drawStringWithLeftAlignment(text, x+labelWidth, y+height/2);
+        labelWidth += DrawUtils.stringWidth(text);
 
         // prints big square bracket representing matrix
-        DrawUtils.setFont(new Font("TimesRoman Plain", Font.PLAIN, fontSize*4), g2);
+        DrawUtils.setFont(new Font("TimesRoman Plain", Font.PLAIN, fontSize*4));
         text = "[";
-        DrawUtils.drawStringWithLeftAlignment(text, x+labelWidth, (int)(y+height*0.4), g2);
-        labelWidth += DrawUtils.stringWidth(text, g2);
+        DrawUtils.drawStringWithLeftAlignment(text, x+labelWidth, (int)(y+height*0.4));
+        labelWidth += DrawUtils.stringWidth(text);
 
         // sets color to color of matrix's x-axis
         g2.setColor(new Color(255, 100, 100));
 
         // prints first column of matrix
-        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize), g2);
+        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize));
         text = Double.toString(MathUtils.round(matrix.a, 2));
-        DrawUtils.drawStringWithLeftAlignment(text, x+labelWidth, (int)(y+height*0.3), g2);
+        DrawUtils.drawStringWithLeftAlignment(text, x+labelWidth, (int)(y+height*0.3));
         text = Double.toString(MathUtils.round(matrix.c, 2));
-        DrawUtils.drawStringWithLeftAlignment(text, x+labelWidth, (int)(y+height*0.7), g2);
+        DrawUtils.drawStringWithLeftAlignment(text, x+labelWidth, (int)(y+height*0.7));
 
         // sets color to color of matrix's y-axis
         g2.setColor(new Color(100, 255, 100));
@@ -445,14 +445,14 @@ class MatrixLabelButton extends Button {
         // prints second column of the matrix (always starts with the same X) and
         // labelWidth is no longer necessary)
         text = Double.toString(MathUtils.round(matrix.b, 2));
-        DrawUtils.drawStringWithLeftAlignment(text, (int)(x+width*0.6), (int)(y+height*0.3), g2);
+        DrawUtils.drawStringWithLeftAlignment(text, (int)(x+width*0.6), (int)(y+height*0.3));
         text = Double.toString(MathUtils.round(matrix.d, 2));
-        DrawUtils.drawStringWithLeftAlignment(text, (int)(x+width*0.6), (int)(y+height*0.7), g2);
+        DrawUtils.drawStringWithLeftAlignment(text, (int)(x+width*0.6), (int)(y+height*0.7));
 
         // prints right bracket of the matrix
         g2.setColor(textCol);
-        DrawUtils.setFont(new Font("TimesRoman Plain", Font.PLAIN, fontSize*4), g2);
-        DrawUtils.drawStringWithRightAlignment("]", (int)(x+width*0.95), (int)(y+height*0.4), g2);
+        DrawUtils.setFont(new Font("TimesRoman Plain", Font.PLAIN, fontSize*4));
+        DrawUtils.drawStringWithRightAlignment("]", (int)(x+width*0.95), (int)(y+height*0.4));
     }
 
     /**

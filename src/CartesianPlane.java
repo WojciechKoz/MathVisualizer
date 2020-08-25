@@ -78,24 +78,28 @@ public class CartesianPlane implements GraphicsInterface {
             g2.setStroke(new BasicStroke(1));
             g2.setColor(new Color(50, 50, 50));
             for (int i = (int) ceil(camera.x); i < ceil(camera.x) + floor(width / scale) + 1; i++) {
-                DrawUtils.line((i - camera.x) * scale, 0, (i - camera.x) * scale, height, g2);
+                DrawUtils.line((i - camera.x) * scale, 0, (i - camera.x) * scale, height);
             }
             for (int i = (int) ceil(camera.y); i > floor(camera.y) - ceil(height / scale) - 1; i--) {
-                DrawUtils.line(0, (camera.y - i) * scale, width, (camera.y - i) * scale, g2);
+                DrawUtils.line(0, (camera.y - i) * scale, width, (camera.y - i) * scale);
             }
         }
 
         g2.setStroke(new BasicStroke(3));
         g2.setColor(new Color(255,255,255));
-        DrawUtils.line(-camera.x*scale, 0, -camera.x*scale, height, g2);
-        DrawUtils.line(0, camera.y*scale, width, camera.y*scale, g2);
+        DrawUtils.line(-camera.x*scale, 0, -camera.x*scale, height);
+        DrawUtils.line(0, camera.y*scale, width, camera.y*scale);
     }
 
     /**
-     * Draws all standard samples
+     * Draws all standard samples in reverse order
+     * because when a sample is on top of a stack of several samples
+     * it is more logical that it has to be moved first
      */
     void drawSamples() {
-        for(Sample s: samples) s.draw(camera, scale, g2);
+        for(int i = samples.size()-1; i >= 0; i--) {
+            samples.get(i).draw(camera, scale, g2);
+        }
     }
 
     /**
@@ -242,14 +246,14 @@ public class CartesianPlane implements GraphicsInterface {
      * @param y - y value of drawn vector
      */
     void drawVector(double x, double y) {
-        DrawUtils.line(screenX(0), screenY(0), screenX(x), screenY(y), g2);
+        DrawUtils.line(screenX(0), screenY(0), screenX(x), screenY(y));
     }
 
     /**
      * Adds new sample when right mouse button was pressed.
      * Initial place of this new sample is place of mouse position
      * @param x - Initial x coordinate (in cartesian plane simulation)
-     * @param y - Initial y coordiante (in cartesian plane simulation)
+     * @param y - Initial y coordinate (in cartesian plane simulation)
      */
     void addNewSample(double x, double y) {
         Sample sample = new Sample(x, y);
@@ -274,6 +278,13 @@ public class CartesianPlane implements GraphicsInterface {
         }
     }
 
+    /**
+     * If mouse is inside the menu then runs @code{menu.onLeftClick(mouseX, mouseY)}
+     * else checks if some sample is under the mouse and if so then
+     * set its moving variable to true (that sample will follow the mouse until left button will be released)
+     * @param mouseX - current mouse x position (in pixels)
+     * @param mouseY - current mouse y position (in pixels)
+     */
     @Override
     public void onLeftClick(double mouseX, double mouseY) {
         if(menu.hasInside(mouseX, mouseY)) {
@@ -284,21 +295,51 @@ public class CartesianPlane implements GraphicsInterface {
         }
     }
 
+    /**
+     * if mouse is inside the menu then performs actions related to clicked button
+     * else sets all samples moving variable to false (won't follow the mouse)
+     * @param mouseX - current mouse x position (in pixels)
+     * @param mouseY - current mouse y position (in pixels)
+     */
     @Override
     public void onLeftMouseButtonReleased(double mouseX, double mouseY) {
-        int index = select(mouseX, mouseY);
-        if(index != -1) samples.get(index).setMoving(false);
-
-        menuOptions(mouseX, mouseY);
-    }
-
-    void menuOptions(double mx, double my) {
-        switch(menu.onReleased(mx, my)) {
-            case "Grid": linesVisibility = !linesVisibility; break;
-            case "Menu": panel.changeGraphics("Menu");
+        if(menu.hasInside(mouseX, mouseY)) {
+            menuOptions(mouseX, mouseY);
+        } else {
+            for(Sample sample: samples) {
+                sample.setMoving(false);
+            }
         }
     }
 
+    /**
+     * checks if some of buttons in menu is pressed
+     * if so then performs some action related to that pressed button.
+     * Sliders are supported inside @code{menu.onReleased} method since they haven't got
+     * any specific action and all of them behave the same way.
+     * @param mouseX - current mouse x position (in pixels)
+     * @param mouseY - current mouse y position (in pixels)
+     */
+    void menuOptions(double mouseX, double mouseY) {
+        switch(menu.onReleased(mouseX, mouseY)) {
+            case "Grid": linesVisibility = !linesVisibility; break;
+            case "Menu": panel.changeGraphics("", "Menu");
+        }
+    }
+
+    /**
+     * If mouse is inside the menu then executes @code{menu.onMouseDragged}
+     * else checks if some sample has moving variable sets to true
+     * if so then moves that sample else move camera.
+     * Returns true if mouse was inside the menu or some sample was moved.
+     * (it might be a good reason to refresh simulation)
+     * if only camera was moved then no refreshing is needed and function returns false.
+     * @param mouseX - current mouse x position (in pixels)
+     * @param mouseY - current mouse y position (in pixels)
+     * @param prevMouseX - mouse x position in previous frame (in pixels)
+     * @param prevMouseY - mouse y position in previous frame (in pixels)
+     * @return true if mouse was inside menu or some sample was moved, false if only camera was moved
+     */
     @Override
     public boolean onMouseDragged(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
         if(menu.hasInside(mouseX, mouseY)) {
@@ -317,11 +358,24 @@ public class CartesianPlane implements GraphicsInterface {
         return false;
     }
 
+    /**
+     * Since cartesian plane simulation doesn't check if mouse was moved (unless the left button was pressed)
+     * it runs @code{menu.onMouseMoved} because menu might have some buttons which support mouse hovering.
+     * @param mouseX - current mouse x position (in pixels)
+     * @param mouseY - current mouse y position (in pixels)
+     * @param prevMouseX - mouse x position in previous frame (in pixels)
+     * @param prevMouseY - mouse y position in previous frame (in pixels)
+     */
     @Override
     public void onMouseMoved(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
         menu.onMouseMoved(mouseX, mouseY, prevMouseX, prevMouseY, simulationX(mouseX), simulationY(mouseY));
     }
 
+    /**
+     * If mouse is inside the menu then runs @code{menu.onMouseScrolled} else
+     * changes current scale a little bit and moves camera toward the mouse.
+     * @param rotation direction of scrolling. Can be either 1 [down] or -1 [up]
+     */
     @Override
     public void onMouseScrolled(int rotation) {
         Point mouse = MouseInfo.getPointerInfo().getLocation();
@@ -333,6 +387,10 @@ public class CartesianPlane implements GraphicsInterface {
         }
     }
 
+    /**
+     * For now it supports only painting samples and toggle lines visibility
+     * @param key - char value of pressed button
+     */
     @Override
     public void onKeyPressed(char key) {
         switch(key) {

@@ -1,18 +1,26 @@
 import java.awt.*;
-import java.util.ArrayList;
-
 import static java.lang.StrictMath.abs;
 
+/**
+ * Class that simulates linear regression algorithm.
+ * Even if that class contains the whole linear regression model it hasn't got any math inside.
+ * For the algorithms look at MathUtils class.
+ */
 public class LRCartesianPlane extends CartesianPlane {
+    // a and b are coefficients of best fitting line
     private double a, b;
-    private boolean lineVisible, errorVisible;
+    private boolean regressionLineVisibility, errorVisibility;
 
     LRCartesianPlane(Graphics2D g2, int width, int height, Panel mainPanel) {
         super(g2, width, height, mainPanel);
-        lineVisible = true;
-        errorVisible = true;
+        regressionLineVisibility = true;
+        errorVisibility = true;
     }
 
+    /**
+     * initializes the menu with buttons {Grid, Line, Errors, Menu}
+     * and labels {line coefficient, error measure}
+     */
     void initSideMenu() {
         String[] buttonLabels = new String[] {"Grid", "Line", "Errors", "Menu"};
 
@@ -22,19 +30,30 @@ public class LRCartesianPlane extends CartesianPlane {
         menu.addValueLabel("Error", "0", height/20.0);
     }
 
+    /**
+     * draws cartesian plane lines, samples,
+     * and, if there are at least two samples, best straight line
+     * at the end menu is drawn
+     */
     @Override
     public void draw() {
         drawLines();
 
         drawSamples();
 
-        if(samples.size() > 1 && lineVisible) {
+        if(samples.size() > 1 && regressionLineVisibility) {
             drawRegressionLine();
         }
 
         menu.draw();
     }
 
+    /**
+     * Performs onRightClick from CartesianPlane
+     * if there are at least 2 samples updates the whole simulation
+     * @param mouseX - current mouse x position (in pixels)
+     * @param mouseY - current mouse y position (in pixels)
+     */
     @Override
     public void onRightClick(double mouseX, double mouseY) {
         super.onRightClick(mouseX, mouseY);
@@ -43,6 +62,14 @@ public class LRCartesianPlane extends CartesianPlane {
         }
     }
 
+    /**
+     * Performs onMouseDragged from CartesianPlane. If it returns true then update the simulation.
+     * @param mouseX - current mouse x position (in pixels)
+     * @param mouseY - current mouse y position (in pixels)
+     * @param prevMouseX - mouse x position in previous frame (in pixels)
+     * @param prevMouseY - mouse y position in previous frame (in pixels)
+     * @return always true
+     */
     @Override
     public boolean onMouseDragged(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
         if(super.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY) && samples.size() > 1) {
@@ -51,33 +78,41 @@ public class LRCartesianPlane extends CartesianPlane {
         return true;
     }
 
-    void menuOptions(double mx, double my) {
-        switch(menu.onReleased(mx, my)) {
+    /**
+     * checks if some of buttons in menu is pressed
+     * if so then performs some action related to that pressed button.
+     * Sliders are supported inside @code{menu.onReleased} method since they haven't got
+     * any specific action and all of them behave the same way.
+     * @param mouseX - current mouse x position (in pixels)
+     * @param mouseY - current mouse y position (in pixels)
+     */
+    void menuOptions(double mouseX, double mouseY) {
+        switch(menu.onReleased(mouseX, mouseY)) {
             case "Grid": linesVisibility = !linesVisibility; break;
-            case "Line": lineVisibleToggle(); break;
-            case "Errors": errorVisibleToggle(); break;
-            case "Menu": panel.changeGraphics("Menu");
+            case "Line": regressionLineVisibility = !regressionLineVisibility; break;
+            case "Errors": errorVisibility = !errorVisibility; break;
+            case "Menu": panel.changeGraphics("", "Visualizations");
         }
     }
 
-    void lineVisibleToggle() { lineVisible = !lineVisible; }
-
-    void errorVisibleToggle() { errorVisible = !errorVisible; }
-
-    boolean colorSelectedSample(Color col, int value) {
-        return super.colorSelectedSample(col, value);
-    }
-
+    /**
+     * Draws regression line and if error visibility variable is set to true then
+     * error is also drawn
+     */
     void drawRegressionLine() {
         g2.setColor(new Color(0, 255, 0));
         g2.setStroke(new BasicStroke(3));
         drawStraightLine(a, b);
 
-        if(errorVisible) {
+        if(errorVisibility) {
             drawErrors();
         }
     }
 
+    /**
+     * Draws the visualization of the error. They are squares with sides equal to difference of y of sample and
+     * of y value of the line with the same x as sample.
+     */
     void drawErrors() {
         g2.setColor(new Color(255,0,0,130));
         for(Sample sample: samples) {
@@ -91,10 +126,13 @@ public class LRCartesianPlane extends CartesianPlane {
         }
     }
 
+    /**
+     * Updates the simulation. Finds new best straight line, calculates new error and updates labels in the menu.
+     */
     void update() {
-        ArrayList<Double> coefficients = MathUtils.linearRegressionCoefficients(samples);
-        a = coefficients.get(0);
-        b = coefficients.get(1);
+        double[] coefficients = MathUtils.fitLinearRegressionModel(samples);
+        a = coefficients[0];
+        b = coefficients[1];
 
         menu.updateLabel("y", MathUtils.round(a, 2)+"x " + (b > 0 ? "+ " : "- ") + MathUtils.round(abs(b), 2));
 

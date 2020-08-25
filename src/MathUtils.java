@@ -1,26 +1,55 @@
 import java.util.*;
-
 import static java.lang.Double.*;
 import static java.lang.Math.exp;
 import static java.lang.Math.floor;
 import static java.lang.StrictMath.pow;
 import static java.lang.StrictMath.sqrt;
 
+/**
+ * Class that implements all math functions and algorithms.
+ * TODO In the future it should be divided into smaller classes.
+ */
 public class MathUtils {
+    /**
+     * function that check if value is in the [min, max] range. If it is then returns val.
+     * If val > max then returns max and if val < min then returns min.
+     * @param val - value that should be in range [min, max]
+     * @param min - lower bound of the range
+     * @param max - upper bound of the range
+     * @return val if val <- [min, max], max if val > max, min if val < min
+     */
     static double clamp(double val, double min, double max) {
         return min(max(val,min),max);
     }
 
+    /**
+     * Calculates the distance between two points in R^2. (x1, y1) and (x2, y2)
+     * @param x1 - x coordinate of the first point
+     * @param y1 - y coordinate of the first point
+     * @param x2 - x coordinate of the second point
+     * @param y2 - y coordinate of the second point
+     * @return distance between (x1, y1) and (x2, y2)
+     */
     static double dist(double x1, double y1, double x2, double y2) {
         return sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
     }
 
+    /**
+     * Calculates the mean value of the numbers in the list.
+     * @param numbers - list of numbers of which mean value is calculated
+     * @return mean value of numbers
+     */
     static double mean(ArrayList<Double> numbers) {
         double sum = 0;
         for(Double num: numbers) sum += num;
         return sum / numbers.size();
     }
 
+    /**
+     * Calculates the variance with formula VX = EX[(X - EX)^2]
+     * @param numbers - list of numbers of which variance is calculated
+     * @return variance of these numbers
+     */
     static double variance(ArrayList<Double> numbers) {
         double sum = 0;
         double mean = mean(numbers);
@@ -29,10 +58,21 @@ public class MathUtils {
         return sum/numbers.size();
     }
 
+    /**
+     * returns standard deviation of the list of numbers using formula std = sqrt(VX)
+     * @param numbers - list of numbers of which standard deviation is calculated
+     * @return standard deviation of given numbers
+     */
     static double stdDev(ArrayList<Double> numbers) {
         return sqrt(variance(numbers));
     }
 
+    /**
+     *
+     * @param xs - first vector
+     * @param ys - second vector
+     * @return dot product of two vectors
+     */
     static double dotProd(List<Double> xs, List<Double> ys) {
         double sum = 0;
         for(int i = 0; i < xs.size(); i++) {
@@ -41,6 +81,11 @@ public class MathUtils {
         return sum;
     }
 
+    /**
+     * gets list of x coordinates of all given samples
+     * @param samples - list of samples of which x coordinates are got.
+     * @return - list of x coordinates of given samples
+     */
     static ArrayList<Double> getXs(ArrayList<Sample> samples) {
         ArrayList<Double> xs = new ArrayList<>();
 
@@ -50,6 +95,11 @@ public class MathUtils {
         return xs;
     }
 
+    /**
+     * gets list of y coordinates of all given samples
+     * @param samples - list of samples of which y coordinates are got.
+     * @return - list of y coordinates of given samples
+     */
     static ArrayList<Double> getYs(ArrayList<Sample> samples) {
         ArrayList<Double> ys = new ArrayList<>();
 
@@ -59,14 +109,24 @@ public class MathUtils {
         return ys;
     }
 
-    static void zeroCenter(ArrayList<Double> xs) {
-        double mean = mean(xs);
+    /**
+     * calculates mean of numbers and moves all of them on that average value.
+     * That means that new numbers have mean exactly equals to 0
+     * @param numbers - list of numbers to centered
+     */
+    static void zeroCenter(ArrayList<Double> numbers) {
+        double mean = mean(numbers);
 
-        for(int i = 0; i < xs.size(); i++) {
-            xs.set(i, xs.get(i) - mean);
+        for(int i = 0; i < numbers.size(); i++) {
+            numbers.set(i, numbers.get(i) - mean);
         }
     }
 
+    /**
+     * calculates mean of x and y coordinates and moves all of samples on that average vector.
+     * That means that new samples have mean exactly equals in point (0,0)
+     * @param samples - list of samples to centered
+     */
     static void zeroCenterSamples(ArrayList<Sample> samples) {
         double meanX = mean(getXs(samples));
         double meanY = mean(getYs(samples));
@@ -74,12 +134,23 @@ public class MathUtils {
         moveAllSamples(samples, -meanX, -meanY);
     }
 
+    /**
+     * move all samples on vector (dx, dy)
+     * @param samples - list of samples to moved
+     * @param dx - x difference
+     * @param dy - y difference
+     */
     static void moveAllSamples(ArrayList<Sample> samples, double dx, double dy) {
-        for(int i = 0; i < samples.size(); i++) {
-            samples.get(i).move(dx, dy);
+        for (Sample sample : samples) {
+            sample.move(dx, dy);
         }
     }
 
+    /**
+     * Calculates covariance of x and y coordinates using formula Cov(X, Y) = E[(X-EX)*(Y-EY)]
+     * @param samples - list of samples of which covariance will be calculated
+     * @return - covariance between x and y coordinates of all samples
+     */
     static double covariance(ArrayList<Sample> samples) {
         if(samples.size() == 0) { return 0; }
 
@@ -92,17 +163,17 @@ public class MathUtils {
         return dotProd(xs, ys) / samples.size();
     }
 
+    /**
+     * computes covariance matrix for given data in R^2
+     * since Cov(X,Y) = Cov(Y,X) then covariance matrix will always be symmetric
+     * if samples list is empty returns zero matrix to avoid dividing by 0
+     * @param samples - current samples in the simulation
+     * @return Matrix [Var(X)  , Cov(X,Y) ]
+     *                [Cov(X,Y), Var(Y)   ]
+     */
     static Matrix2x2 covarianceMatrix(ArrayList<Sample> samples) {
-        /**
-         * computes covariance matrix for given data in R^2
-         * returns [Var(X), Cov(X,Y), Var(Y)]
-         * since Cov(X,Y) = Cov(Y,X) then covariance matrix will always be symmetric
-         * so we can return only values on the diagonal and above
-         * if samples list is empty returns [0,0,0] to avoid dividing by 0
-         */
         if(samples.size() == 0) { return new Matrix2x2(0,0,0,0); }
 
-        ArrayList<Double> output = new ArrayList<>();
         ArrayList<Double> xs = getXs(samples);
         ArrayList<Double> ys = getYs(samples);
 
@@ -116,12 +187,20 @@ public class MathUtils {
         return new Matrix2x2(varX, covXY, covXY, varY);
     }
 
+    /**
+     * @param samples - list of samples in the simulation
+     * @return the correlation between x and y coordinates
+     */
     static double correlation(ArrayList<Sample> samples) {
         return covariance(samples)/(stdDev(getXs(samples))*stdDev(getYs(samples)));
     }
 
-    static ArrayList<Double> linearRegressionCoefficients(ArrayList<Sample> samples) {
-        ArrayList<Double> output = new ArrayList<>();
+    /**
+     * fit the model of linear regression with given samples
+     * @param samples - the list of samples to which the straight line is determined
+     * @return table of [a, b]
+     */
+    static double[] fitLinearRegressionModel(ArrayList<Sample> samples) {
         ArrayList<Double> xs = getXs(samples);
         ArrayList<Double> ys = getYs(samples);
 
@@ -131,48 +210,7 @@ public class MathUtils {
 
         double a = rho*devY/devX;
 
-        output.add(a);
-        output.add(mean(ys) - a*mean(xs));
-        return output;
-    }
-
-    static ArrayList<Double> symmetricMatrixEigenvaluesAndVectors(double a, double b, double c) {
-        /**
-         * computes eigenvectors and eigenvalues of symmetric matrix | a b |
-         *                                                           | b c |
-         * returns [ V1x, V1y, V2x, V2y, lambda1, lambda 2 ]
-         * where V1 and V2 are eigenvectors and lambda1 and lambda2 are corresponding eigenvalues
-         * V1x is x-value of V1 etc ...
-         * if a==b==c==0 returns [0,0,0,0,0,0] to avoid NaN values
-         * lengths of eigenvectors are equal to corresponding eigenvalues (not 1!) for better visualization
-         *
-         * Please note that since given matrix is symmetric, eigenvectors will always be orthogonal to each other
-         **/
-
-        if(a == 0 && b == 0 && c == 0) { return new ArrayList<>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0)); }
-
-        ArrayList<Double> output = new ArrayList<>();
-
-        // first, compute eigenvalues using characteristic equation of given matrix
-        double delta = sqrt((a+c)*(a+c) - 4*(a*c - b*b));
-        double lambda_1 = (a+c+delta)/2;
-        double lambda_2 = (a+c-delta)/2;
-
-        // compute lengths of eigenvectors where x value = 1
-        double len_x1 = sqrt(1+((lambda_1-a)/b)*((lambda_1-a)/b));
-        double len_x2 = sqrt(1+((lambda_2-a)/b)*((lambda_2-a)/b));
-
-        // compute eigenvectors divided by their lengths and multiply by lambda values to achieve lengths = lambda
-        output.add(lambda_1/len_x1);
-        output.add(lambda_1*(lambda_1-a)/(b*len_x1));
-        output.add(lambda_2/len_x2);
-        output.add(lambda_2*(lambda_2-a)/(b*len_x2));
-
-        // add eigenvalues to output
-        output.add(lambda_1);
-        output.add(lambda_2);
-
-        return output;
+        return new double[] {a, mean(ys)-a*mean(xs)};
     }
 
     public static double sigmoid(double x) {
@@ -183,9 +221,20 @@ public class MathUtils {
         return sigmoid(x)*(1 - sigmoid(x));
     }
 
-    public static double[] LogisticRegressionParameters(ArrayList<Sample> samples, int epochs, double eta) {
-        // should be random values but with constant initial values, line looks more stable
-
+    /**
+     * fits the model of logistic regression in R^2.
+     * takes only red and blue samples and performs zero centering
+     * then finds the best weights using stochastic gradient descent with batch size = 1
+     * last thing is to move all samples by its old mean values
+     * because zero centering is only to improve efficiency of algorithm not to transform original data
+     * bias is moved by that means as well.
+     * that means zero centering is not noticeable outside this function.
+     * @param samples - list of all samples
+     * @param epochs - number of iteration of gradient descent
+     * @param eta - step size of updating the weights
+     * @return table [wx, wy, bias]
+     */
+    public static double[] fitLogisticRegressionModel(ArrayList<Sample> samples, int epochs, double eta) {
         ArrayList<Sample> trainingSamples = new ArrayList<>();
 
         for(Sample sample: samples) {
@@ -198,6 +247,7 @@ public class MathUtils {
         double meanY = mean(getYs(trainingSamples));
         zeroCenterSamples(trainingSamples);
 
+        // should be random values but with constant initial values, line looks more stable
         double wx = 0.1;
         double wy = -0.1;
         double bias = 0.2;
@@ -218,8 +268,14 @@ public class MathUtils {
         return new double[] {wx, wy, bias - (wx*meanX + wy*meanY)};
     }
 
-    public static double round(double value, int i) {
-        double factor = pow(10, i);
+    /**
+     * rounds a real number to the specified precision.
+     * @param value - value to be rounded
+     * @param precision - how many digits after the decimal point
+     * @return rounded value to the given precision
+     */
+    public static double round(double value, int precision) {
+        double factor = pow(10, precision);
         return floor(value*factor)/factor;
     }
 }

@@ -1,17 +1,31 @@
 import java.awt.*;
-
 import static java.lang.StrictMath.abs;
 
+/**
+ * Class that simulates logistic regression algorithm.
+ * Even if that class contains the whole logistic regression model it hasn't got any math inside.
+ * For the algorithms look at MathUtils class.
+ */
 public class LogCartesianPlane extends CartesianPlane {
-    private double a, b, wx, wy, bias;
-    private boolean lineVisible, weightVisible;
+    // a and b are coefficient of separation line
+    private double a;
+    private double b;
+    // wx and wy are weights of that model
+    private double wx;
+    private double wy;
+    private boolean separationLineVisibility, weightsVisibility;
 
     LogCartesianPlane(Graphics2D g2, int width, int height, Panel mainPanel) {
         super(g2, width, height, mainPanel);
-        lineVisible = true;
-        weightVisible = false;
+        separationLineVisibility = true;
+        weightsVisibility = false;
     }
 
+    /**
+     * Initializes all menu with buttons {Grid, Line, Weights, Menu}
+     * sliders {ETA, Epochs}
+     * labels {weights, bias, separation line}
+     */
     void initSideMenu() {
         String[] buttonLabels = new String[] {"Grid", "Line", "Weights", "Menu"};
         int heightOfButton = height/20;
@@ -26,6 +40,13 @@ public class LogCartesianPlane extends CartesianPlane {
         menu.addValueLabel("y", "0x + 0", height/20.0);
     }
 
+    /**
+     * draws cartesian plane lines, all samples and if there are
+     * at least 2 samples and one of them is red and the other is blue
+     * and if line visibility is set to true then draws separation line
+     * also if weight visibility is set to true then weight vector is drawn.
+     * at the end menu is drawn.
+     */
     @Override
     public void draw() {
         drawLines();
@@ -33,25 +54,35 @@ public class LogCartesianPlane extends CartesianPlane {
         drawSamples();
 
         if(samples.size() > 1 && twoClassesExists()) {
-            if(lineVisible) drawSeparationLine();
+            if(separationLineVisibility) drawSeparationLine();
 
-            if(weightVisible) {
+            if(weightsVisibility) {
                 g2.setStroke(new BasicStroke(2));
                 g2.setColor(new Color(100, 255, 100));
                 drawVector(wx, wy);
             }
         }
 
-
         menu.draw();
     }
 
+    /**
+     * adds new Sample but always with '0' class which means that it's neutral and its color is gray.
+     * @param x - Initial x coordinate (in cartesian plane simulation)
+     * @param y - Initial y coordinate (in cartesian plane simulation)
+     */
     void addNewSample(double x, double y) {
         super.addNewSample(x, y);
         samples.get(samples.size() - 1).setCategory(0);
         samples.get(samples.size() - 1).setColor(new Color(130, 130, 130));
     }
 
+    /**
+     * performs onRightClick method from Cartesian plane but refresh all simulation
+     * only is there are at least 2 samples
+     * @param mouseX - current mouse x position (in pixels)
+     * @param mouseY - current mouse y position (in pixels)
+     */
     @Override
     public void onRightClick(double mouseX, double mouseY) {
         super.onRightClick(mouseX, mouseY);
@@ -60,6 +91,15 @@ public class LogCartesianPlane extends CartesianPlane {
         }
     }
 
+    /**
+     * Performs onMouseDragged from cartesian plane and if it returns true (means that
+     * something was changed and it might has an impact on the simulation) updates the whole simulation
+     * @param mouseX - current mouse x position (in pixels)
+     * @param mouseY - current mouse y position (in pixels)
+     * @param prevMouseX - mouse x position in previous frame (in pixels)
+     * @param prevMouseY - mouse y position in previous frame (in pixels)
+     * @return always true
+     */
     @Override
     public boolean onMouseDragged(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
         if(super.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY) && samples.size() > 1) {
@@ -68,15 +108,30 @@ public class LogCartesianPlane extends CartesianPlane {
         return true;
     }
 
-    void menuOptions(double mx, double my) {
-        switch(menu.onReleased(mx, my)) {
+    /**
+     * checks if some of buttons in menu is pressed
+     * if so then performs some action related to that pressed button.
+     * Sliders are supported inside @code{menu.onReleased} method since they haven't got
+     * any specific action and all of them behave the same way.
+     * @param mouseX - current mouse x position (in pixels)
+     * @param mouseY - current mouse y position (in pixels)
+     */
+    void menuOptions(double mouseX, double mouseY) {
+        switch(menu.onReleased(mouseX, mouseY)) {
             case "Grid": linesVisibility = !linesVisibility; break;
-            case "Line": lineVisible = !lineVisible; break;
-            case "Weights": weightVisible = !weightVisible; break;
-            case "Menu": panel.changeGraphics("Menu");
+            case "Line": separationLineVisibility = !separationLineVisibility; break;
+            case "Weights": weightsVisibility = !weightsVisibility; break;
+            case "Menu": panel.changeGraphics("", "Visualizations");
         }
     }
 
+    /**
+     * performs colorSelectedSample from cartesianPlane and if it returns true
+     * updates the whole simulation.
+     * @param col - new Color of selected sample
+     * @param value - new value (related to color) of selected sample
+     * @return always true
+     */
     boolean colorSelectedSample(Color col, int value) {
         if(super.colorSelectedSample(col, value)) {
             update();
@@ -84,20 +139,26 @@ public class LogCartesianPlane extends CartesianPlane {
         return true;
     }
 
+    /**
+     * Updates the whole simulation under the condition that at least one sample is red and one is blue.
+     * Finds best weights for current samples using method @code{MathUtils.LogisticRegressionParameters}
+     * Saves weights and bias, updates labels and finds the coefficients of separation line.
+     * At the end predicts class for all neutral samples.
+     */
     void update() {
         if(!twoClassesExists()) {
             return;
         }
 
-        double[] neuron = MathUtils.LogisticRegressionParameters(samples,
+        double[] neuron = MathUtils.fitLogisticRegressionModel(samples,
                 (int)menu.readValueFromSlider("Epochs"),
                 menu.readValueFromSlider("ETA"));
         wx = neuron[0];
         wy = neuron[1];
-        bias = neuron[2];
+        double bias = neuron[2];
 
         a = -wx/wy;
-        b = -bias/wy;
+        b = -bias /wy;
 
         menu.updateLabel("w", "["+MathUtils.round(wx, 2)+", "+MathUtils.round(wy, 2)+"]");
         menu.updateLabel("bias", Double.toString(MathUtils.round(bias, 2)));
@@ -112,6 +173,10 @@ public class LogCartesianPlane extends CartesianPlane {
         }
     }
 
+    /**
+     * checks if at least there is one red sample and one blue
+     * @return true if there are red and blue samples otherwise false
+     */
     boolean twoClassesExists() {
         boolean pos = false, neg = false;
 
@@ -126,8 +191,12 @@ public class LogCartesianPlane extends CartesianPlane {
         return false;
     }
 
+    /**
+     * draws line which separates red and blue samples
+     */
     void drawSeparationLine() {
         g2.setColor(new Color(255, 255, 0));
+        g2.setStroke(new BasicStroke(3));
         drawStraightLine(a, b);
     }
 }
