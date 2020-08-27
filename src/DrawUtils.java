@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
 
 /**
  * Class that has a lot of utility functions for drawing on the screen.
@@ -106,5 +108,12 @@ public class DrawUtils {
     public static int stringWidth(String text) {
         FontMetrics metrics = g2.getFontMetrics(font);
         return metrics.stringWidth(text);
+    }
+
+    public static int stringHeight(String text) {
+        FontRenderContext frc = g2.getFontRenderContext();
+        GlyphVector gv = g2.getFont().createGlyphVector(frc, text);
+        Rectangle rect = gv.getPixelBounds(null, 0,0);
+        return (int) rect.getHeight();
     }
 }

@@ -26,10 +26,12 @@ public class MatrixCartesianPlane extends CartesianPlane {
 
     /**
      * Creates the matrix. Initial state is the identity.
+     * Initializes the message window
      */
     @Override
     void initComponents() {
         matrix = new GraphicsMatrix2x2(1,0,0,1);
+        messageWindow = new MessageWindow(width, height, "data/Matrix-Sim-About");
     }
 
     /**
@@ -38,7 +40,7 @@ public class MatrixCartesianPlane extends CartesianPlane {
     @Override
     void initSideMenu() {
         String[] buttonLabels = new String[] {"Grid", "Matrix Grid", "Determinant", "Transpose",
-                "Inverse", "Eigenvectors", "Projected", "Menu"};
+                "Inverse", "Eigenvectors", "Projected", "About", "Menu"};
 
         menu = new SideMenu(g2, width/9, height);
         menu.addButtons(buttonLabels, height/20);
@@ -75,6 +77,7 @@ public class MatrixCartesianPlane extends CartesianPlane {
         if(projectVisibility) { for(Sample s: projected) s.draw(camera, scale, g2); }
 
         menu.draw();
+        messageWindow.draw(g2);
     }
 
     /**
@@ -89,21 +92,20 @@ public class MatrixCartesianPlane extends CartesianPlane {
     }
 
     /**
-     * checks if some sample is under the mouse and if so then selects it.
-     * if not, checks whether one of two basis is under the mouse and if so then selects it.
-     * At the end performs @code{SideMenu#onLeftClick}
+     * Performs {@code CartesianPlane#onLeftClick} if nothing was moved then checks
+     * if some of the basis of the matrix is under the mouse
+     * and if so then changes its moving variable to true
+     * so it will follow the mouse
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
+     * @return always true
      */
     @Override
-    public void onLeftClick(double mouseX, double mouseY) {
-        int index = select(mouseX, mouseY);
-        if(index != -1) {
-            samples.get(index).setMoving(true);
-        } else {
+    public boolean onLeftClick(double mouseX, double mouseY) {
+        if(super.onLeftClick(mouseX, mouseY)) {
             matrix.selectBasis(simulationX(mouseX), simulationY(mouseY));
         }
-        menu.onLeftClick(mouseX, mouseY);
+        return true;
     }
 
     /**
@@ -158,6 +160,7 @@ public class MatrixCartesianPlane extends CartesianPlane {
             case "Inverse": inverseVisibility = !inverseVisibility; break;
             case "Eigenvectors": eigenvectorsVisibility = !eigenvectorsVisibility; break;
             case "Projected": projectVisibility = !projectVisibility; break;
+            case "About": messageWindow.toggleVisibility(); break;
             case "Menu": panel.changeGraphics("", "Visualizations");
         }
     }

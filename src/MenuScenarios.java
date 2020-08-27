@@ -32,7 +32,7 @@ class MenuScenarios {
 
     private static final String[] linearAlgebraButtons = new String[] {
             "Vectors",
-            "Matrices as system of equation",
+            "Matrix as a system of equations",
             "Matrices geometrically",
             "Inverse of Matrix",
             "Four Subspaces of Matrix",

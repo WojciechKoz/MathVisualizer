@@ -18,11 +18,19 @@ public class LRCartesianPlane extends CartesianPlane {
     }
 
     /**
+     * Initializes the message window
+     */
+    @Override
+    void initComponents() {
+        messageWindow = new MessageWindow(width, height, "data/Linear-Reg-Sim-About");
+    }
+
+    /**
      * initializes the menu with buttons {Grid, Line, Errors, Menu}
      * and labels {line coefficient, error measure}
      */
     void initSideMenu() {
-        String[] buttonLabels = new String[] {"Grid", "Line", "Errors", "Menu"};
+        String[] buttonLabels = new String[] {"Grid", "Line", "Errors", "About", "Menu"};
 
         menu = new SideMenu(g2, width/9, height);
         menu.addButtons(buttonLabels, height/20);
@@ -33,7 +41,7 @@ public class LRCartesianPlane extends CartesianPlane {
     /**
      * draws cartesian plane lines, samples,
      * and, if there are at least two samples, best straight line
-     * at the end menu is drawn
+     * at the end menu and message window are drawn
      */
     @Override
     public void draw() {
@@ -46,6 +54,7 @@ public class LRCartesianPlane extends CartesianPlane {
         }
 
         menu.draw();
+        messageWindow.draw(g2);
     }
 
     /**
@@ -91,6 +100,7 @@ public class LRCartesianPlane extends CartesianPlane {
             case "Grid": linesVisibility = !linesVisibility; break;
             case "Line": regressionLineVisibility = !regressionLineVisibility; break;
             case "Errors": errorVisibility = !errorVisibility; break;
+            case "About": messageWindow.toggleVisibility(); break;
             case "Menu": panel.changeGraphics("", "Visualizations");
         }
     }

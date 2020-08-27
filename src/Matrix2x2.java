@@ -11,12 +11,18 @@ public class Matrix2x2 {
     protected double a,b,c,d;
     // eigenvectors and values table looks like this [v1x, v1y, v2x, v2y, l1, l2]
     protected double[] eigenvectorsAndValues = new double[6];
+    protected String name;
 
     Matrix2x2(double a, double b, double c, double d) {
+        this(a, b, c, d,"A");
+    }
+
+    Matrix2x2(double a, double b, double c, double d, String name) {
         this.a = a;
         this.b = b;
         this.c = c;
         this.d = d;
+        this.name = name;
 
         computeEigenvectorsAndValues();
     }
@@ -87,13 +93,13 @@ public class Matrix2x2 {
 
     /**
      * computes real eigenvectors and eigenvalues.
-     * If eigenvalues are supposed to be complex or matrix is singular
+     * If eigenvalues are supposed to be complex
      * then all eigenvectors and eigenvalues are equal to 0.
      * Lengths of eigenvectors are equal to corresponding eigenvalues (NOT 1 !!)
-     * Results are saved in @code{realEigenvectorsAndValues}.
+     * Results are saved in {@code realEigenvectorsAndValues}.
      */
     protected void computeEigenvectorsAndValues() {
-        if(trace()*trace() < 4*det() || singular()) {
+        if(trace()*trace() < 4*det() || zeroMatrix()) {
             eigenvectorsAndValues = new double[] {0,0,0,0,0,0};
             return;
         }
@@ -149,7 +155,16 @@ public class Matrix2x2 {
         return det() == 0.0;
     }
 
-    String getName() { return "A"; }
+    /**
+     * @return true if matrix is a 0 matrix meaning that all components are 0
+     */
+    boolean zeroMatrix() {
+        return a==0 && b==0 && c==0 && d==0;
+    }
+
+    String getName() { return name; }
+
+    void setName(String newName) { name = newName; }
 
     /**
      * sets new values to avoid creating a new matrix.
@@ -178,6 +193,11 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
 
     GraphicsMatrix2x2(double a, double b, double c, double d) {
         super(a, b, c, d);
+        deselect();
+    }
+
+    GraphicsMatrix2x2(double a, double b, double c, double d, String name) {
+        super(a, b, c, d, name);
         deselect();
     }
 
@@ -400,7 +420,6 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
      */
     private void drawParallelLines(double slope, double yInterceptIncrement, Point2D camera, double scale,
                                    CartesianPlane plane) {
-        if(yInterceptIncrement < 0.001) return;
 
         if(Double.isInfinite(slope)) {
             // is a is infinite draws parallel vertical lines

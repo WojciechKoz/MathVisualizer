@@ -20,7 +20,7 @@ public interface GraphicsInterface {
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
      */
-    void onLeftClick(double mouseX, double mouseY);
+    boolean onLeftClick(double mouseX, double mouseY);
 
     /**
      * this method runs when left mouse button was released

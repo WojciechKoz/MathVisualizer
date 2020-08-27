@@ -25,6 +25,8 @@ public class CartesianPlane implements GraphicsInterface {
     protected Panel panel;
     // menu on the left hand side of the screen with some options in simulation
     protected SideMenu menu;
+    // window with text about current simulation
+    protected MessageWindow messageWindow;
 
     CartesianPlane(Graphics2D g2, int width, int height, Panel mainPanel) {
         this.g2 = g2;
@@ -41,20 +43,25 @@ public class CartesianPlane implements GraphicsInterface {
 
         initComponents();
         initSideMenu();
+
     }
 
     /**
      * Initializes all objects in simulations (for example Matrix2x2)
      * It's important to keep it before initSideMenu
-     * because sometimes we want to have a button with matrix details in it so that matrix has to be created
+     * because sometimes we want to have a button with matrix details in it so that matrix has to be created.
+     * Initializes the message window since all simulations have other information.
      */
-    void initComponents() { }
+    void initComponents() {
+        // tests. will be deleted
+        messageWindow = new MessageWindow(width, height, "data/lorem-ipsum");
+    }
 
     /**
      * Initializes sideMenu with all its buttons
      */
     void initSideMenu() {
-        String[] buttonLabels = new String[] {"Grid", "Menu"};
+        String[] buttonLabels = new String[] {"Grid", "About", "Menu"};
 
         menu = new SideMenu(g2, width/9, height);
         menu.addButtons(buttonLabels, height/20);
@@ -68,6 +75,8 @@ public class CartesianPlane implements GraphicsInterface {
         drawLines();
         drawSamples();
         menu.draw();
+
+        messageWindow.draw(g2);
     }
 
     /**
@@ -279,19 +288,28 @@ public class CartesianPlane implements GraphicsInterface {
     }
 
     /**
-     * If mouse is inside the menu then runs @code{menu.onLeftClick(mouseX, mouseY)}
+     * If mouse is inside the messageWindow or menu then runs its onLeftClick method
      * else checks if some sample is under the mouse and if so then
      * set its moving variable to true (that sample will follow the mouse until left button will be released)
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
+     * @return true if something was moved
      */
     @Override
-    public void onLeftClick(double mouseX, double mouseY) {
-        if(menu.hasInside(mouseX, mouseY)) {
+    public boolean onLeftClick(double mouseX, double mouseY) {
+        if(messageWindow.hasInside(mouseX, mouseY)) {
+            messageWindow.onLeftClick(mouseX, mouseY);
+            return false;
+        } else if(menu.hasInside(mouseX, mouseY)) {
             menu.onLeftClick(mouseX, mouseY);
+            return false;
         } else {
             int index = select(mouseX, mouseY);
-            if (index != -1) samples.get(index).setMoving(true);
+            if (index != -1) {
+                samples.get(index).setMoving(true);
+                return false;
+            }
+            return true;
         }
     }
 
@@ -305,6 +323,8 @@ public class CartesianPlane implements GraphicsInterface {
     public void onLeftMouseButtonReleased(double mouseX, double mouseY) {
         if(menu.hasInside(mouseX, mouseY)) {
             menuOptions(mouseX, mouseY);
+        } else if(messageWindow.hasInside(mouseX, mouseY)) {
+            messageWindow.onMouseReleased(mouseX, mouseY);
         } else {
             for(Sample sample: samples) {
                 sample.setMoving(false);
@@ -323,6 +343,7 @@ public class CartesianPlane implements GraphicsInterface {
     void menuOptions(double mouseX, double mouseY) {
         switch(menu.onReleased(mouseX, mouseY)) {
             case "Grid": linesVisibility = !linesVisibility; break;
+            case "About": messageWindow.toggleVisibility(); break;
             case "Menu": panel.changeGraphics("", "Menu");
         }
     }
@@ -345,6 +366,9 @@ public class CartesianPlane implements GraphicsInterface {
         if(menu.hasInside(mouseX, mouseY)) {
             menu.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY);
             return true;
+        }
+        if(messageWindow.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY)) {
+            return false;
         }
 
         for (Sample sample : samples) {
@@ -369,6 +393,8 @@ public class CartesianPlane implements GraphicsInterface {
     @Override
     public void onMouseMoved(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
         menu.onMouseMoved(mouseX, mouseY, prevMouseX, prevMouseY, simulationX(mouseX), simulationY(mouseY));
+
+        messageWindow.onMouseMoved(mouseX, mouseY);
     }
 
     /**
@@ -382,6 +408,8 @@ public class CartesianPlane implements GraphicsInterface {
 
         if(menu.hasInside(mouse.x, mouse.y)) {
             menu.onMouseScrolled(rotation);
+        } else if(messageWindow.hasInside(mouse.x, mouse.y)) {
+            messageWindow.onMouseScrolled(rotation);
         } else {
             changeScale(rotation == 1 ? 0.95 : 1.05, mouse.x, mouse.y);
         }

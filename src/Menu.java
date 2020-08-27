@@ -78,12 +78,14 @@ public class Menu implements GraphicsInterface {
      * If left mouse button is pressed then color of the button is changed to clicked hover theme.
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
+     * @return always true
      */
     @Override
-    public void onLeftClick(double mouseX, double mouseY) {
+    public boolean onLeftClick(double mouseX, double mouseY) {
         for(Button button: buttons) {
             button.setHover(mouseX, mouseY, true);
         }
+        return true;
     }
 
     /**

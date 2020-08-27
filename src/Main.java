@@ -52,7 +52,7 @@ public class Main {
     ...
     version 0.4
     - refactor code [checked]
-    - message box inside CartesianPlane
+    - message box inside CartesianPlane [checked]
     - input numbers from keyboard
     - checkboxes buttons
     - KNN Algorithm

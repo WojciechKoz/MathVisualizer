@@ -25,14 +25,16 @@ public class PCACartesianPlane extends CartesianPlane {
      */
     @Override
     void initComponents() {
+        messageWindow = new MessageWindow(width, height, "data/PCA-Sim-About");
         covarianceMatrix = new GraphicsMatrix2x2(MathUtils.covarianceMatrix(samples));
+        covarianceMatrix.setName("Cov");
     }
 
     /**
      * Initializes all side menu with buttons
      */
     void initSideMenu() {
-        String[] buttonLabels = new String[] {"Grid", "Cov Matrix", "Eigenvectors", "Projected", "Menu"};
+        String[] buttonLabels = new String[] {"Grid", "Cov Matrix", "Eigenvectors", "Projected", "About", "Menu"};
 
         menu = new SideMenu(g2, width/9, height);
         menu.addButtons(buttonLabels, height/20);
@@ -61,6 +63,7 @@ public class PCACartesianPlane extends CartesianPlane {
         if(projectedSamplesVisibility) { for(Sample s: projected) s.draw(camera, scale, g2); }
 
         menu.draw();
+        messageWindow.draw(g2);
     }
 
     /**
@@ -108,6 +111,7 @@ public class PCACartesianPlane extends CartesianPlane {
             case "Cov Matrix": covToggle(); break;
             case "Eigenvectors": eigToggle(); break;
             case "Projected": prodToggle(); break;
+            case "About": messageWindow.toggleVisibility(); break;
             case "Menu": panel.changeGraphics("", "Visualizations");
         }
     }

@@ -1,0 +1,25 @@
+Matrix Simulation
+This is a 2x2 matrix simulation. Basis of the matrix are represented by two vectors (red and green).
+You can change values of the matrix by moving the circles at the ends of the vectors with the mouse.
+The exact values are displayed in the side menu on the left side of the screen.
+Each vector you add will be multiplied by this matrix and the result will 
+be displayed in a slightly more transparent color.
+The result is nothing more than the projection of this vector 
+onto the space created by this matrix 
+(for more details please check out theory of linear algebra available in this app).
+
+The determinant of the matrix is represented by a parallelogram spanning the 
+bases of that matrix because its area is the absolute value of the determinant of that matrix.
+The exact value of the determinant is displayed in the 
+side menu on the left side of the screen under the matrix values.
+
+Transposition and inverse of this matrix are represented by another matrices.
+Color of basis of the transpose is blue and color of the inverse matrix is yellow.
+You can also check the values of inverse matrix looking at the side menu.
+
+Eigenvectors if exist are drawn as straight white lines. However if the eigenvalues are 
+not real eigenvectors are not drawn at all. Eigenvalues are displayed below the determinant.
+
+If the matrix is almost singular, the simulation does not draw 
+the matrix grid because the number of lines goes to infinity and 
+this can slow down the entire program considerably.

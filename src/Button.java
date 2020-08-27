@@ -97,6 +97,11 @@ public abstract class Button {
     public void setY(double newY) { y = (int)newY; }
 
     public double getY() { return y; }
+
+    public void move(double dx, double dy) {
+        x += dx;
+        y += dy;
+    }
 }
 
 
@@ -445,9 +450,9 @@ class MatrixLabelButton extends Button {
         // prints second column of the matrix (always starts with the same X) and
         // labelWidth is no longer necessary)
         text = Double.toString(MathUtils.round(matrix.b, 2));
-        DrawUtils.drawStringWithLeftAlignment(text, (int)(x+width*0.6), (int)(y+height*0.3));
+        DrawUtils.drawStringWithLeftAlignment(text, (int) (x+width*0.65), (int)(y+height*0.3));
         text = Double.toString(MathUtils.round(matrix.d, 2));
-        DrawUtils.drawStringWithLeftAlignment(text, (int)(x+width*0.6), (int)(y+height*0.7));
+        DrawUtils.drawStringWithLeftAlignment(text, (int)(x+width*0.65), (int)(y+height*0.7));
 
         // prints right bracket of the matrix
         g2.setColor(textCol);

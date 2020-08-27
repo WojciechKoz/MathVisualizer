@@ -22,12 +22,19 @@ public class LogCartesianPlane extends CartesianPlane {
     }
 
     /**
-     * Initializes all menu with buttons {Grid, Line, Weights, Menu}
+     * Initializes the message window
+     */
+    void initComponents() {
+        messageWindow = new MessageWindow(width, height, "data/Logistic-Reg-Sim-About");
+    }
+
+    /**
+     * Initializes all menu with buttons
      * sliders {ETA, Epochs}
      * labels {weights, bias, separation line}
      */
     void initSideMenu() {
-        String[] buttonLabels = new String[] {"Grid", "Line", "Weights", "Menu"};
+        String[] buttonLabels = new String[] {"Grid", "Line", "Weights", "About", "Menu"};
         int heightOfButton = height/20;
 
         menu = new SideMenu(g2, width/9, height);
@@ -45,7 +52,7 @@ public class LogCartesianPlane extends CartesianPlane {
      * at least 2 samples and one of them is red and the other is blue
      * and if line visibility is set to true then draws separation line
      * also if weight visibility is set to true then weight vector is drawn.
-     * at the end menu is drawn.
+     * at the end menu and message window are drawn.
      */
     @Override
     public void draw() {
@@ -64,6 +71,7 @@ public class LogCartesianPlane extends CartesianPlane {
         }
 
         menu.draw();
+        messageWindow.draw(g2);
     }
 
     /**
@@ -121,6 +129,7 @@ public class LogCartesianPlane extends CartesianPlane {
             case "Grid": linesVisibility = !linesVisibility; break;
             case "Line": separationLineVisibility = !separationLineVisibility; break;
             case "Weights": weightsVisibility = !weightsVisibility; break;
+            case "About": messageWindow.toggleVisibility(); break;
             case "Menu": panel.changeGraphics("", "Visualizations");
         }
     }
