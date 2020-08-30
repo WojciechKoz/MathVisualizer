@@ -27,8 +27,8 @@ public class MessageWindow {
 
     MessageWindow(double screenWidth, double screenHeight, String filename) {
         // initial position and size of message window
-        x = (int) (0.55*screenWidth);
-        y = (int) (0.2*screenHeight);
+        x = (int) (0.58*screenWidth);
+        y = (int) (0.05*screenHeight);
         width = (int) (0.4*screenWidth);
         height = (int) (0.65*screenHeight);
         fontSize = (int) (screenWidth/70.0);

@@ -84,10 +84,11 @@ public class Matrix2x2 {
      * @return inverse matrix of this one. If matrix is singular returns 0 matrix.
      */
     Matrix2x2 inverse() {
-        double det = det();
-        if(det == 0) {
+        if(singular()) {
             return new Matrix2x2(0,0,0,0);
         }
+
+        double det = det();
         return new Matrix2x2(d/det, -c/det, -b/det, a/det);
     }
 

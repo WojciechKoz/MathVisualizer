@@ -13,6 +13,7 @@ public class PCACartesianPlane extends CartesianPlane {
 
     PCACartesianPlane(Graphics2D g2, int width, int height, Panel panel) {
         super(g2, width, height, panel);
+        menuName = "Visualizations";
 
         covarianceMatrixVisibility = true;
         eigenvectorsVisibility = true;
@@ -34,10 +35,10 @@ public class PCACartesianPlane extends CartesianPlane {
      * Initializes all side menu with buttons
      */
     void initSideMenu() {
-        String[] buttonLabels = new String[] {"Grid", "Cov Matrix", "Eigenvectors", "Projected", "About", "Menu"};
+        String[] buttonsLabels = new String[] {"Cov Matrix", "Eigenvectors", "Projected"};
+        Boolean[] buttonsValues = new Boolean[] {true, true, true};
 
-        menu = new SideMenu(g2, width/9, height);
-        menu.addButtons(buttonLabels, height/20);
+        menu.addCheckBoxButtons(buttonsLabels, buttonsValues, height/20);
         menu.addMatrixLabel(covarianceMatrix, height/10.0);
     }
 
@@ -76,7 +77,7 @@ public class PCACartesianPlane extends CartesianPlane {
     public void onRightClick(double mouseX, double mouseY) {
         super.onRightClick(mouseX, mouseY);
         covarianceMatrix.setValues(MathUtils.covarianceMatrix(samples));
-        project();
+        update();
     }
 
     /**
@@ -91,8 +92,7 @@ public class PCACartesianPlane extends CartesianPlane {
     @Override
     public boolean onMouseDragged(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
         if(super.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY)) {
-            covarianceMatrix.setValues(MathUtils.covarianceMatrix(samples));
-            project();
+            update();
         }
         return true;
     }
@@ -102,17 +102,14 @@ public class PCACartesianPlane extends CartesianPlane {
      * if so then performs some action related to that pressed button.
      * Sliders are supported inside @code{menu.onReleased} method since they haven't got
      * any specific action and all of them behave the same way.
-     * @param mouseX - current mouse x position (in pixels)
-     * @param mouseY - current mouse y position (in pixels)
+     * @param label - label of pressed button
      */
-    void menuOptions(double mouseX, double mouseY) {
-        switch(menu.onReleased(mouseX, mouseY)) {
-            case "Grid": linesVisibility = !linesVisibility; break;
+    void menuOptions(String label) {
+        switch(label) {
             case "Cov Matrix": covToggle(); break;
             case "Eigenvectors": eigToggle(); break;
             case "Projected": prodToggle(); break;
-            case "About": messageWindow.toggleVisibility(); break;
-            case "Menu": panel.changeGraphics("", "Visualizations");
+            default: super.menuOptions(label);
         }
     }
 
@@ -123,27 +120,30 @@ public class PCACartesianPlane extends CartesianPlane {
     void prodToggle() { projectedSamplesVisibility = !projectedSamplesVisibility; }
 
     /**
-     * tries to color a sample and if it succeed then refreshes projected samples
-     * (no need to refresh covariance matrix)
+     * tries to color a sample and if it succeed then refreshes simulation
      * @param col - new Color of selected sample
      * @param value - new value (related to color) of selected sample
      * @return always true
      */
     boolean colorSelectedSample(Color col, int value) {
         if(super.colorSelectedSample(col, value)) {
-            project();
+            update();
         }
         return true;
     }
 
     /**
+     * Calculates covariance matrix and its eigenvectors.
      * Removes all buttons in side menu related with projected samples and clear an old list of projected samples.
      * Projects samples onto the eigenvector which has a bigger eigenvalue (TODO add 2D projection)
      * Adds all buttons corresponding to the new projected samples.
      * projected samples are created every time when simulation is changed because there is no connection
      * between sample and its projection.
      */
-    void project() {
+    @Override
+    public void update() {
+        covarianceMatrix.setValues(MathUtils.covarianceMatrix(samples));
+
         for(Sample sample: projected) {
             menu.removeSampleLabel(sample);
         }
@@ -158,7 +158,7 @@ public class PCACartesianPlane extends CartesianPlane {
             Sample newSample = new Sample(projected_x, 0,
                     new Color(s.getColor().getRed(), s.getColor().getGreen(), s.getColor().getBlue(), 130));
             projected.add(newSample);
-            menu.addSampleLabel(newSample, height/20.0);
+            menu.addSampleLabel(newSample, height/20.0, false);
         }
     }
 }

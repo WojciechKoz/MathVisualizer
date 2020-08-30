@@ -13,6 +13,8 @@ public class LRCartesianPlane extends CartesianPlane {
 
     LRCartesianPlane(Graphics2D g2, int width, int height, Panel mainPanel) {
         super(g2, width, height, mainPanel);
+        menuName = "Visualizations";
+
         regressionLineVisibility = true;
         errorVisibility = true;
     }
@@ -30,10 +32,10 @@ public class LRCartesianPlane extends CartesianPlane {
      * and labels {line coefficient, error measure}
      */
     void initSideMenu() {
-        String[] buttonLabels = new String[] {"Grid", "Line", "Errors", "About", "Menu"};
+        String[] buttonsLabels = new String[] {"Line", "Errors"};
+        Boolean[] buttonsValues = new Boolean[] {true, true};
 
-        menu = new SideMenu(g2, width/9, height);
-        menu.addButtons(buttonLabels, height/20);
+        menu.addCheckBoxButtons(buttonsLabels, buttonsValues, height/20);
         menu.addValueLabel("y", "0x + 0", height/20.0);
         menu.addValueLabel("Error", "0", height/20.0);
     }
@@ -49,7 +51,7 @@ public class LRCartesianPlane extends CartesianPlane {
 
         drawSamples();
 
-        if(samples.size() > 1 && regressionLineVisibility) {
+        if(samples.size() > 1) {
             drawRegressionLine();
         }
 
@@ -92,16 +94,13 @@ public class LRCartesianPlane extends CartesianPlane {
      * if so then performs some action related to that pressed button.
      * Sliders are supported inside @code{menu.onReleased} method since they haven't got
      * any specific action and all of them behave the same way.
-     * @param mouseX - current mouse x position (in pixels)
-     * @param mouseY - current mouse y position (in pixels)
+     * @param label - label of pressed button
      */
-    void menuOptions(double mouseX, double mouseY) {
-        switch(menu.onReleased(mouseX, mouseY)) {
-            case "Grid": linesVisibility = !linesVisibility; break;
+    void menuOptions(String label) {
+        switch(label) {
             case "Line": regressionLineVisibility = !regressionLineVisibility; break;
             case "Errors": errorVisibility = !errorVisibility; break;
-            case "About": messageWindow.toggleVisibility(); break;
-            case "Menu": panel.changeGraphics("", "Visualizations");
+            default: super.menuOptions(label);
         }
     }
 
@@ -110,9 +109,11 @@ public class LRCartesianPlane extends CartesianPlane {
      * error is also drawn
      */
     void drawRegressionLine() {
-        g2.setColor(new Color(0, 255, 0));
-        g2.setStroke(new BasicStroke(3));
-        drawStraightLine(a, b);
+        if(regressionLineVisibility){
+            g2.setColor(new Color(0, 255, 0));
+            g2.setStroke(new BasicStroke(3));
+            drawStraightLine(a, b);
+        }
 
         if(errorVisibility) {
             drawErrors();
@@ -139,7 +140,8 @@ public class LRCartesianPlane extends CartesianPlane {
     /**
      * Updates the simulation. Finds new best straight line, calculates new error and updates labels in the menu.
      */
-    void update() {
+    @Override
+    public void update() {
         double[] coefficients = MathUtils.fitLinearRegressionModel(samples);
         a = coefficients[0];
         b = coefficients[1];

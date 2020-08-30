@@ -15,6 +15,7 @@ public class MatrixCartesianPlane extends CartesianPlane {
 
     MatrixCartesianPlane(Graphics2D g2, int width, int height, Panel panel) {
         super(g2, width, height, panel);
+        menuName = "Visualizations";
 
         gridVisibility = true;
         eigenvectorsVisibility = false;
@@ -39,11 +40,11 @@ public class MatrixCartesianPlane extends CartesianPlane {
      */
     @Override
     void initSideMenu() {
-        String[] buttonLabels = new String[] {"Grid", "Matrix Grid", "Determinant", "Transpose",
-                "Inverse", "Eigenvectors", "Projected", "About", "Menu"};
+        String[] buttonsLabels = new String[] {"Matrix Grid", "Determinant", "Transpose",
+                "Inverse", "Eigenvectors", "Projected"};
+        Boolean[] buttonsValues = new Boolean[] {true, false, false, false, false, true};
 
-        menu = new SideMenu(g2, width/9, height);
-        menu.addButtons(buttonLabels, height/20);
+        menu.addCheckBoxButtons(buttonsLabels, buttonsValues, height/20);
         menu.addMatrixLabel(matrix, height/10.0);
         menu.addValueLabel("Det", "1", height/20.0);
         menu.addValueLabel("Lambda 1", "0", height/20.0);
@@ -148,25 +149,22 @@ public class MatrixCartesianPlane extends CartesianPlane {
      * if so then performs some action related to that pressed button.
      * Sliders are supported inside @code{menu.onReleased} method since they haven't got
      * any specific action and all of them behave the same way.
-     * @param mouseX - current mouse x position (in pixels)
-     * @param mouseY - current mouse y position (in pixels)
+     * @param label - label of pressed button
      */
-    void menuOptions(double mouseX, double mouseY) {
-        switch(menu.onReleased(mouseX, mouseY)) {
-            case "Grid": linesVisibility = !linesVisibility; break;
+    void menuOptions(String label) {
+        switch(label) {
             case "Matrix Grid": gridVisibility = !gridVisibility; break;
             case "Determinant": determinantVisibility = !determinantVisibility; break;
             case "Transpose": transposeVisibility = !transposeVisibility; break;
             case "Inverse": inverseVisibility = !inverseVisibility; break;
             case "Eigenvectors": eigenvectorsVisibility = !eigenvectorsVisibility; break;
             case "Projected": projectVisibility = !projectVisibility; break;
-            case "About": messageWindow.toggleVisibility(); break;
-            case "Menu": panel.changeGraphics("", "Visualizations");
+            default: super.menuOptions(label);
         }
     }
 
     /**
-     * Performs @code{CartesianPlane#colorSelectedSample} if it returns true which means that
+     * Performs {@code CartesianPlane#colorSelectedSample} if it returns true which means that
      * some sample changed the color and update is necessary since projected sample should has
      * the same color.
      * @param col - new Color of selected sample
@@ -186,7 +184,8 @@ public class MatrixCartesianPlane extends CartesianPlane {
      * and creates new buttons corresponding to list of new projected samples.
      * Label buttons about matrix determinant and eigenvalues are refreshed as well
      */
-    void update() {
+    @Override
+    public void update() {
         for(Sample sample: projected) {
             menu.removeSampleLabel(sample);
         }
@@ -196,7 +195,7 @@ public class MatrixCartesianPlane extends CartesianPlane {
             Sample s_prod = matrix.project(s);
             s_prod.setColor(new Color(s.getColor().getRed(), s.getColor().getGreen(), s.getColor().getBlue(), 130));
             projected.add(s_prod);
-            menu.addSampleLabel(s_prod, height/20.0);
+            menu.addSampleLabel(s_prod, height/20.0, false);
         }
 
         menu.updateLabel("Det", Double.toString(MathUtils.round(matrix.det(), 2)));

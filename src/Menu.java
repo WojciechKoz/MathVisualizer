@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 /**
@@ -168,10 +169,11 @@ public class Menu implements GraphicsInterface {
 
     /**
      * Menu doesn't support keyboard
-     * @param key - char value of pressed button
+     * @param event - all information about pressed button
+     * @return always true
      */
     @Override
-    public void onKeyPressed(char key) {
-
+    public boolean onKeyPressed(KeyEvent event) {
+        return true;
     }
 }

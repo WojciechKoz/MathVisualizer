@@ -17,6 +17,8 @@ public class LogCartesianPlane extends CartesianPlane {
 
     LogCartesianPlane(Graphics2D g2, int width, int height, Panel mainPanel) {
         super(g2, width, height, mainPanel);
+        menuName = "Visualizations";
+
         separationLineVisibility = true;
         weightsVisibility = false;
     }
@@ -34,17 +36,17 @@ public class LogCartesianPlane extends CartesianPlane {
      * labels {weights, bias, separation line}
      */
     void initSideMenu() {
-        String[] buttonLabels = new String[] {"Grid", "Line", "Weights", "About", "Menu"};
+        String[] buttonsLabels = new String[] {"Line", "Weights"};
+        Boolean[] buttonsValues = new Boolean[] {true, false};
         int heightOfButton = height/20;
 
-        menu = new SideMenu(g2, width/9, height);
-        menu.addButtons(buttonLabels, heightOfButton);
+        menu.addCheckBoxButtons(buttonsLabels, buttonsValues, heightOfButton);
         menu.addSlider("ETA", 0.001, 1.2, 1.1*heightOfButton, false);
         menu.addSlider("Epochs", 1, 200, 1.1*heightOfButton, true);
 
-        menu.addValueLabel("w", "[0, 0]", height/20.0);
-        menu.addValueLabel("bias", "0", height/20.0);
-        menu.addValueLabel("y", "0x + 0", height/20.0);
+        menu.addValueLabel("w", "[0, 0]", heightOfButton);
+        menu.addValueLabel("bias", "0", heightOfButton);
+        menu.addValueLabel("y", "0x + 0", heightOfButton);
     }
 
     /**
@@ -121,16 +123,13 @@ public class LogCartesianPlane extends CartesianPlane {
      * if so then performs some action related to that pressed button.
      * Sliders are supported inside @code{menu.onReleased} method since they haven't got
      * any specific action and all of them behave the same way.
-     * @param mouseX - current mouse x position (in pixels)
-     * @param mouseY - current mouse y position (in pixels)
+     * @param label - label of pressed button
      */
-    void menuOptions(double mouseX, double mouseY) {
-        switch(menu.onReleased(mouseX, mouseY)) {
-            case "Grid": linesVisibility = !linesVisibility; break;
+    void menuOptions(String label) {
+        switch(label) {
             case "Line": separationLineVisibility = !separationLineVisibility; break;
             case "Weights": weightsVisibility = !weightsVisibility; break;
-            case "About": messageWindow.toggleVisibility(); break;
-            case "Menu": panel.changeGraphics("", "Visualizations");
+            default: super.menuOptions(label);
         }
     }
 
@@ -154,7 +153,8 @@ public class LogCartesianPlane extends CartesianPlane {
      * Saves weights and bias, updates labels and finds the coefficients of separation line.
      * At the end predicts class for all neutral samples.
      */
-    void update() {
+    @Override
+    public void update() {
         if(!twoClassesExists()) {
             return;
         }

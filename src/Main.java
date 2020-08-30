@@ -34,7 +34,7 @@ public class Main {
     ...
     version 0.2
     - Matrix2x2 class [checked]
-    - improve efficiency of grid drawing [checked but still not perfect]
+    - improve efficiency of grid drawing [checked]
     - Matrix visualization [checked]
     - Matrix projection [checked]
     - determinant, inverse, transpose, eigenline visualizations [checked]
@@ -53,12 +53,22 @@ public class Main {
     version 0.4
     - refactor code [checked]
     - message box inside CartesianPlane [checked]
-    - input numbers from keyboard
-    - checkboxes buttons
+    - input numbers from keyboard [checked]
+    - checkboxes buttons [checked]
     - KNN Algorithm
     - tutorial
-    - settings
+    - scrollbar and show/hide sidemenu
     ...
     version 0.5
-    - Theory of linear regression
+    - photos in message boxes
+    - Theory of linear algebra chapter 1
+    - sounds
+    - Settings
+    - polish language
+    - Improve PCA (add 2d transformation)
+    - ID-tree
+    ...
+    version 0.6
+    - curve lines
+
  */

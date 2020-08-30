@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 
 /**
@@ -29,6 +30,20 @@ public class SideMenu extends Menu {
     void addButtons(String[] labels, int heightOfButton) {
         for (String label : labels) {
             buttons.add(new ClickableButton(0, currentY + yOffset, width, heightOfButton, label, bigFont));
+            currentY += heightOfButton;
+        }
+    }
+
+    /**
+     * adds list of checkbox buttons. Their labels are given and all of them has the same height (also given value)
+     * after each button currentY is updating. All values of these buttons are given.
+     * @param labels - list of labels that will be on the buttons
+     * @param values - list of logical values of buttons
+     * @param heightOfButton - height of each added button
+     */
+    void addCheckBoxButtons(String[] labels, Boolean[] values, int heightOfButton) {
+        for (int i = 0; i < labels.length; i++) {
+            buttons.add(new CheckBoxButton(0, currentY + yOffset, width, heightOfButton, labels[i], bigFont, values[i]));
             currentY += heightOfButton;
         }
     }
@@ -86,6 +101,18 @@ public class SideMenu extends Menu {
         yOffset = (int)buttons.get(0).getY();
     }
 
+    @Override
+    public boolean onKeyPressed(KeyEvent event) {
+        for(Button b: buttons) {
+            if(b instanceof SampleLabelButton) {
+                if(((SampleLabelButton) b).onKeyPressed(event)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * WARNING note that it is not the method inherited from interface and it returns String
      * Sets color of each button.
@@ -129,8 +156,8 @@ public class SideMenu extends Menu {
      * @param sample - sample that will be described
      * @param height - height of the button
      */
-    public void addSampleLabel(Sample sample, double height) {
-        buttons.add(new SampleLabelButton(0, currentY+yOffset, width, (int)height, sample, smallFont));
+    public void addSampleLabel(Sample sample, double height, boolean available) {
+        buttons.add(new SampleLabelButton(0, currentY+yOffset, width, (int)height, sample, smallFont, available));
         currentY += height;
     }
 
@@ -215,5 +242,14 @@ public class SideMenu extends Menu {
                 ((ValueLabelButton) button).updateValue(value);
             }
         }
+    }
+
+    public boolean focusingInputs(double mouseX, double mouseY) {
+        for(Button b: buttons) {
+            if(b instanceof SampleLabelButton) {
+                ((SampleLabelButton) b).onLeftClick(mouseX, mouseY);
+            }
+        }
+        return true;
     }
 }

@@ -1,3 +1,5 @@
+import java.awt.event.KeyEvent;
+
 /**
  * Interface of main menu and all cartesian plane simulations
  * has methods for drawing components on the screen and capture mouse and keyboard actions
@@ -56,7 +58,7 @@ public interface GraphicsInterface {
 
     /**
      * This method runs when some button is pressed
-     * @param key - char value of pressed button
+     * @param event - all information of pressed button
      */
-    void onKeyPressed(char key);
+    boolean onKeyPressed(KeyEvent event);
 }

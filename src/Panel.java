@@ -127,7 +127,7 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
      */
     @Override
     public void keyPressed(KeyEvent e) {
-        graphics.onKeyPressed(e.getKeyChar());
+        graphics.onKeyPressed(e);
     }
 
     /**
