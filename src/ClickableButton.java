@@ -73,4 +73,9 @@ class ClickableButton extends Button {
     boolean hasInside(double mouseX, double mouseY) {
         return mouseX > x && mouseX < x+width && mouseY > y && mouseY < y+height;
     }
+
+    @Override
+    public String onClicked(double mouseX, double mouseY) {
+        return getLabel();
+    }
 }

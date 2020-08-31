@@ -1,4 +1,7 @@
+import java.lang.reflect.Array;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static java.lang.Double.*;
 import static java.lang.Math.exp;
 import static java.lang.Math.floor;
@@ -33,6 +36,28 @@ public class MathUtils {
     static double dist(double x1, double y1, double x2, double y2) {
         return sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
     }
+
+
+    static double dist(Point2D A, Point2D B) {
+        return sqrt((A.x-B.x)*(A.x-B.x) + (A.y-B.y)*(A.y-B.y));
+    }
+
+
+    static int argmax(Integer[] values) {
+        int max=values[0]-1, maxInd=0;
+        boolean exAequo = false;
+
+        for(int i = 0; i < values.length; i++) {
+            if(values[i] >= max) {
+                exAequo = (values[i] == max);
+                max = values[i];
+                maxInd = i;
+            }
+
+        }
+        return exAequo ? -1 : maxInd;
+    }
+
 
     /**
      * Calculates the mean value of the numbers in the list.
@@ -277,5 +302,48 @@ public class MathUtils {
     public static double round(double value, int precision) {
         double factor = pow(10, precision);
         return floor(value*factor)/factor;
+    }
+
+
+    public static void voting(Sample neutral, List<Sample> neighbours, int k) {
+        Integer[] values = new Integer[]{0,0,0,0,0,0};
+
+        for (int i = 0; i < Integer.min(k, neighbours.size()); i++) {
+            Sample neighbour = neighbours.get(i);
+            values[neighbour.category() - 1] += 1;
+        }
+
+        int predictedCategory = argmax(values)+1;
+
+        if(predictedCategory == 0) {
+            voting(neutral, neighbours, k-1);
+        } else {
+            neutral.setPredictedColor(DrawUtils.sampleColors[predictedCategory]);
+        }
+    }
+
+    public static ArrayList<KNNInterface> KNNAlgorithm(ArrayList<Sample> samples, int k) {
+        ArrayList<KNNInterface> interfaces = new ArrayList<>();
+        ArrayList<Sample> training = new ArrayList<>();
+        ArrayList<Sample> neutrals = new ArrayList<>();
+
+        for(Sample sample: samples) {
+            if(sample.category() != 0) {
+                training.add(sample);
+            } else {
+                neutrals.add(sample);
+            }
+        }
+
+        for(Sample neutral: neutrals) {
+            training.sort(new DistComparator(neutral));
+            List<Sample> neighbours = training.subList(0, Integer.min(k, training.size()));
+
+            if(neighbours.size() > 0) {
+                voting(neutral, neighbours, k);
+                interfaces.add(new KNNInterface(neutral, neighbours));
+            }
+        }
+        return interfaces;
     }
 }

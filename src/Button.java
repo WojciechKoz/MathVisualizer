@@ -82,6 +82,8 @@ public abstract class Button {
         updateVisibility();
     }
 
+    abstract String onClicked(double mouseX, double mouseY);
+
     /**
      * method used after changes of visibility or colors
      * RGB values stays the same, but backgroundCol and textCol are updated by visibility

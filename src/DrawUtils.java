@@ -9,6 +9,16 @@ public class DrawUtils {
     static Font font;
     static Graphics2D g2;
 
+    static Color[] sampleColors = new Color[] {
+            new Color(130, 130, 130),
+            new Color(100, 100, 255),
+            new Color(255, 100, 100),
+            new Color(100, 255, 100),
+            new Color(200, 200, 50),
+            new Color(200, 50, 200),
+            new Color(50, 200, 200)
+    };
+
     /**
      * draws a full circle on the screen
      * @param x - x coordinate of the center of the circle

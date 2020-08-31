@@ -109,6 +109,10 @@ class Sample extends Point2D {
         predictedColor = newPredictedColor;
     }
 
+    Color getPredictedColor() {
+        return predictedColor;
+    }
+
     void setMoving(boolean value) { isMoving = value; }
 
     boolean isMoving() { return isMoving; }
@@ -120,4 +124,6 @@ class Sample extends Point2D {
     public void select(boolean value) {
         selected = value;
     }
+
+    Point2D position() { return new Point2D(x, y); }
 }

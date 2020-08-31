@@ -44,8 +44,9 @@ public class CheckBoxButton extends ClickableButton {
         value = !value;
     }
 
-    public String getLabel() {
+    @Override
+    public String onClicked(double mouseX, double mouseY) {
         toggleValue();
-        return super.getLabel();
+        return super.onClicked(mouseX, mouseY);
     }
 }

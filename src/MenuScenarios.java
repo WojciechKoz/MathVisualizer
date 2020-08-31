@@ -16,6 +16,7 @@ class MenuScenarios {
     private static final String[] visualizationButtons = new String[] {
             "Matrix Simulation",
             "Linear Regression",
+            "K-Nearest Neighbours",
             "Logistic Regression",
             "PCA Algorithm",
             "Back"
@@ -98,6 +99,9 @@ class MenuScenarios {
 
             case "PCA Algorithm":
                 return new PCACartesianPlane(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+
+            case "K-Nearest Neighbours":
+                return new KNNCartesianPlane(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
 
             default: // "Back"
                 return createMenu(panel.getAppName(), mainMenuButtons);

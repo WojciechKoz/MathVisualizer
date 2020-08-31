@@ -86,4 +86,10 @@ class Slider extends Button {
     }
 
     double getValue() { return value; }
+
+    @Override
+    public String onClicked(double mouseX, double mouseY) {
+        setValue(mouseX);
+        return "";
+    }
 }

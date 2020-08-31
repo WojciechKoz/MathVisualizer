@@ -130,4 +130,9 @@ class SampleLabelButton extends Button {
         inputForX.y = y;
         inputForY.y = y;
     }
+
+    @Override
+    public String onClicked(double mouseX, double mouseY) {
+        return "";
+    }
 }

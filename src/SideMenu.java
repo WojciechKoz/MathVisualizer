@@ -126,12 +126,7 @@ public class SideMenu extends Menu {
         for(Button button: buttons) {
             button.setHover(mouseX, mouseY,false);
             if(button.hasInside(mouseX, mouseY)) {
-                if(button instanceof ClickableButton) {
-                    return button.getLabel();
-                } else if(button instanceof Slider) {
-                    ((Slider) button).setValue(mouseX);
-                    return "";
-                }
+                return button.onClicked(mouseX, mouseY);
             }
         }
         return "";

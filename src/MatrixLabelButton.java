@@ -88,4 +88,9 @@ class MatrixLabelButton extends Button {
     boolean hasInside(double mouseX, double mouseY) {
         return false;
     }
+
+    @Override
+    public String onClicked(double mouseX, double mouseY) {
+        return "";
+    }
 }

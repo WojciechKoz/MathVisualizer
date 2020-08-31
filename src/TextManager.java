@@ -21,18 +21,10 @@ public class TextManager {
                     String[] words = line.split(" ");
                     StringBuilder last = new StringBuilder(output.get(output.size() - 1));
 
-                    boolean first = true;
                     for(String word: words) {
                         if(DrawUtils.stringWidth(last+" "+word) < lengthOfWindow*0.95) {
-                            if(first) {
-                                output.set(output.size()-1, last+" "+word+" ");
-                                last.append(" ").append(word).append(" ");
-                                first = false;
-                            } else {
-                                output.set(output.size()-1, last+word+" ");
-                                last.append(word).append(" ");
-                            }
-
+                            output.set(output.size()-1, last+word+" ");
+                            last.append(word).append(" ");
                         } else {
                             output.add(word+" ");
                             last = new StringBuilder(word+" ");
