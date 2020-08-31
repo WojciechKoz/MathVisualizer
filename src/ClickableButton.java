@@ -2,7 +2,7 @@ import java.awt.*;
 
 /**
  * The most default version of the button. Used in menus and sideMenus.
- * It doesn't have any onClicked method, however when it is clicked, upper layer (menu, sideMenu) gets
+ * when it is clicked, upper layer (menu, sideMenu) gets
  * its title value and performs some action depending of that value.
  * That class supports hover colors.
  */
@@ -13,17 +13,17 @@ class ClickableButton extends Button {
         super(x, y, width, height, label, fontSize);
 
         // sets all default colors
-        backgroundBase = new Color(50,50,50);
-        backgroundHover = new Color(251, 139, 36);
-        backgroundOnClicked = new Color(50, 50, 50);
+        backgroundBase = backgroundCol;
+        backgroundHover = textCol;
+        backgroundOnClicked = backgroundCol;
 
-        textBase = new Color(251, 139, 36);
-        textHover = new Color(0,0,0);
-        textOnClicked = new Color(150, 150, 150);
+        textBase = textCol;
+        textHover = DrawUtils.black;
+        textOnClicked = DrawUtils.lightGray;
     }
 
     /**
-     * Draws the rectangle using parent's draw method and in the middle of the button prints label
+     * Draws the rectangle using parent's draw method and in the middle of the button prints centered label
      * @param g2 - object for drawing on the screen and responsible for the graphics
      */
     void draw(Graphics2D g2) {
@@ -74,6 +74,12 @@ class ClickableButton extends Button {
         return mouseX > x && mouseX < x+width && mouseY > y && mouseY < y+height;
     }
 
+    /**
+     * When button is pressed, it sends its label to the upper layer.
+     * @param mouseX - current x position of mouse
+     * @param mouseY - current y position of mouse
+     * @return label of this button
+     */
     @Override
     public String onClicked(double mouseX, double mouseY) {
         return getLabel();

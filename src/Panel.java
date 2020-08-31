@@ -90,7 +90,7 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
      */
     public void paintComponent(Graphics g) {
         g.drawImage(context, 0, 0, null);
-        g2.setColor(new Color(0,0,0));
+        g2.setColor(DrawUtils.black);
         g2.fillRect(0,0, width, height);
 
         graphics.draw();

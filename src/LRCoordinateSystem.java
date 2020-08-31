@@ -6,12 +6,12 @@ import static java.lang.StrictMath.abs;
  * Even if that class contains the whole linear regression model it hasn't got any math inside.
  * For the algorithms look at MathUtils class.
  */
-public class LRCartesianPlane extends CartesianPlane {
+public class LRCoordinateSystem extends CoordinateSystem {
     // a and b are coefficients of best fitting line
     private double a, b;
     private boolean regressionLineVisibility, errorVisibility;
 
-    LRCartesianPlane(Graphics2D g2, int width, int height, Panel mainPanel) {
+    LRCoordinateSystem(Graphics2D g2, int width, int height, Panel mainPanel) {
         super(g2, width, height, mainPanel);
         menuName = "Visualizations";
 
@@ -28,8 +28,7 @@ public class LRCartesianPlane extends CartesianPlane {
     }
 
     /**
-     * initializes the menu with buttons {Grid, Line, Errors, Menu}
-     * and labels {line coefficient, error measure}
+     * Initializes the buttons that are related to linear regression simulation
      */
     void initSideMenu() {
         String[] buttonsLabels = new String[] {"Line", "Errors"};
@@ -41,7 +40,7 @@ public class LRCartesianPlane extends CartesianPlane {
     }
 
     /**
-     * draws cartesian plane lines, samples,
+     * draws coordinate system lines, samples,
      * and, if there are at least two samples, best straight line
      * at the end menu and message window are drawn
      */
@@ -60,7 +59,7 @@ public class LRCartesianPlane extends CartesianPlane {
     }
 
     /**
-     * Performs onRightClick from CartesianPlane
+     * Performs onRightClick from CoordinateSystem
      * if there are at least 2 samples updates the whole simulation
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
@@ -74,7 +73,7 @@ public class LRCartesianPlane extends CartesianPlane {
     }
 
     /**
-     * Performs onMouseDragged from CartesianPlane. If it returns true then update the simulation.
+     * Performs onMouseDragged from CoordinateSystem. If it returns true then update the simulation.
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
      * @param prevMouseX - mouse x position in previous frame (in pixels)
@@ -90,9 +89,9 @@ public class LRCartesianPlane extends CartesianPlane {
     }
 
     /**
-     * checks if some of buttons in menu is pressed
+     * checks if some of buttons in menu are pressed
      * if so then performs some action related to that pressed button.
-     * Sliders are supported inside @code{menu.onReleased} method since they haven't got
+     * Sliders are supported inside {@code menu.onReleased} method since they haven't got
      * any specific action and all of them behave the same way.
      * @param label - label of pressed button
      */
@@ -110,7 +109,7 @@ public class LRCartesianPlane extends CartesianPlane {
      */
     void drawRegressionLine() {
         if(regressionLineVisibility){
-            g2.setColor(new Color(0, 255, 0));
+            g2.setColor(DrawUtils.green);
             g2.setStroke(new BasicStroke(3));
             drawStraightLine(a, b);
         }
@@ -125,7 +124,7 @@ public class LRCartesianPlane extends CartesianPlane {
      * of y value of the line with the same x as sample.
      */
     void drawErrors() {
-        g2.setColor(new Color(255,0,0,130));
+        g2.setColor(DrawUtils.transparentRed);
         for(Sample sample: samples) {
             int difference =  (int)((a*sample.getX() + b - sample.getY())*scale);
 

@@ -9,15 +9,42 @@ public class DrawUtils {
     static Font font;
     static Graphics2D g2;
 
+    // All colors that are used in the program
+    public static final Color orange = new Color(251, 139, 36);
+    public static final Color yellow = new Color(220, 220, 20);
+    public static final Color gold = new Color(255, 215, 0);
+    public static final Color transparentYellow = new Color(255, 255, 100, 120);
+
+    public static final Color transparentWhite = new Color(255, 255, 255, 180);
+    public static final Color white = new Color(255,255,255);
+    public static final Color lightGray = new Color(150, 150, 150);
+    public static final Color gray = new Color(130, 130, 130);
+    public static final Color darkGray = new Color(50, 50, 50);
+    public static final Color transparentBlack = new Color(0, 0, 0, 170);
+    public static final Color black = new Color(0,0,0);
+    public static final Color transparent = new Color(0,0,0, 0);
+
+    public static final Color red = new Color(255, 0, 0);
+    public static final Color transparentRed = new Color(255, 0, 0, 130);
+    public static final Color lightRed = new Color(255, 100, 100);
+    public static final Color darkRed = new Color(100, 50, 50);
+    public static final Color green = new Color(0, 255, 0);
+    public static final Color transparentGreen = new Color(0, 255, 0, 130);
+    public static final Color lightGreen = new Color(100, 255, 100);
+    public static final Color darkGreen = new Color(50, 100, 50);
+    public static final Color lightBlue = new Color(100, 100, 255);
+
+    // colors of samples
     static Color[] sampleColors = new Color[] {
-            new Color(130, 130, 130),
-            new Color(100, 100, 255),
-            new Color(255, 100, 100),
-            new Color(100, 255, 100),
+            gray,
+            lightBlue,
+            lightRed,
+            lightGreen,
             new Color(200, 200, 50),
             new Color(200, 50, 200),
             new Color(50, 200, 200)
     };
+
 
     /**
      * draws a full circle on the screen
@@ -120,6 +147,10 @@ public class DrawUtils {
         return metrics.stringWidth(text);
     }
 
+    /**
+     * @param text - text to be drawn
+     * @return height of the string written with current font on the screen
+     */
     public static int stringHeight(String text) {
         FontRenderContext frc = g2.getFontRenderContext();
         GlyphVector gv = g2.getFont().createGlyphVector(frc, text);

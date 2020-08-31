@@ -1,18 +1,16 @@
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import static java.lang.StrictMath.ceil;
 import static java.lang.StrictMath.floor;
 
 /**
- * A class that supports cartesian plane simulations. Has basic sideMenu and list of samples.
+ * A class that supports coordinate system simulations. Has basic sideMenu and list of samples.
+ * Also handles the message window.
  * More advanced simulations in cartesian plane inherit of that class
  */
-public class CartesianPlane implements GraphicsInterface {
+public class CoordinateSystem implements GraphicsInterface {
     // the point corresponding to the upper-left corner of the screen in simulation coordinates
     protected Point2D camera;
     // List of samples (points or vectors) in R^2
@@ -33,13 +31,15 @@ public class CartesianPlane implements GraphicsInterface {
     protected MessageWindow messageWindow;
     // name of menu that will be active after quit this simulation
     protected String menuName;
+    protected final int STANDARD_BUTTON_HEIGHT;
 
-    CartesianPlane(Graphics2D g2, int width, int height, Panel mainPanel) {
+    CoordinateSystem(Graphics2D g2, int width, int height, Panel mainPanel) {
         this.g2 = g2;
         this.width = width;
         this.height = height;
         this.panel = mainPanel;
         menuName = "Menu";
+        STANDARD_BUTTON_HEIGHT = height/20;
 
         // 100 pixels = unit in axes
         scale = 100;
@@ -48,13 +48,16 @@ public class CartesianPlane implements GraphicsInterface {
 
         linesVisibility = true;
 
+        // for some matrices and message window
         initComponents();
 
+        // initializes the side menu with that 4 most basic buttons
         menu = new SideMenu(g2, width/9, height);
-        menu.addCheckBoxButtons(new String[]{"Visible"}, new Boolean[] {true}, height/20);
-        menu.addButtons(new String[]{"Menu", "About"}, height/20);
-        menu.addCheckBoxButtons(new String[]{"Grid"}, new Boolean[] {true},height/20);
+        menu.addCheckBoxButtons(new String[]{"Visible"}, new Boolean[] {true}, STANDARD_BUTTON_HEIGHT);
+        menu.addButtons(new String[]{"Menu", "About"}, STANDARD_BUTTON_HEIGHT);
+        menu.addCheckBoxButtons(new String[]{"Grid"}, new Boolean[] {true},STANDARD_BUTTON_HEIGHT);
 
+        // adds more buttons depending which simulation is running
         initSideMenu();
     }
 
@@ -77,7 +80,7 @@ public class CartesianPlane implements GraphicsInterface {
     }
 
     /**
-     * Draws all simulation's objects.
+     * Draws all simulation's objects, side menu and message window
      */
     @Override
     public void draw() {
@@ -104,7 +107,7 @@ public class CartesianPlane implements GraphicsInterface {
         }
 
         g2.setStroke(new BasicStroke(3));
-        g2.setColor(new Color(255,255,255));
+        g2.setColor(DrawUtils.white);
         DrawUtils.line(-camera.x*scale, 0, -camera.x*scale, height);
         DrawUtils.line(0, camera.y*scale, width, camera.y*scale);
     }
@@ -206,7 +209,7 @@ public class CartesianPlane implements GraphicsInterface {
      * @return true if some sample was coloured otherwise false
      */
     boolean colorSelectedSample(Color col, int value) {
-        Point mouse = MouseInfo.getPointerInfo().getLocation();
+        Point mouse = new Point(panel.prevMouseX, panel.prevMouseY);
         int index = select(mouse.x, mouse.y);
 
         // if index == -1 then no sample is under the mouse
@@ -276,7 +279,7 @@ public class CartesianPlane implements GraphicsInterface {
     void addNewSample(double x, double y) {
         Sample sample = new Sample(x, y);
         samples.add(sample);
-        menu.addSampleLabel(sample, height/20.0, true);
+        menu.addSampleLabel(sample, STANDARD_BUTTON_HEIGHT, true);
     }
 
     /**
@@ -306,10 +309,12 @@ public class CartesianPlane implements GraphicsInterface {
      */
     @Override
     public boolean onLeftClick(double mouseX, double mouseY) {
+        menu.focusingInputs(mouseX, mouseY);
+
         if(messageWindow.hasInside(mouseX, mouseY)) {
             messageWindow.onLeftClick(mouseX, mouseY);
             return false;
-        } else if(menu.focusingInputs(mouseX, mouseY) && menu.hasInside(mouseX, mouseY)) {
+        } else if(menu.hasInside(mouseX, mouseY)) {
             menu.onLeftClick(mouseX, mouseY);
             return false;
         } else {
@@ -330,10 +335,10 @@ public class CartesianPlane implements GraphicsInterface {
      */
     @Override
     public void onLeftMouseButtonReleased(double mouseX, double mouseY) {
-        if(menu.hasInside(mouseX, mouseY)) {
-            menuOptions(menu.onReleased(mouseX, mouseY));
-        } else if(messageWindow.hasInside(mouseX, mouseY)) {
+        if(messageWindow.hasInside(mouseX, mouseY)) {
             messageWindow.onMouseReleased(mouseX, mouseY);
+        } else if(menu.hasInside(mouseX, mouseY)) {
+            menuOptions(menu.onReleased(mouseX, mouseY));
         } else {
             for(Sample sample: samples) {
                 sample.setMoving(false);
@@ -357,7 +362,8 @@ public class CartesianPlane implements GraphicsInterface {
     }
 
     /**
-     * If mouse is inside the menu then executes @code{menu.onMouseDragged}
+     * Drags the message window if it's selected
+     * If mouse is inside the menu then executes {@code menu.onMouseDragged}
      * else checks if some sample has moving variable sets to true
      * if so then moves that sample else move camera.
      * Returns true if mouse was inside the menu or some sample was moved.
@@ -371,12 +377,13 @@ public class CartesianPlane implements GraphicsInterface {
      */
     @Override
     public boolean onMouseDragged(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
+        if(messageWindow.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY)) {
+            return false;
+        }
+
         if(menu.hasInside(mouseX, mouseY)) {
             menu.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY);
             return true;
-        }
-        if(messageWindow.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY)) {
-            return false;
         }
 
         for (Sample sample : samples) {
@@ -392,7 +399,8 @@ public class CartesianPlane implements GraphicsInterface {
 
     /**
      * Since cartesian plane simulation doesn't check if mouse was moved (unless the left button was pressed)
-     * it runs @code{menu.onMouseMoved} because menu might have some buttons which support mouse hovering.
+     * it runs {@code menu.onMouseMoved} because menu might have some buttons which support mouse hovering.
+     * and messageWindow for the same reason
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
      * @param prevMouseX - mouse x position in previous frame (in pixels)
@@ -412,21 +420,22 @@ public class CartesianPlane implements GraphicsInterface {
      */
     @Override
     public void onMouseScrolled(int rotation) {
-        Point mouse = MouseInfo.getPointerInfo().getLocation();
+        Point mouse = new Point(panel.prevMouseX, panel.prevMouseY);
 
-        if(menu.hasInside(mouse.x, mouse.y)) {
-            menu.onMouseScrolled(rotation);
-        } else if(messageWindow.hasInside(mouse.x, mouse.y)) {
+        if(messageWindow.hasInside(mouse.x, mouse.y)) {
             messageWindow.onMouseScrolled(rotation);
-        } else {
+        } else if(menu.hasInside(mouse.x, mouse.y)) {
+            menu.onMouseScrolled(rotation);
+        }  else {
             changeScale(rotation == 1 ? 0.95 : 1.05, mouse.x, mouse.y);
         }
     }
 
     /**
-     * For now it supports only painting samples and toggle lines visibility
+     * For now it supports only painting samples.
+     * Updates the simulation if mouse was inside the menu or some sample was coloured.
      * @param event - all information about pressed button
-     * @return always true
+     * @return always true if mouse was inside menu or some sample was coloured otherwise false
      */
     @Override
     public boolean onKeyPressed(KeyEvent event) {
@@ -436,20 +445,14 @@ public class CartesianPlane implements GraphicsInterface {
         }
 
         char key = event.getKeyChar();
-        switch(key) {
-            case 'l': case 'L':
-                linesVisibility = !linesVisibility;
-                break;
-
-            case '0': colorSelectedSample(new Color(130, 130, 130), Character.getNumericValue(key)); break;
-            case '1': colorSelectedSample(new Color(100, 100, 255), Character.getNumericValue(key)); break;
-            case '2': colorSelectedSample(new Color(255, 100, 100), Character.getNumericValue(key)); break;
-            case '3': colorSelectedSample(new Color(100, 255, 100), Character.getNumericValue(key)); break;
-            case '4': colorSelectedSample(new Color(200, 200, 50), Character.getNumericValue(key)); break;
-            case '5': colorSelectedSample(new Color(200, 50, 200), Character.getNumericValue(key)); break;
-            case '6': colorSelectedSample(new Color(50, 200, 200), Character.getNumericValue(key)); break;
+        if (key >= '0' && key <= '6') {
+            if(colorSelectedSample(DrawUtils.sampleColors[Integer.parseInt(String.valueOf(key))],
+                    Character.getNumericValue(key))) {
+                update();
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 
     public void update() {

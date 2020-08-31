@@ -72,14 +72,14 @@ public class MessageWindow {
             return;
         }
 
-        g2.setColor(new Color(0, 0, 0, 170));
+        g2.setColor(DrawUtils.transparentBlack);
         g2.fillRect(x, y, width, height);
 
-        g2.setColor(new Color(251, 139, 36));
+        g2.setColor(DrawUtils.orange);
         g2.setStroke(new BasicStroke(3));
         g2.drawRect(x, y, width, height);
 
-        g2.setColor(new Color(50, 50, 50));
+        g2.setColor(DrawUtils.darkGray);
         g2.fillRect(x, y, width, (int)(0.05*height));
         g2.drawRect(x, y, width, (int)(0.05*height));
 
@@ -87,7 +87,7 @@ public class MessageWindow {
             b.draw(g2);
         }
 
-        g2.setColor(new Color(255, 255, 255));
+        g2.setColor(DrawUtils.white);
         DrawUtils.setFont(new Font("David bold", Font.PLAIN, (int) (fontSize*1.7)));
         DrawUtils.drawCenteredString(title, x+width/2, (int) (y+0.15*height));
 

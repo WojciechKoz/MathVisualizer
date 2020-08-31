@@ -65,7 +65,7 @@ class MenuScenarios {
     static GraphicsInterface mainMenuOptions(String buttonLabel) {
         switch(buttonLabel) {
             case "First Steps":
-                return new CartesianPlane(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+                return new CoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
 
             case "Visualizations":
                 return createMenu("Visualizations", visualizationButtons);
@@ -89,19 +89,19 @@ class MenuScenarios {
     static GraphicsInterface visualizationsMenuOptions(String buttonLabel) {
         switch(buttonLabel) {
             case "Matrix Simulation":
-                return new MatrixCartesianPlane(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+                return new MatrixCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
 
             case "Linear Regression":
-                return new LRCartesianPlane(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+                return new LRCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
 
             case "Logistic Regression":
-                return new LogCartesianPlane(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+                return new LogCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
 
             case "PCA Algorithm":
-                return new PCACartesianPlane(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+                return new PCACoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
 
             case "K-Nearest Neighbours":
-                return new KNNCartesianPlane(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+                return new KNNCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
 
             default: // "Back"
                 return createMenu(panel.getAppName(), mainMenuButtons);

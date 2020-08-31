@@ -239,12 +239,11 @@ public class SideMenu extends Menu {
         }
     }
 
-    public boolean focusingInputs(double mouseX, double mouseY) {
+    public void focusingInputs(double mouseX, double mouseY) {
         for(Button b: buttons) {
             if(b instanceof SampleLabelButton) {
                 ((SampleLabelButton) b).onLeftClick(mouseX, mouseY);
             }
         }
-        return true;
     }
 }

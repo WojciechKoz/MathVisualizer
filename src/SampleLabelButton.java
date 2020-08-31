@@ -17,11 +17,11 @@ class SampleLabelButton extends Button {
 
         inputForX = new NumberInput((int) (x+width*0.3), y, (int)(width*0.3), height,
                 MathUtils.round(sample.x,3), this, available,
-                textCol, new Color(0,0,0,0), new Color(100, 50, 50));
+                textCol, DrawUtils.transparent, DrawUtils.darkRed);
 
         inputForY = new NumberInput((int)(x+width*0.7), y, (int)(width*0.3), height,
                 MathUtils.round(sample.y, 3), this, available,
-                textCol, new Color(0,0,0,0), new Color(50, 100, 50));
+                textCol, DrawUtils.transparent, DrawUtils.darkGreen);
     }
 
     /**
@@ -58,11 +58,11 @@ class SampleLabelButton extends Button {
      */
     public void hoverFromSample(double mouseX, double mouseY) {
         if(sample.hasInside(mouseX, mouseY)) {
-            backgroundCol = new Color(251, 139, 36);
-            textCol = new Color(50, 50, 50);
+            backgroundCol = DrawUtils.orange;
+            textCol = DrawUtils.darkGray;
         } else {
-            backgroundCol = new Color(50, 50, 50);
-            textCol = new Color(251, 139, 36);
+            backgroundCol = DrawUtils.darkGray;
+            textCol = DrawUtils.orange;
         }
         inputForX.setColors(textCol, backgroundCol);
         inputForY.setColors(textCol, backgroundCol);

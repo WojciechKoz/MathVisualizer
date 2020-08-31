@@ -45,6 +45,13 @@ class LabelButton extends Button {
         return false;
     }
 
+    /**
+     * Since this class is only a label then returns an empty string when is clicked
+     * meaning that the upper layer doesn't perform any action after this button was pressed
+     * @param mouseX - current x position of mouse
+     * @param mouseY - current y position of mouse
+     * @return - an empty string
+     */
     @Override
     public String onClicked(double mouseX, double mouseY) {
         return "";

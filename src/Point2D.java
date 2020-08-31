@@ -44,8 +44,8 @@ class Point2D {
  */
 class Sample extends Point2D {
     private static final double radius = 0.18;
-    private Color col = new Color(100, 100, 255);
-    private Color predictedColor = new Color(130, 130, 130);
+    private Color col = DrawUtils.lightBlue;
+    private Color predictedColor = DrawUtils.gray;
     // if point is moving then it follows the mouse,
     // if point is selected then around him an orange ring is drawn
     private boolean isMoving, selected;
@@ -85,7 +85,7 @@ class Sample extends Point2D {
         }
 
         if(selected) {
-            g2.setColor(new Color(251, 139, 36));
+            g2.setColor(DrawUtils.orange);
             g2.setStroke(new BasicStroke(2));
             DrawUtils.ring(screenX, screenY, radius*scale*1.7);
         }

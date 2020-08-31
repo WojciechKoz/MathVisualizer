@@ -8,7 +8,7 @@ public class Main {
 /* FIXME
     Known bugs:
     -   mouse position while key pressing is not relative to the program window but to the screen
-        (doesn't work when there is no fullscreen)
+        (doesn't work when there is no fullscreen) [ probably fixed - now it uses previous values stored in panel ]
     -   Sometimes side menu doesn't stop scrolling down and instead it scrolls a little bit up.
         (usually works so its hard to find the cause)
  */
@@ -55,9 +55,9 @@ public class Main {
     - message box inside CartesianPlane [checked]
     - input numbers from keyboard [checked]
     - checkboxes buttons [checked]
-    - KNN Algorithm
+    - KNN Algorithm [checked]
     - tutorial
-    - scrollbar and show/hide sidemenu
+    - scrollbar and show/hide side menu
     ...
     version 0.5
     - photos in message boxes
@@ -65,7 +65,7 @@ public class Main {
     - sounds
     - Settings
     - polish language
-    - Improve PCA (add 2d transformation)
+    - Improve PCA (add 2d transformation), matrix (inverse will be drawn), LogReg (background of areas)
     - ID-tree
     ...
     version 0.6

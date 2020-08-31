@@ -16,14 +16,5 @@ public class Window extends JFrame {
         Panel panel = new Panel(WIDTH, HEIGHT, this);
         add(panel);
         setVisible(true);
-
-        /* tried to fix mouse position bug
-        GraphicsConfiguration config = this.getGraphicsConfiguration();
-        Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(config);
-
-        int y = insets.top - this.getHeight();
-        System.out.println(y);
-
-         */
     }
 }

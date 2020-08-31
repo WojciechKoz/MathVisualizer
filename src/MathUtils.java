@@ -1,8 +1,9 @@
-import java.lang.reflect.Array;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import static java.lang.Double.*;
+import static java.lang.Double.max;
+import static java.lang.Double.min;
 import static java.lang.Math.exp;
 import static java.lang.Math.floor;
 import static java.lang.StrictMath.pow;
@@ -38,11 +39,22 @@ public class MathUtils {
     }
 
 
+    /**
+     * Calculates the distance between two points in R^2. A and B
+     * @param A - first point
+     * @param B - second point
+     * @return - distance between point A and B
+     */
     static double dist(Point2D A, Point2D B) {
         return sqrt((A.x-B.x)*(A.x-B.x) + (A.y-B.y)*(A.y-B.y));
     }
 
-
+    /**
+     * Return the index of the biggest value from given list of numbers.
+     * If there are many value that are the biggest the returns -1
+     * @param values - list of numbers
+     * @return - index of the biggest value in the list or -1
+     */
     static int argmax(Integer[] values) {
         int max=values[0]-1, maxInd=0;
         boolean exAequo = false;
@@ -304,8 +316,13 @@ public class MathUtils {
         return floor(value*factor)/factor;
     }
 
-
-    public static void voting(Sample neutral, List<Sample> neighbours, int k) {
+    /**
+     *
+     * @param neutral
+     * @param neighbours
+     * @param k
+     */
+    private static void voting(Sample neutral, List<Sample> neighbours, int k) {
         Integer[] values = new Integer[]{0,0,0,0,0,0};
 
         for (int i = 0; i < Integer.min(k, neighbours.size()); i++) {

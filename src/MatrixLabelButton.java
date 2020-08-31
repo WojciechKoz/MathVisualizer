@@ -42,7 +42,7 @@ class MatrixLabelButton extends Button {
         labelWidth += DrawUtils.stringWidth(text);
 
         // sets color to color of matrix's x-axis
-        g2.setColor(new Color(255, 100, 100));
+        g2.setColor(DrawUtils.lightRed);
 
         // prints first column of matrix
         DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize));
@@ -52,7 +52,7 @@ class MatrixLabelButton extends Button {
         DrawUtils.drawStringWithLeftAlignment(text, x+labelWidth, (int)(y+height*0.7));
 
         // sets color to color of matrix's y-axis
-        g2.setColor(new Color(100, 255, 100));
+        g2.setColor(DrawUtils.lightGreen);
 
         // prints second column of the matrix (always starts with the same X) and
         // labelWidth is no longer necessary)

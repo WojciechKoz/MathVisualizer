@@ -43,7 +43,7 @@ class Slider extends Button {
         // draws a bar
         int sliderWidth = width/20;
         int position = (int)((value-lowerBound)/(upperBound-lowerBound)*0.8*width);
-        g2.setColor(new Color(0,0,0));
+        g2.setColor(DrawUtils.black);
         g2.drawLine(x+width/10, (int)(y+height*0.6), (int)(x+width*0.9), (int)(y+height*0.6));
         g2.setColor(textCol);
         g2.fillRect(x+width/10+position-sliderWidth/2, (int)(y+height*0.54), sliderWidth, (int)(0.15*height));

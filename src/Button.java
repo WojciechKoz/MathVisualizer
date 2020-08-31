@@ -1,10 +1,7 @@
 import java.awt.*;
-import java.awt.event.KeyEvent;
-
-import static java.lang.StrictMath.min;
 
 /**
- *  class used in menus and sideMenus (in CartesianPlane)
+ *  class used in menus and sideMenus (in CoordinateSystem)
  *  Its children can be used like a normal buttons, check buttons,
  *  sliders or even as a label between other buttons in menu
  *  It's drawn as a rectangle with given x, y, width, height and color
@@ -25,9 +22,9 @@ public abstract class Button {
 
         this.fontSize = fontSize;
 
-        // standard colors for background and foreground (it might be changed while the program is running)
-        backgroundCol = new Color(50, 50, 50);
-        textCol = new Color(251, 139, 36);
+        // standard colors for background and foreground (they might be changed while the program is running)
+        backgroundCol = DrawUtils.darkGray;
+        textCol = DrawUtils.orange;
 
         // by default visible has maximum value (it changes while scrolling in menu)
         visibility = 255;
@@ -82,6 +79,15 @@ public abstract class Button {
         updateVisibility();
     }
 
+    /**
+     * Method that runs when button is clicked.
+     * For buttons that have corresponding action in CoordinateSystem that method returns label of pressed button
+     * so CoordinateSystem is able to distinguish which button was pressed. For other buttons like
+     * for example sliders it does some changes (change slider value in sliders case) and returns an empty string
+     * @param mouseX - current x position of mouse
+     * @param mouseY - current y position of mouse
+     * @return - label or empty string
+     */
     abstract String onClicked(double mouseX, double mouseY);
 
     /**

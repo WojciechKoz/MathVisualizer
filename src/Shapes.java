@@ -11,7 +11,7 @@ class Stretch {
         color = col;
     }
 
-    void draw(Graphics2D g2, CartesianPlane plane) {
+    void draw(Graphics2D g2, CoordinateSystem plane) {
         g2.setStroke(new BasicStroke(3));
         g2.setColor(color);
         DrawUtils.line(plane.screenX(A.x), plane.screenY(A.y), plane.screenX(B.x), plane.screenY(B.y));
@@ -29,7 +29,7 @@ class Ring {
         color = col;
     }
 
-    void draw(Graphics2D g2, CartesianPlane plane) {
+    void draw(Graphics2D g2, CoordinateSystem plane) {
         g2.setStroke(new BasicStroke(3));
         g2.setColor(color);
         DrawUtils.ring(plane.screenX(center.x), plane.screenY(center.y), radius*plane.scale);

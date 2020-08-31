@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /**
  * Class that simulates 2x2 matrix as a pair of 2-dimensional vectors.
  */
-public class MatrixCartesianPlane extends CartesianPlane {
+public class MatrixCoordinateSystem extends CoordinateSystem {
     // list of samples which are a product of matrix * sample (sample <- samples)
     private final ArrayList<Sample> projected = new ArrayList<>();
     // simulated matrix
@@ -13,7 +13,7 @@ public class MatrixCartesianPlane extends CartesianPlane {
     private boolean gridVisibility, eigenvectorsVisibility, projectVisibility,
             determinantVisibility, transposeVisibility, inverseVisibility;
 
-    MatrixCartesianPlane(Graphics2D g2, int width, int height, Panel panel) {
+    MatrixCoordinateSystem(Graphics2D g2, int width, int height, Panel panel) {
         super(g2, width, height, panel);
         menuName = "Visualizations";
 

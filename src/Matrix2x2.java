@@ -274,12 +274,12 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
      * @param plane - cartesian plane
      * @param circleAtTheEnd - if true then at the end of vectors small circles are drawn
      */
-    void drawBasis(Graphics2D g2, CartesianPlane plane, boolean circleAtTheEnd) {
-        g2.setColor(new Color(255, 0, 0));
+    void drawBasis(Graphics2D g2, CoordinateSystem plane, boolean circleAtTheEnd) {
+        g2.setColor(DrawUtils.red);
         plane.drawVector(a, c);
         if(circleAtTheEnd) DrawUtils.circle(plane.screenX(a), plane.screenY(c), plane.scale*radius);
 
-        g2.setColor(new Color(0, 255, 0));
+        g2.setColor(DrawUtils.green);
         plane.drawVector(b, d);
         if(circleAtTheEnd) DrawUtils.circle(plane.screenX(b), plane.screenY(d), plane.scale*radius);
     }
@@ -289,8 +289,8 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
      * @param g2 - graphics context
      * @param plane - current cartesian plane
      */
-    void drawEigenvectors(Graphics2D g2, CartesianPlane plane) {
-        g2.setColor(new Color(255,255,255));
+    void drawEigenvectors(Graphics2D g2, CoordinateSystem plane) {
+        g2.setColor(DrawUtils.white);
         g2.setStroke(new BasicStroke(2));
 
         plane.drawVector(eigenvectorsAndValues[0], eigenvectorsAndValues[1]);
@@ -302,11 +302,11 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
      * @param g2 - graphics context
      * @param plane - current cartesian plane
      */
-    void drawAxes(Graphics2D g2, CartesianPlane plane) {
+    void drawAxes(Graphics2D g2, CoordinateSystem plane) {
         g2.setStroke(new BasicStroke(3));
-        g2.setColor(new Color(255, 0, 0));
+        g2.setColor(DrawUtils.red);
         plane.drawStraightLine(c/a, 0);
-        g2.setColor(new Color(0, 255, 0));
+        g2.setColor(DrawUtils.green);
         plane.drawStraightLine(d/b, 0);
     }
 
@@ -317,8 +317,8 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
      * @param g2 - graphics context
      * @param plane - current cartesian plane
      */
-    void drawTranspose(Graphics2D g2, CartesianPlane plane) {
-        g2.setColor(new Color(100, 100, 255));
+    void drawTranspose(Graphics2D g2, CoordinateSystem plane) {
+        g2.setColor(DrawUtils.lightBlue);
         g2.setStroke(new BasicStroke(2));
         drawOtherMatrixBasis(transpose(), g2, plane);
     }
@@ -330,8 +330,8 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
      * @param g2 - graphics context
      * @param plane - current cartesian plane
      */
-    void drawInverse(Graphics2D g2, CartesianPlane plane) {
-        g2.setColor(new Color(230, 180, 0));
+    void drawInverse(Graphics2D g2, CoordinateSystem plane) {
+        g2.setColor(DrawUtils.gold);
         g2.setStroke(new BasicStroke(2));
         drawOtherMatrixBasis(inverse(), g2, plane);
     }
@@ -343,13 +343,13 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
      * @param g2 - graphics context
      * @param plane - current cartesian plane
      */
-    private void drawOtherMatrixBasis(Matrix2x2 matrix, Graphics2D g2, CartesianPlane plane) {
+    private void drawOtherMatrixBasis(Matrix2x2 matrix, Graphics2D g2, CoordinateSystem plane) {
         plane.drawVector(matrix.a, matrix.c);
         plane.drawVector(matrix.b, matrix.d);
 
-        g2.setColor(new Color(255, 0, 0));
+        g2.setColor(DrawUtils.red);
         DrawUtils.circle(plane.screenX(matrix.a), plane.screenY(matrix.c), radius*plane.scale);
-        g2.setColor(new Color(0, 255, 0));
+        g2.setColor(DrawUtils.green);
         DrawUtils.circle(plane.screenX(matrix.b), plane.screenY(matrix.d), radius*plane.scale);
     }
 
@@ -359,11 +359,11 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
      * @param g2 - graphics context
      * @param plane - current cartesian plane
      */
-    void drawEigenvectorsLines(Graphics2D g2, CartesianPlane plane) {
+    void drawEigenvectorsLines(Graphics2D g2, CoordinateSystem plane) {
         if(eigenvectorsAndValues[0] == 0 || eigenvectorsAndValues[2] == 0) {
             return; // matrix is singular or has imaginary eigenvalues
         }
-        g2.setColor(new Color(255, 255, 255, 180));
+        g2.setColor(DrawUtils.transparentWhite);
         g2.setStroke(new BasicStroke(2));
         plane.drawStraightLine(eigenvectorsAndValues[1]/eigenvectorsAndValues[0], 0);
         plane.drawStraightLine(eigenvectorsAndValues[3]/eigenvectorsAndValues[2], 0);
@@ -375,8 +375,8 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
      * @param g2 - graphics context
      * @param plane - current cartesian plane
      */
-    void drawDeterminant(Graphics2D g2, CartesianPlane plane) {
-        g2.setColor(new Color(255, 255, 100, 120));
+    void drawDeterminant(Graphics2D g2, CoordinateSystem plane) {
+        g2.setColor(DrawUtils.transparentYellow);
         g2.fillPolygon(
                 new int[] {(int)plane.screenX(0), (int)plane.screenX(a), (int)plane.screenX(a+b), (int)plane.screenX(b)},
                 new int[]{(int)plane.screenY(0), (int)plane.screenY(c), (int)plane.screenY(c+d), (int)plane.screenY(d)}, 4);
@@ -392,18 +392,18 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
      * @param camera - point where lies top left corner of the screen in cartesian plane simulation units.
      * @param plane - current cartesian plane
      */
-    void drawGrid(Graphics2D g2, double scale, Point2D camera, CartesianPlane plane) {
+    void drawGrid(Graphics2D g2, double scale, Point2D camera, CoordinateSystem plane) {
         if(almostSingular()) {
             return;
         }
         g2.setStroke(new BasicStroke(1));
 
-        g2.setColor(new Color(255, 0, 0, 130));
+        g2.setColor(DrawUtils.transparentRed);
         double direction = c/a;
         double y_intercept = abs(b*c/a-d);
         drawParallelLines(direction, y_intercept, camera, scale, plane);
 
-        g2.setColor(new Color(0, 255, 0, 130));
+        g2.setColor(DrawUtils.transparentGreen);
         direction = d/b;
         y_intercept = abs(c-a*d/b);
         drawParallelLines(direction, y_intercept, camera, scale, plane);
@@ -420,7 +420,7 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
      * @param plane - current cartesian plane
      */
     private void drawParallelLines(double slope, double yInterceptIncrement, Point2D camera, double scale,
-                                   CartesianPlane plane) {
+                                   CoordinateSystem plane) {
 
         if(Double.isInfinite(slope)) {
             // is a is infinite draws parallel vertical lines

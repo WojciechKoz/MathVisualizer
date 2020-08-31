@@ -6,12 +6,12 @@ import java.util.List;
  * Class that simulates Principal Component Analysis.
  * All math of this algorithm are implemented in Matrix2x2 and MathUtils.
  */
-public class PCACartesianPlane extends CartesianPlane {
+public class PCACoordinateSystem extends CoordinateSystem {
     private final ArrayList<Sample> projected = new ArrayList<>();
     private GraphicsMatrix2x2 covarianceMatrix;
     private boolean covarianceMatrixVisibility, eigenvectorsVisibility, projectedSamplesVisibility;
 
-    PCACartesianPlane(Graphics2D g2, int width, int height, Panel panel) {
+    PCACoordinateSystem(Graphics2D g2, int width, int height, Panel panel) {
         super(g2, width, height, panel);
         menuName = "Visualizations";
 

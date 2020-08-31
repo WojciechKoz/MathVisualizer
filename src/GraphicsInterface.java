@@ -21,6 +21,8 @@ public interface GraphicsInterface {
      * this method runs when left mouse button was pressed
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
+     * @return false if simulation doesn't have to be refreshed.
+     *         true otherwise (also in menus)
      */
     boolean onLeftClick(double mouseX, double mouseY);
 
@@ -59,6 +61,7 @@ public interface GraphicsInterface {
     /**
      * This method runs when some button is pressed
      * @param event - all information of pressed button
+     * @return true/false depending of the usage
      */
     boolean onKeyPressed(KeyEvent event);
 }

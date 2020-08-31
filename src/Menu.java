@@ -58,7 +58,7 @@ public class Menu implements GraphicsInterface {
      */
     @Override
     public void draw() {
-        g2.setColor(new Color(251, 139, 36));
+        g2.setColor(DrawUtils.orange);
         DrawUtils.setFont(new Font("David bold", Font.PLAIN, 70));
         DrawUtils.drawCenteredString(title, width/2, height/7);
 

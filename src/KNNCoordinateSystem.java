@@ -1,11 +1,18 @@
 import java.awt.*;
 import java.util.ArrayList;
 
-public class KNNCartesianPlane extends CartesianPlane{
+/**
+ * Class that simulates K-nearest neighbours algorithm.
+ * Even if that class contains the whole KNN model it hasn't got any math inside.
+ * For the algorithms look at MathUtils class.
+ * This class uses the KNNInterface which is a graphical class for drawing
+ * rings and lines between neutrals samples and their neighbours
+ */
+public class KNNCoordinateSystem extends CoordinateSystem {
     private boolean distancesVisibility, ringsVisibility;
     private ArrayList<KNNInterface> interfaces = new ArrayList<>();
 
-    KNNCartesianPlane(Graphics2D g2, int width, int height, Panel mainPanel) {
+    KNNCoordinateSystem(Graphics2D g2, int width, int height, Panel mainPanel) {
         super(g2, width, height, mainPanel);
         menuName = "Visualizations";
 
@@ -22,8 +29,7 @@ public class KNNCartesianPlane extends CartesianPlane{
     }
 
     /**
-     * initializes the menu with buttons {Grid, Line, Errors, Menu}
-     * and labels {line coefficient, error measure}
+     * Initializes the specific buttons for the side menu
      */
     void initSideMenu() {
         String[] buttonsLabels = new String[] {"Distances", "Rings"};
@@ -34,8 +40,7 @@ public class KNNCartesianPlane extends CartesianPlane{
     }
 
     /**
-     * draws cartesian plane lines, samples,
-     *
+     * draws coordinate system lines, samples, and KNNInterfaces
      * at the end menu and message window are drawn
      */
     @Override
@@ -57,13 +62,12 @@ public class KNNCartesianPlane extends CartesianPlane{
     void addNewSample(double x, double y) {
         super.addNewSample(x, y);
         samples.get(samples.size() - 1).setCategory(0);
-        samples.get(samples.size() - 1).setColor(new Color(130, 130, 130));
+        samples.get(samples.size() - 1).setColor(DrawUtils.sampleColors[0]);
     }
 
-
     /**
-     * Performs onRightClick from CartesianPlane
-     * if there are at least 2 samples updates the whole simulation
+     * Performs onRightClick from CoordinateSystem
+     * and updates the whole simulation
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
      */
@@ -73,6 +77,14 @@ public class KNNCartesianPlane extends CartesianPlane{
         update();
     }
 
+    /**
+     * Checks if mouse is above some neutral sample.
+     * If so then changes corresponding interface active value to true
+     * @param mouseX - current mouse x position (in pixels)
+     * @param mouseY - current mouse y position (in pixels)
+     * @param prevMouseX - mouse x position in previous frame (in pixels)
+     * @param prevMouseY - mouse y position in previous frame (in pixels)
+     */
     @Override
     public void onMouseMoved(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
         super.onMouseMoved(mouseX, mouseY, prevMouseX, prevMouseY);
@@ -82,7 +94,7 @@ public class KNNCartesianPlane extends CartesianPlane{
     }
 
     /**
-     * Performs onMouseDragged from CartesianPlane. If it returns true then update the simulation.
+     * Performs onMouseDragged from CoordinateSystem. If it returns true then update the simulation.
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
      * @param prevMouseX - mouse x position in previous frame (in pixels)
@@ -93,7 +105,6 @@ public class KNNCartesianPlane extends CartesianPlane{
     public boolean onMouseDragged(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
         if(super.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY)) {
             update();
-
         }
         return true;
     }
@@ -101,7 +112,7 @@ public class KNNCartesianPlane extends CartesianPlane{
     /**
      * checks if some of buttons in menu is pressed
      * if so then performs some action related to that pressed button.
-     * Sliders are supported inside @code{menu.onReleased} method since they haven't got
+     * Sliders are supported inside {@code menu.onReleased} method since they haven't got
      * any specific action and all of them behave the same way.
      * @param label - label of pressed button
      */
@@ -114,7 +125,7 @@ public class KNNCartesianPlane extends CartesianPlane{
     }
 
     /**
-     * performs colorSelectedSample from cartesianPlane and if it returns true
+     * performs colorSelectedSample from CoordinateSystem and if it returns true
      * updates the whole simulation.
      * @param col - new Color of selected sample
      * @param value - new value (related to color) of selected sample
@@ -128,8 +139,8 @@ public class KNNCartesianPlane extends CartesianPlane{
     }
 
     /**
-     * Draws regression line and if error visibility variable is set to true then
-     * error is also drawn
+     * Draws the interface of KNN algorithm - distances between neutral samples and their neighbours and
+     * rings with radii equal to distances between neutral samples and the farthest samples.
      */
     void drawKNNInterface() {
         if(!atLeastOneTrainingSample()) {
@@ -142,6 +153,10 @@ public class KNNCartesianPlane extends CartesianPlane{
         }
     }
 
+    /**
+     * checks if in the data there is at least one sample with known class
+     * @return true if there is a training sample otherwise false
+     */
     boolean atLeastOneTrainingSample() {
         for(Sample sample: samples) {
             if(sample.category() != 0) return true;
