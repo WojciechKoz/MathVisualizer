@@ -92,6 +92,17 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
      * @param g - graphics engine
      */
     public void paintComponent(Graphics g) {
+        System.out.println(window.getSize().width + " " + window.getSize().height + " " + width + " " + height);
+
+        if(window.getSize().width != width || window.getSize().height != height) {
+            width = window.getSize().width;
+            height = window.getSize().height;
+            context = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            g2 = (Graphics2D) context.getGraphics();
+            DrawUtils.setGraphicsContext(g2);
+            changeGraphics("", "Menu");
+        }
+
         g.drawImage(context, 0, 0, null);
         g2.setColor(DrawUtils.black);
         g2.fillRect(0,0, width, height);

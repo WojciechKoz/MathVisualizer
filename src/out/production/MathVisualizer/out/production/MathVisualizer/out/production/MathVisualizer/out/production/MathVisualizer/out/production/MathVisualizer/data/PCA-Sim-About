@@ -1,0 +1,25 @@
+Principal Component Analysis
+This is a simulation of PCA algorithm.
+It can be useful in two situations.
+The first is the transformation of the dataset into the data that
+is more logically aligned (the greatest variance occurs along the x axis).
+The second usage is to transform a dataset into data that has smaller
+dimension but retains as much information as possible. In our case,
+we can convert the 2D data to a 2D or 1D dataset, but you can choose
+any smaller dimension not only smaller by 1.
+
+The way this algorithm works is very easy as long as you know what
+covariance matrix and eigenvectors are. If you don't know them
+please check them out in the theory section.
+
+First thing to do is to compute covariance matrix and then
+its eigenvectors and eigenvalues. Since covariance matrix is always
+simmetric (because Cov(X,Y) = Cov(Y,X)) its eigenvectors are perpendicular.
+What's more, the value of eigenvalue and the variation along the
+corresponding eigenvector are proportional.
+
+Then you can choose some number of eigenvectors that have the
+biggest corresponding eigenvalues. The number of selected eigenvectors
+is the dimension of your future dataset. Next put them
+together to create matrix and multiply every sample
+by that matrix to get new dataset.

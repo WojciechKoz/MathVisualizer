@@ -1,0 +1,15 @@
+Linear Regression
+This is a linear regression simulation - a straight line
+that fits all samples as good as possible.
+You can add more samples by pressing the right
+mouse button somewhere in the cartesian plane.
+The optimized function is the sum of the squared
+differences between the y coordinates of each sample
+and the y-value of the line at the x point of that sample.
+The graphical interpretation of the error that we minimize
+is the set of red squares drawn between the points and the line.
+The exact line value and error can be checked on the left side of the screen.
+
+If you want to know how this line is calculated,
+please see Linear Regression Theory in Probability
+and Statistics section of this app.
