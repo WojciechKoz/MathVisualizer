@@ -1,0 +1,28 @@
+K Nearest Neighbours
+Welcome to the KNN simulation. KNN is a simple
+machine learning algorithm to predict a class of the sample
+using samples with known classes. In fact, this is the simplest
+prediction algorithm, and it works exactly as the name suggests.
+
+For a new sample that you don't know, you calculate the distances 
+between that unknown sample and all known samples.
+Then you sort them by that distance values and take the k nearest samples.
+The k value is a hyperparameter and you can choose it depends how the dataset looks like.
+Then among this k nearest samples you choose the class which appears the most often.
+For example if you have three red, two blue and two
+green samples - the predicted class of the unknown sample would be red.
+If you have the same number of samples from different classes
+(for example two red, two blue and one green) algorithm would
+decrease k-value by one, until some class will be more frequent in the neighbours set.
+
+This algorithm is good for data that cannot be separated by a line.
+However, its performance is very slow if the data size and dimensions are large.
+The second drawback is that the model is nonparametric,
+meaning that when a new test sample comes out, the entire algorithm has to start all over again.
+
+The usage is also quite simple. You can add new neutral samples by pressing the right
+mouse button, move them with the mouse and change their classes by selecting them with
+the mouse and pressing a number from 0 to 6. To see which samples are neighbors of a neutral sample,
+you can hover the mouse over that neutral sample or unlock
+the distances or rings visibility by pressing the buttons in the side menu.
+The value of k can be changed with the slider in the side menu. The valid values of k are between 1 and 10.

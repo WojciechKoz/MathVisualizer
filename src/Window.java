@@ -1,8 +1,6 @@
 import javax.swing.*;
-import java.awt.*;
 
 public class Window extends JFrame {
-    private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     public Window() {
         setTitle("MV v0.4");
@@ -10,11 +8,11 @@ public class Window extends JFrame {
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(true);
-
-        int WIDTH = (int) screenSize.getWidth();
-        int HEIGHT = (int) screenSize.getHeight();
-        Panel panel = new Panel(WIDTH, HEIGHT, this);
+        Panel panel = new Panel(this);
         add(panel);
+        pack();
         setVisible(true);
+        panel.start(getSize().width, getSize().height);
+
     }
 }

@@ -9,11 +9,11 @@ import java.awt.image.BufferedImage;
  * It manages menus and simulations changes using MenuScenarios.
  */
 public class Panel extends JPanel implements ActionListener, MouseWheelListener, KeyListener, MouseListener, MouseMotionListener {
-    private final Image context;
-    private final Graphics2D g2;
+    private Image context;
+    private Graphics2D g2;
     // dimensions of the program window
-    private final int width;
-    private final int height;
+    private int width;
+    private int height;
     // could be a menu or a simulation
     private GraphicsInterface graphics;
     int prevMouseX= -1;
@@ -21,10 +21,13 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
     Window window;
     final String appName = "Math Visualizer V0.4";
 
-    public Panel(int width, int height, Window win) {
+    public Panel(Window win) {
+        this.window = win;
+    }
+
+    void start(int width, int height) {
         this.width = width;
         this.height = height;
-        this.window = win;
         context = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
 
         // Adds all listeners ( mouse and keyboard )
