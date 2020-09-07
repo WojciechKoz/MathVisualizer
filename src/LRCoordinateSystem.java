@@ -8,8 +8,8 @@ import static java.lang.StrictMath.abs;
  */
 public class LRCoordinateSystem extends CoordinateSystem {
     // a and b are coefficients of best fitting line
-    private double a, b;
-    private boolean regressionLineVisibility, errorVisibility;
+    protected double a, b;
+    protected boolean regressionLineVisibility, errorVisibility;
 
     LRCoordinateSystem(Graphics2D g2, int width, int height, Panel mainPanel) {
         super(g2, width, height, mainPanel);

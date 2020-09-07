@@ -10,6 +10,7 @@ public class SideMenu extends Menu {
     // yOffset is related with scrolling the menu. (its a y coordinate of first button) it is 0 or negative.
     private int currentY, yOffset;
     private final int smallFont, normalFont, bigFont;
+    private boolean visibility;
 
     SideMenu(Graphics2D g2, int width, int height) {
         super(g2, width, height, null, "");
@@ -19,6 +20,8 @@ public class SideMenu extends Menu {
         smallFont = (int)(width/10.0);
         normalFont = (int)(width/9.0);
         bigFont = (int)(width/8.0);
+
+        visibility = true;
     }
 
     /**
@@ -31,6 +34,15 @@ public class SideMenu extends Menu {
         for (String label : labels) {
             buttons.add(new ClickableButton(0, currentY + yOffset, width, heightOfButton, label, bigFont));
             currentY += heightOfButton;
+        }
+    }
+
+    @Override
+    public void draw() {
+        if(visibility) {
+            super.draw();
+        } else {
+            buttons.get(0).draw(g2);
         }
     }
 
@@ -77,7 +89,7 @@ public class SideMenu extends Menu {
     @Override
     public void onMouseScrolled(int rotation) {
         // there is no need to scrolling
-        if(currentY <= height) return;
+        if(currentY <= height || !visibility) return;
 
         // scrolls 30 pixel per event
         double factor = -30*rotation;
@@ -101,6 +113,12 @@ public class SideMenu extends Menu {
         yOffset = (int)buttons.get(0).getY();
     }
 
+    /**
+     * Runs when some key is pressed. For now only sample label button has input fields
+     * so only these buttons are handling this event.
+     * @param event - all information about pressed button
+     * @return - true if some input was active, meaning that coordiante system simulation has to be refreshed.
+     */
     @Override
     public boolean onKeyPressed(KeyEvent event) {
         for(Button b: buttons) {
@@ -124,8 +142,11 @@ public class SideMenu extends Menu {
      */
     String onReleased(double mouseX, double mouseY) {
         for(Button button: buttons) {
-            button.setHover(mouseX, mouseY,false);
+            button.setHover(mouseX, mouseY, false);
             if(button.hasInside(mouseX, mouseY)) {
+                if(button.getLabel().equals("Visible")) {
+                    visibility = !visibility;
+                }
                 return button.onClicked(mouseX, mouseY);
             }
         }
@@ -212,7 +233,10 @@ public class SideMenu extends Menu {
      * @return - true if mouse is inside the menu otherwise false
      */
     public boolean hasInside(double mouseX, double mouseY) {
-        return mouseX < width && mouseY < currentY;
+        if(visibility) {
+            return mouseX < width && mouseY < currentY;
+        }
+        return mouseX < width && mouseY < buttons.get(0).getHeight();
     }
 
     /**
@@ -239,10 +263,28 @@ public class SideMenu extends Menu {
         }
     }
 
+    /**
+     * When mouse is pressed it updates the availability of
+     * each input fields that are inside the "sample label buttons"
+     * @param mouseX - current x position of the mouse (in pixels)
+     * @param mouseY - current y position of the mouse (in pixels)
+     */
     public void focusingInputs(double mouseX, double mouseY) {
         for(Button b: buttons) {
             if(b instanceof SampleLabelButton) {
                 ((SampleLabelButton) b).onLeftClick(mouseX, mouseY);
+            }
+        }
+    }
+
+    public void toggleCheckBoxButton(String label) {
+        for(Button b: buttons) {
+            if(b instanceof CheckBoxButton && b.getLabel().equals(label)) {
+                ((CheckBoxButton)b).toggleValue();
+
+                if(label.equals("Visible")) {
+                    visibility = !visibility;
+                }
             }
         }
     }

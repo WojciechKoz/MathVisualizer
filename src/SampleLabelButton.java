@@ -1,11 +1,10 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
-
 import static java.lang.StrictMath.min;
 
 /**
- * TODO docs of this class are outdated
  * Class used only in sideMenus in CartesianPlane. Shows current coordinate of sample and its color.
+ * This button has two inputField that support moving the sample by typing its exact coordinates from the keyboard.
  */
 class SampleLabelButton extends Button {
     Sample sample;
@@ -15,6 +14,7 @@ class SampleLabelButton extends Button {
         super(x, y, width, height, "", fontSize);
         this.sample = sample;
 
+        // initializes two inputs. First is for x coordinate and second is for y coordinate
         inputForX = new NumberInput((int) (x+width*0.3), y, (int)(width*0.3), height,
                 MathUtils.round(sample.x,3), this, available,
                 textCol, DrawUtils.transparent, DrawUtils.darkRed);
@@ -26,7 +26,7 @@ class SampleLabelButton extends Button {
 
     /**
      * Draws rectangle symbolizing the button, small circle inside (using color of corresponding sample)
-     * and label with coordinates of sample
+     * and two input fields
      * @param g2 - object for drawing on the screen and responsible for the graphics
      */
     @Override
@@ -41,7 +41,7 @@ class SampleLabelButton extends Button {
         inputForX.updateFromButton(MathUtils.round(sample.x, 3));
         inputForY.updateFromButton(MathUtils.round(sample.y, 3));
 
-        // prints labels
+        // prints labels with input fields
         g2.setColor(textCol);
         DrawUtils.setFont(new Font("David Bold", Font.PLAIN, fontSize));
         DrawUtils.drawStringWithLeftAlignment("X:", x+width/5, y+height/2);
@@ -52,7 +52,8 @@ class SampleLabelButton extends Button {
     }
 
     /**
-     * If mouse is over the sample then background and text colors swap
+     * If mouse is over the sample then background and text colors swap.
+     * IT changes the colors of input fields as well
      * @param mouseX - x coordinate in CartesianPlane pointed by the mouse (not real mouse x position)
      * @param mouseY - y coordinate in CartesianPlane pointed by the mouse (not real mouse y position)
      */
@@ -71,6 +72,8 @@ class SampleLabelButton extends Button {
     /**
      * Sets {@code Sample#selected} value to true if mouse is over the button.
      * If {@code Sample#selected} is true then an orange ring is drawn around the sample.
+     * If the mouse button is down, it sets the accessibility of the
+     * input fields by checking if the mouse is inside them.
      * @param mouseX - x position of mouse (in pixels)
      * @param mouseY - y position of mouse (in pixels)
      * @param pressed - true when left mouse button is pressed otherwise false, unused
@@ -95,17 +98,35 @@ class SampleLabelButton extends Button {
         return mouseX > x && mouseX < x+width && mouseY > y && mouseY < y+height;
     }
 
+    /**
+     * Function that runs when some key was pressed. It passes the information about this pressing
+     * to input fields and return true if at least one of them (actually it's not possible that both) is selected.
+     * That means that the key pressed event might changed the coordinates and the simulation has to be refreshed.
+     * @param event - event that carries the information of the key pressing
+     * @return - true if one of the input is selected (simulation has to be refreshed because this key pressed event
+     *           might changed the coordiantes of some sample)
+     */
     boolean onKeyPressed(KeyEvent event) {
         inputForX.onKeyPressed(event);
         inputForY.onKeyPressed(event);
         return inputForX.selected || inputForY.selected;
     }
 
+    /**
+     * Runs when left mouse button is down. Passes the information about it to input fields.
+     * @param mouseX - current x coordinate of the mouse (in pixels)
+     * @param mouseY - current y coordinate of the mouse (in pixels)
+     */
     void onLeftClick(double mouseX, double mouseY) {
         inputForX.onLeftClick(mouseX, mouseY);
         inputForY.onLeftClick(mouseX, mouseY);
     }
 
+    /**
+     * If text in the input field is valid and the value is different than the real sample position
+     * it updates the position of the sample. Runs from input fields.
+     * TODO when more buttons will have their inputs it might be not the best name of update function.
+     */
     void updateFromInput() {
         sample.instantMove(inputForX.value, inputForY.value);
     }
@@ -131,6 +152,13 @@ class SampleLabelButton extends Button {
         inputForY.y = y;
     }
 
+    /**
+     * Since this class is only for displaying sample values, returns an empty string when is clicked
+     * meaning that the upper layer doesn't perform any action after this button was pressed
+     * @param mouseX - current x position of mouse
+     * @param mouseY - current y position of mouse
+     * @return - an empty string
+     */
     @Override
     public String onClicked(double mouseX, double mouseY) {
         return "";

@@ -1,0 +1,11 @@
+Tutorial
+Nice, now the line cannot pass through all the points, but
+it tries to be as close to all of them as possible.
+
+Sometimes you want to add a point that will be very far
+away from the origin. To do that you need to either scroll
+the mouse to change the scale or dragged the mouse
+to move the camera. In this case You will move the camera by
+dragging the mouse. Just press the left mouse button
+and move the mouse. Let's add the last point which will be very high.
+Follow the arrows!

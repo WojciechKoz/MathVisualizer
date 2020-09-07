@@ -97,6 +97,11 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
             height = window.getSize().height;
             context = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             g2 = (Graphics2D) context.getGraphics();
+
+            // antialiasing for better graphics quality
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+
             DrawUtils.setGraphicsContext(g2);
             changeGraphics("", "Menu");
         }

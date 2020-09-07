@@ -147,9 +147,10 @@ public class NumberInput {
     }
 
     /**
-     * Sets colors 
-     * @param textCol
-     * @param background
+     * Sets background and foreground colors. Used when mouse is above the button
+     * that has this inputField.
+     * @param textCol - new color of text
+     * @param background - new background color
      */
     void setColors(Color textCol, Color background) {
         foreground = textCol;

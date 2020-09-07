@@ -87,6 +87,13 @@ class Slider extends Button {
 
     double getValue() { return value; }
 
+    /**
+     * When this button is clicked it updates (looking at the mouse x position) the value of the slider.
+     * It also returns an emtpy string because upper layer has any action related to this type of button.
+     * @param mouseX - current x position of mouse
+     * @param mouseY - current y position of mouse
+     * @return - an empty string
+     */
     @Override
     public String onClicked(double mouseX, double mouseY) {
         setValue(mouseX);
