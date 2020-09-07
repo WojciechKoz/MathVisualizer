@@ -36,7 +36,7 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
     }
 
     /**
-     * Initializes all side menu with buttons and labels
+     * Initializes all specific buttons in side menu
      */
     @Override
     void initSideMenu() {
@@ -82,7 +82,7 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
     }
 
     /**
-     * Performs onRightClick from CartesianPlane and updates the simulation
+     * Performs onRightClick from CoordinateSystem and updates the simulation
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
      */
@@ -93,7 +93,7 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
     }
 
     /**
-     * Performs {@code CartesianPlane#onLeftClick} if nothing was moved then checks
+     * Performs {@code CoordinateSystem#onLeftClick} if nothing was moved then checks
      * if some of the basis of the matrix is under the mouse
      * and if so then changes its moving variable to true
      * so it will follow the mouse
@@ -133,7 +133,7 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
 
     /**
      * If mouse is released then deselects matrix basis (even if they wasn't been selected)
-     * and performs @code{CartesianPlane#onLeftMouseButtonReleased} to do the same with samples
+     * and performs {@code CoordinateSystem#onLeftMouseButtonReleased} to do the same with samples
      * and checks if some button in menu is clicked
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
@@ -147,7 +147,7 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
     /**
      * checks if some of buttons in menu is pressed
      * if so then performs some action related to that pressed button.
-     * Sliders are supported inside @code{menu.onReleased} method since they haven't got
+     * Sliders are supported inside {@code menu.onReleased} method since they haven't got
      * any specific action and all of them behave the same way.
      * @param label - label of pressed button
      */
@@ -164,7 +164,7 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
     }
 
     /**
-     * Performs {@code CartesianPlane#colorSelectedSample} if it returns true which means that
+     * Performs {@code CoordinateSystem#colorSelectedSample} if it returns true which means that
      * some sample changed the color and update is necessary since projected sample should has
      * the same color.
      * @param col - new Color of selected sample

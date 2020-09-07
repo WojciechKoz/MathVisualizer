@@ -197,11 +197,12 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
         deselect();
     }
 
+    /*
     GraphicsMatrix2x2(double a, double b, double c, double d, String name) {
         super(a, b, c, d, name);
         deselect();
     }
-
+    */
     /* not used
     GraphicsMatrix2x2(ArrayList<Double> values) {
         super(values);

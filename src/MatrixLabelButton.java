@@ -1,7 +1,8 @@
 import java.awt.*;
 
 /**
- * Button that shows components of 2x2 matrix. Used only in sideMenus in cartesianPlane where there is some matrix.
+ * Button that shows components of 2x2 matrix. Used only in sideMenus in coordinate systems
+ * where there is some matrix.
  * Doesn't support hovering.
  */
 class MatrixLabelButton extends Button {
@@ -89,6 +90,13 @@ class MatrixLabelButton extends Button {
         return false;
     }
 
+    /**
+     * Since this class is only for displaying matrix values, returns an empty string when is clicked
+     * meaning that the upper layer doesn't perform any action after this button was pressed
+     * @param mouseX - current x position of mouse
+     * @param mouseY - current y position of mouse
+     * @return - an empty string
+     */
     @Override
     public String onClicked(double mouseX, double mouseY) {
         return "";

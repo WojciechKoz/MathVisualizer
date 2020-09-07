@@ -317,10 +317,12 @@ public class MathUtils {
     }
 
     /**
-     *
-     * @param neutral
-     * @param neighbours
-     * @param k
+     * Predicts class of neutral sample checking which class appears most frequent
+     * int the neighbours list.
+     * if there are many classes that are equally frequent, reduces k by one and performs voting once again.
+     * @param neutral - predicted sample
+     * @param neighbours - list of samples sorted from closest to farthest
+     * @param k - how many neighbours are counted in voting
      */
     private static void voting(Sample neutral, List<Sample> neighbours, int k) {
         Integer[] values = new Integer[]{0,0,0,0,0,0};
@@ -339,11 +341,19 @@ public class MathUtils {
         }
     }
 
+    /**
+     * for each neutral sample performs {@code voting} to predict their classes and
+     * creates KNNInterface to visualize this algorithm in the KNN simulation
+     * @param samples - list of all samples
+     * @param k - how many neighbours are counted in voting
+     * @return - list of KNNInterface
+     */
     public static ArrayList<KNNInterface> KNNAlgorithm(ArrayList<Sample> samples, int k) {
         ArrayList<KNNInterface> interfaces = new ArrayList<>();
         ArrayList<Sample> training = new ArrayList<>();
         ArrayList<Sample> neutrals = new ArrayList<>();
 
+        // divides all dataset to training and testing samples
         for(Sample sample: samples) {
             if(sample.category() != 0) {
                 training.add(sample);
@@ -352,6 +362,7 @@ public class MathUtils {
             }
         }
 
+        // for each test sample takes k nearest neighbours and performs voting and creates KNNInterfaces
         for(Sample neutral: neutrals) {
             training.sort(new DistComparator(neutral));
             List<Sample> neighbours = training.subList(0, Integer.min(k, training.size()));

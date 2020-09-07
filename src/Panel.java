@@ -92,8 +92,6 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
      * @param g - graphics engine
      */
     public void paintComponent(Graphics g) {
-        System.out.println(window.getSize().width + " " + window.getSize().height + " " + width + " " + height);
-
         if(window.getSize().width != width || window.getSize().height != height) {
             width = window.getSize().width;
             height = window.getSize().height;

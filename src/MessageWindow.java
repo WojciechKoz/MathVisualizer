@@ -2,7 +2,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * Class that prints out some important information about current cartesian plane simulation in message window.
+ * Class that prints out some important information about current coordinate system simulation in message window.
  */
 public class MessageWindow {
     // current x and y position of the window and its width and height
@@ -51,6 +51,11 @@ public class MessageWindow {
         findAverageLineHeight();
     }
 
+    /**
+     * Sometimes the lines have higher letters.
+     * The average height provides that all lines are separated by
+     * the same distance which looks more aesthetically pleasing.
+     */
     void findAverageLineHeight() {
         ArrayList<Double> heights = new ArrayList<>();
         DrawUtils.setFont(new Font("Arial", Font.PLAIN, fontSize));

@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Class that is responsible for the graphics of main menu which appears when program starts.
  * If button is clicked that class sends title of menu + label on that button to Panel
  * where right action is performed.
- * That class is also extensive (@code{SideMenu})
+ * That class is also extensive ({@code SideMenu})
  * to a smaller class - side menu inside the cartesian plane simulations.
  */
 public class Menu implements GraphicsInterface {
@@ -91,7 +91,7 @@ public class Menu implements GraphicsInterface {
 
     /**
      * for all buttons sets clicked hover to false and checks whether some button was pressed
-     * If so then sends title of the menu + label on the button to panel using @code{Panel#changeGraphics}
+     * If so then sends title of the menu + label on the button to panel using {@code Panel#changeGraphics}
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
      */
