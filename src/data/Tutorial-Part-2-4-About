@@ -1,0 +1,12 @@
+Tutorial
+Let's move the new training sample which is in the
+blue area to the red area. There is no specified
+square where the point must be but it has to be
+above the yellow line to change its predicted class.
+When the sample will cross the line you should see
+that the small circle inside the sample will change
+the color.
+
+To move the sample click on it, keep the button
+pressed and drag the mouse.
+The sample will follow the mouse.

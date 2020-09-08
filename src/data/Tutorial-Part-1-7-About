@@ -1,0 +1,13 @@
+Tutorial
+Right, let's focus on something other than adding and removing points.
+Now we will check how to move the existing sample.
+This is very useful if you want to see how this sample affects the simulation.
+The simulation updates every time the sample moves so you get the feeling
+that the simulation is "live".
+
+Moving is also very easy - just click on the sample you want to select
+then keep the button pressed and drag the mouse. The sample will follow the mouse.
+
+Let's move the first sample to the yellow area.
+So the linear regression algorithm will fit to the
+points very well since all of them will almost lie on the straight line.

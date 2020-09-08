@@ -1,0 +1,16 @@
+Tutorial
+Look at these numbers! Now you can be very precise.
+Right so you know how to zoom out/in, move the camera,
+add, remove and move points (using mouse or keyboard).
+You also know where to look if you're looking for some
+numbers related to the current simulation
+or buttons to unlock new visual effects.
+But it is not the end.
+
+For prediction algorithms the most important thing is
+the class of the sample. We need to distinguish which
+sample belongs to which class so we need to change their colors.
+
+But before we do so let's first remove all samples. If you forgot
+you have to press right mouse button on the sample that you wish
+to delete.

@@ -66,6 +66,14 @@ class Sample extends Point2D {
         category = 1;
     }
 
+    Sample(double x, double y, int cat) {
+        super(x,y);
+        this.col = DrawUtils.sampleColors[cat];
+        isMoving = false;
+        selected = false;
+        category = cat;
+    }
+
     /**
      * Draws the point as a circle. Its color corresponds the category which it has.
      * if point is selected then there is an orange ring round him
@@ -124,6 +132,4 @@ class Sample extends Point2D {
     public void select(boolean value) {
         selected = value;
     }
-
-    Point2D position() { return new Point2D(x, y); }
 }

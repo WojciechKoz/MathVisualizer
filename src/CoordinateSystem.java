@@ -282,6 +282,25 @@ public class CoordinateSystem implements GraphicsInterface {
         menu.addSampleLabel(sample, STANDARD_BUTTON_HEIGHT, true);
     }
 
+    void removeSample(int index) {
+        menu.removeSampleLabel(samples.get(index));
+        samples.remove(index);
+    }
+
+    boolean moveSamples(double mouseX, double mouseY) {
+        for (Sample sample : samples) {
+            if (sample.isMoving()) {
+                sample.instantMove(simulationX(mouseX), simulationY(mouseY));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void moveCamera(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
+        camera.move((prevMouseX - mouseX)/scale, (mouseY - prevMouseY)/scale);
+    }
+
     /**
      * If some sample is under the mouse then removes that sample, if not creates new one in the mouse place
      * @param mouseX - current mouse x position (in pixels)
@@ -292,8 +311,7 @@ public class CoordinateSystem implements GraphicsInterface {
         int toRemove = select(mouseX, mouseY);
 
         if(toRemove != -1) {
-            menu.removeSampleLabel(samples.get(toRemove));
-            samples.remove(toRemove);
+            removeSample(toRemove);
         } else {
             addNewSample(simulationX(mouseX), simulationY(mouseY));
         }
@@ -386,14 +404,11 @@ public class CoordinateSystem implements GraphicsInterface {
             return true;
         }
 
-        for (Sample sample : samples) {
-            if (sample.isMoving()) {
-                sample.instantMove(simulationX(mouseX), simulationY(mouseY));
-                return true;
-            }
-        }
+        if(moveSamples(mouseX, mouseY)) return true;
 
-        camera.move((prevMouseX - mouseX)/scale, (mouseY - prevMouseY)/scale);
+        moveCamera(mouseX, mouseY, prevMouseX, prevMouseY);
+
+
         return false;
     }
 

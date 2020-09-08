@@ -1,0 +1,31 @@
+Tutorial
+You are doing very well! Next thing is the menu on the
+left hand side of the screen. Just click at the first
+button to see what the menu contains.
+
+Here you are able to see the exact value of the straight
+line, samples you added and even an error of the linear
+regression, which tells how far all points are from the line.
+
+There are also some buttons that are responsible for visibility of
+some features like coordinate system grid or graphical interpretation
+of the error! Check them out. Be careful with the "menu" button though,
+since it will take you back to the main menu.
+
+About button will show/hide the information about current visualization.
+You can press it twice to hide and show again this message box.
+
+The great thing about the menu is ability to move the samples using
+keyboard. When you test all buttons you should check that out as well.
+
+To move the sample using the keyboard - press the left mouse button
+when the mouse will be above the button related to the sample you wish
+to move. If you don't know which button it is, you can hover the mouse
+over the button and see that around one sample there is an orange
+ring. You can do it another way - move the mouse over the point you wish to
+move and corresponding button will light up.
+
+Your task is to move samples that they will have these coordinates:
+(-1.5, 1.5), (-0.5, 2.5), (0.5, 3.5). Don't worry about the order.
+You just need to have three samples with these values. Can you do it
+using your keyboard?

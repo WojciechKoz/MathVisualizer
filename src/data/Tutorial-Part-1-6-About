@@ -1,0 +1,13 @@
+Tutorial
+Now we can see all the samples at once. However, this isolated
+point spoils everything. The line tries to fit to every point,
+but this last point seems to have the greatest effect on the line.
+Moreover, this point may be wrong, looking at other samples.
+I think we should delete this point, but don't worry - it's very
+easy and similar to adding points. In fact, you also need to press
+the right mouse button. This time though you have to click on the
+sample you want to delete.
+
+Delete the point indicated by the arrows.
+Don't worry if you miss that point. Adding points is currently disabled
+so nothing will happen.

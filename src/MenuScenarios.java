@@ -65,7 +65,7 @@ class MenuScenarios {
     static GraphicsInterface mainMenuOptions(String buttonLabel) {
         switch(buttonLabel) {
             case "First Steps":
-                return new LRTutorialCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+                return new LogTutorialCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
 
             case "Visualizations":
                 return createMenu("Visualizations", visualizationButtons);
@@ -147,6 +147,9 @@ class MenuScenarios {
     static GraphicsInterface blankOptions(String buttonLabel) {
         if ("Visualizations".equals(buttonLabel)) {
             return createMenu("Visualizations", visualizationButtons);
+        }
+        if(buttonLabel.equals("tutorial-part-2")) {
+            return new LogTutorialCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
         }
         return createMenu(panel.getAppName(), mainMenuButtons);
     }

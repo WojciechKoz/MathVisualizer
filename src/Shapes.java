@@ -1,5 +1,7 @@
 import java.awt.*;
 
+import static java.lang.StrictMath.abs;
+
 interface Shape {
     public void draw(Graphics2D g2, CoordinateSystem plane);
 }
@@ -83,6 +85,11 @@ class Rectangle implements Shape {
         g2.setColor(color);
         g2.fillRect((int)plane.screenX(x), (int)plane.screenY(y), (int)(plane.scale*width), (int)(plane.scale*height));
     }
+
+    void move(double dx, double dy) {
+        x += dx;
+        y += dy;
+    }
 }
 
 
@@ -118,23 +125,103 @@ class BlinkingRectangle extends Rectangle {
 
 class Triangle implements Shape {
     private Point2D A, B, C;
+    private Color color;
 
-    Triangle(Point2D A, Point2D B, Point2D C) {
+    Triangle(Point2D A, Point2D B, Point2D C, Color col) {
         this.A = A;
         this.B = B;
         this.C = C;
+        color = col;
     }
 
     @Override
     public void draw(Graphics2D g2, CoordinateSystem plane) {
         g2.setColor(color);
-        g2.fillTriangle();
+        g2.fillPolygon(
+                new int[] {
+                    (int) plane.screenX(A.x),
+                    (int) plane.screenX(B.x),
+                    (int) plane.screenX(C.x)
+                },
+                new int[] {
+                    (int) plane.screenY(A.y),
+                    (int) plane.screenY(B.y),
+                    (int) plane.screenY(C.y)
+                }, 3);
+    }
+
+    void move(double dx, double dy) {
+        A.move(dx, dy);
+        B.move(dx, dy);
+        C.move(dx, dy);
     }
 }
 
 class Arrow implements Shape {
     Triangle dart;
     Rectangle body;
+    private double positionShift = 0;
+    private double positionChanges;
+    private String direction;
 
+    Arrow(Point2D center, double length, String direction, Color color) {
+        this.direction = direction;
+
+        switch(direction) {
+            case "up": {
+                body = new Rectangle(center.x - 0.125*length, center.y + 0.15*length,
+                        0.25*length, 0.8*length, color);
+
+                dart = new Triangle(new Point2D(center.x-0.3*length, center.y+0.15*length),
+                        new Point2D(center.x+0.3*length, center.y+0.15*length),
+                        new Point2D(center.x, center.y+0.45*length), color);
+            } break;
+            case "down": {
+                body = new Rectangle(center.x - 0.125*length, center.y + 0.65*length,
+                        0.25*length, 0.8*length, color);
+
+                dart = new Triangle(new Point2D(center.x-0.3*length, center.y-0.15*length),
+                        new Point2D(center.x+0.3*length, center.y-0.15*length),
+                        new Point2D(center.x, center.y-0.45*length), color);
+            } break;
+            case "right": {
+                body = new Rectangle(center.x - 0.65*length, center.y + 0.125*length,
+                         0.8*length, 0.25*length, color);
+
+                dart = new Triangle(new Point2D(center.x+0.15*length, center.y-0.3*length),
+                        new Point2D(center.x+0.15*length, center.y+0.3*length),
+                        new Point2D(center.x+0.45*length, center.y), color);
+            } break;
+            case "left": {
+                body = new Rectangle(center.x - 0.15*length, center.y + 0.125*length,
+                        0.8*length, 0.25*length, color);
+
+                dart = new Triangle(new Point2D(center.x-0.15*length, center.y-0.3*length),
+                        new Point2D(center.x-0.15*length, center.y+0.3*length),
+                        new Point2D(center.x-0.45*length, center.y), color);
+            } break;
+        }
+        positionChanges = length/100 * (direction.equals("right") || direction.equals("up") ? 1 : -1);
+    }
+
+    @Override
+    public void draw(Graphics2D g2, CoordinateSystem plane) {
+        dart.draw(g2, plane);
+        body.draw(g2, plane);
+
+        if(direction.equals("up") || direction.equals("down")) {
+            dart.move(0, positionChanges);
+            body.move(0, positionChanges);
+        } else {
+            dart.move(positionChanges, 0);
+            body.move(positionChanges, 0);
+        }
+
+        positionShift += positionChanges;
+        if(abs(positionShift) > abs(positionChanges)*25) {
+            positionChanges = -positionChanges;
+            positionShift += positionChanges;
+        }
+    }
 
 }

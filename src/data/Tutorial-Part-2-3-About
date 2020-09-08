@@ -1,0 +1,13 @@
+Tutorial
+We have complete training dataset.
+Now we can check whether the new (unknown)
+leaf is a cherry or hazel leaf. You know how to
+add new samples but if you forgot - you need to
+press right mouse button somewhere in the
+coordinate system. Please add two samples
+one in each yellow square.
+
+You should see that in both gray (neutral) samples
+there are small circles. It is predicted color of this
+sample. So if one sample has red circle inside it is more
+likely that this sample is a cherry leaf.

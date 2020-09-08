@@ -56,13 +56,13 @@ public class Main {
     - input numbers from keyboard [checked]
     - checkboxes buttons [checked]
     - KNN Algorithm [checked]
-    - tutorial
-    - scrollbar and show/hide side menu
+    - tutorial [checked]
+    - show/hide side menu [checked]
     ...
     version 0.5
-    - photos in message boxes
+    - scrollbar
+    - dialog window when exiting the simulation
     - Theory of linear algebra chapter 1
-    - sounds
     - Settings
     - polish language
     - Improve PCA (add 2d transformation), matrix (inverse will be drawn), LogReg (background of areas)
@@ -70,5 +70,7 @@ public class Main {
     ...
     version 0.6
     - curve lines
-
+    - sounds
+    - photos in message boxes
+    - Simulation of RB-Tree
  */

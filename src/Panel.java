@@ -115,7 +115,7 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
 
     /**
      * performs this.paintComponent() whenever timer starts an event (every 15 milliseconds)
-     * @param e
+     * @param e - action event (not used)
      */
     @Override
     public void actionPerformed(ActionEvent e) {
