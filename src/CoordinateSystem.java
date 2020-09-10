@@ -28,7 +28,7 @@ public class CoordinateSystem implements GraphicsInterface {
     // menu on the left hand side of the screen with some options in simulation
     protected SideMenu menu;
     // window with text about current simulation
-    protected MessageWindow messageWindow;
+    protected MessageWindow messageWindow, exitWindow;
     // name of menu that will be active after quit this simulation
     protected String menuName;
     protected final int STANDARD_BUTTON_HEIGHT;
@@ -67,7 +67,12 @@ public class CoordinateSystem implements GraphicsInterface {
      * because sometimes we want to have a button with matrix details in it so that matrix has to be created.
      * Initializes the message window since all simulations have other information.
      */
-    void initComponents() { }
+    void initComponents() {
+        exitWindow = new MessageWindow((int)(width*0.3), (int)(height*0.3), (int)(width*0.4), (int)(height*0.2));
+        exitWindow.toggleVisibility();
+        exitWindow.setTitle("Are you sure you want to quit this simulation?");
+        // exitWindow.getButtons().add(new ClickableButton());
+    }
 
     /**
      * Initializes all specified buttons in other cartesian plane simulations
@@ -81,9 +86,13 @@ public class CoordinateSystem implements GraphicsInterface {
     public void draw() {
         drawLines();
         drawSamples();
-        menu.draw();
+        drawInterface();
+    }
 
+    void drawInterface() {
+        menu.draw();
         messageWindow.draw(g2);
+        exitWindow.draw(g2);
     }
 
     /**

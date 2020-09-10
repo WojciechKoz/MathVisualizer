@@ -31,6 +31,7 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
      */
     @Override
     void initComponents() {
+        super.initComponents();
         matrix = new GraphicsMatrix2x2(1,0,0,1);
         messageWindow = new MessageWindow(width, height, "data/Matrix-Sim-About");
     }
@@ -77,8 +78,7 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
         drawSamples();
         if(projectVisibility) { for(Sample s: projected) s.draw(camera, scale, g2); }
 
-        menu.draw();
-        messageWindow.draw(g2);
+        drawInterface();
     }
 
     /**

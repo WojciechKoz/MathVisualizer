@@ -9,7 +9,7 @@ public class MessageWindow {
     private int x;
     private int y;
     private final int width;
-    private final int height;
+    private int height;
     // height of the single line
     private int lineHeight;
     // y coordinate of first line of text - lowerBound
@@ -17,9 +17,9 @@ public class MessageWindow {
     // height of all lines of text
     private int heightOfAllText;
     // max and min y of visibility lines
-    private final int lowerBound, upperBound;
+    private int lowerBound, upperBound;
     private final ArrayList<String> text;
-    private final String title;
+    private String title;
     private final int fontSize;
     private final ArrayList<Button> buttons = new ArrayList<>();
     // visibility of message window. selected tells if window is dragged currently by the mouse
@@ -49,6 +49,29 @@ public class MessageWindow {
         selected = false;
 
         findAverageLineHeight();
+
+        if(upperBound + heightOfAllText < lowerBound) {
+            lowerBound = upperBound+heightOfAllText;
+            height = upperBound+heightOfAllText+(int)(0.1*height);
+        }
+    }
+
+    MessageWindow(int x, int y, int width, int height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+
+        fontSize = (int) (width/35.0);
+        scrollOffset = 0;
+
+        text = new ArrayList<>();
+        upperBound = 0;
+        lowerBound = height;
+
+        visibility = false;
+        selected = false;
+        title = "";
     }
 
     /**
@@ -94,8 +117,7 @@ public class MessageWindow {
 
         g2.setColor(DrawUtils.white);
         DrawUtils.setFont(new Font("David bold", Font.PLAIN, (int) (fontSize*1.7)));
-        DrawUtils.drawCenteredString(title, x+width/2, (int) (y+0.15*height));
-
+        DrawUtils.drawCenteredString(title, x+width/2, (int) (y+0.1*height + DrawUtils.stringHeight(title)));
 
         double yOffset = y + upperBound + scrollOffset;
         DrawUtils.setFont(new Font("Arial", Font.PLAIN, fontSize));
@@ -232,5 +254,11 @@ public class MessageWindow {
 
     void toggleVisibility() {
         visibility = !visibility;
+    }
+
+    ArrayList<Button> getButtons() { return buttons; }
+
+    void setTitle(String line) {
+        this.title = line;
     }
 }

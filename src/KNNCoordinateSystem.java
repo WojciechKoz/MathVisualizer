@@ -50,8 +50,7 @@ public class KNNCoordinateSystem extends CoordinateSystem {
 
         drawSamples();
 
-        menu.draw();
-        messageWindow.draw(g2);
+        drawInterface();
     }
 
     /**
