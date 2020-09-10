@@ -2,6 +2,11 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+/**
+ * This is the second part of the tutorial.
+ * It has many switches depended on the current state of the tutorial
+ * so my apology if the code has less quality than the other classes.
+ */
 public class LogTutorialCoordinateSystem extends LogCoordinateSystem {
     //  number of current step of the tutorial
     private int state = 1;

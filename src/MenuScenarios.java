@@ -65,7 +65,7 @@ class MenuScenarios {
     static GraphicsInterface mainMenuOptions(String buttonLabel) {
         switch(buttonLabel) {
             case "First Steps":
-                return new LogTutorialCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+                return new LRTutorialCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
 
             case "Visualizations":
                 return createMenu("Visualizations", visualizationButtons);

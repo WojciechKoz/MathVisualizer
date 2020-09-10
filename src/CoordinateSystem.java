@@ -67,17 +67,12 @@ public class CoordinateSystem implements GraphicsInterface {
      * because sometimes we want to have a button with matrix details in it so that matrix has to be created.
      * Initializes the message window since all simulations have other information.
      */
-    void initComponents() {
-        // tests. will be deleted
-        messageWindow = new MessageWindow(width, height, "data/lorem-ipsum");
-    }
+    void initComponents() { }
 
     /**
      * Initializes all specified buttons in other cartesian plane simulations
      */
-    void initSideMenu() {
-
-    }
+    void initSideMenu() { }
 
     /**
      * Draws all simulation's objects, side menu and message window
@@ -282,11 +277,25 @@ public class CoordinateSystem implements GraphicsInterface {
         menu.addSampleLabel(sample, STANDARD_BUTTON_HEIGHT, true);
     }
 
+    /**
+     * Removes the sample with the given index. Also removes the button
+     * corresponding with this sample.
+     * @param index - index of sample that has to be deleted.
+     */
     void removeSample(int index) {
         menu.removeSampleLabel(samples.get(index));
         samples.remove(index);
     }
 
+    /**
+     * move the sample that was under the mouse when the mouse button was clicked.
+     * Now when the mouse is still pressed and this sample returns true from isMoving() method
+     * it will follow the mouse. When no sample moves then nothing happens and function
+     * returns false meaning that no refresh is needed.
+     * @param mouseX - current x coordinate of the mouse (in pixels)
+     * @param mouseY - current y coordinate of the mouse (in pixels)
+     * @return true if some sample was moved otherwise false
+     */
     boolean moveSamples(double mouseX, double mouseY) {
         for (Sample sample : samples) {
             if (sample.isMoving()) {
@@ -297,6 +306,14 @@ public class CoordinateSystem implements GraphicsInterface {
         return false;
     }
 
+    /**
+     * moves the camera when the mouse is dragged. Tries to keep the mouse position
+     * in the same place in simulated coordinate system.
+     * @param mouseX - current x coordinate of the mouse (in pixels)
+     * @param mouseY - current y coordinate of the mouse (in pixels)
+     * @param prevMouseX - previous x coordinate of the mouse (in pixels)
+     * @param prevMouseY - previous y coordinate of the mouse (in pixels)
+     */
     void moveCamera(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
         camera.move((prevMouseX - mouseX)/scale, (mouseY - prevMouseY)/scale);
     }

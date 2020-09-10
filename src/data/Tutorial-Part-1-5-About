@@ -6,10 +6,12 @@ move the camera. Let's see how all points look like.
 
 To zoom out you have to scroll the mouse wheel towards you.
 Keep scrolling until you will be able to see all points
-and the message will change.
+and the message will change. Remember that the mouse cannot
+be inside this message window, because it means that you want
+to scroll the text.
 
 While scrolling, your mouse position moves slightly the
-camera. The effect is similar with google maps scrolling.
+camera. The effect is similar to google maps scrolling.
 Hopefully this will be intuitive for you.
 
 TIP: If you want to see what is below te screen when zooming

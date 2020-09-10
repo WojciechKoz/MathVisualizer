@@ -317,6 +317,16 @@ public class MathUtils {
     }
 
     /**
+     * @param minVal - minimum value that is allowed
+     * @param maxVal - maximum value that is allowed
+     * @param value - value to be checked
+     * @return true if value is between minVal and maxVal
+     */
+    public static boolean isBetween(double minVal, double maxVal, double value) {
+        return minVal < value && value < maxVal;
+    }
+
+    /**
      * Predicts class of neutral sample checking which class appears most frequent
      * int the neighbours list.
      * if there are many classes that are equally frequent, reduces k by one and performs voting once again.
