@@ -32,14 +32,14 @@ public class KNNInterface {
 
     /**
      * Draws all lines between this neutral sample and its neighbours.
-     * Lines are drawn if the sample is under the mouse
+     * Lines are drawn if the sample is under the mouse, is moving
      * or if that option was selected in the side menu.
      * @param g2 - graphical engine
      * @param plane - current working coordinate system
      * @param drawAll - option from side menu that allows drawing all distances from all neutral samples
      */
     void drawDistances(Graphics2D g2, CoordinateSystem plane, boolean drawAll) {
-        if(!(active || drawAll)) return;
+        if(!(active || drawAll || predicted.isMoving())) return;
 
         for(Stretch stretch: distances) {
             stretch.draw(g2, plane);
@@ -48,14 +48,14 @@ public class KNNInterface {
 
     /**
      * Draws a ring whose center is neutral sample and radius is the biggest distance between this sample
-     * and some sample from neighbours list. Ring is drawn if this neutral sample is under the mouse
-     * or is that option was selected in the side menu.
+     * and some sample from neighbours list. Ring is drawn if this neutral sample is under the mouse,
+     * is moving or is that option was selected in the side menu.
      * @param g2 - graphical engine
      * @param plane - current working coordinate system
      * @param drawAll - option from side menu that allows drawing all distances from all neutral samples
      */
     void drawRing(Graphics2D g2, CoordinateSystem plane, boolean drawAll) {
-        if(!(active || drawAll)) return;
+        if(!(active || drawAll || predicted.isMoving())) return;
 
         ring.draw(g2, plane);
     }

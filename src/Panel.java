@@ -19,7 +19,7 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
     int prevMouseX= -1;
     int prevMouseY= -1;
     Window window;
-    final String appName = "Math Visualizer V0.4";
+    final String appName = "Math Visualizer V0.5";
 
     public Panel(Window win) {
         this.window = win;
@@ -107,10 +107,13 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
         }
 
         g.drawImage(context, 0, 0, null);
-        g2.setColor(DrawUtils.black);
-        g2.fillRect(0,0, width, height);
 
-        graphics.draw();
+        if (g2 != null) {
+            g2.setColor(DrawUtils.black);
+            g2.fillRect(0,0, width, height);
+
+            graphics.draw();
+        }
     }
 
     /**

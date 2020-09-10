@@ -4,6 +4,7 @@ import static java.lang.StrictMath.abs;
 
 interface Shape {
     public void draw(Graphics2D g2, CoordinateSystem plane);
+    public void move(double dx, double dy);
 }
 
 /**
@@ -31,6 +32,17 @@ class Stretch implements Shape {
         g2.setStroke(new BasicStroke(3));
         g2.setColor(color);
         DrawUtils.line(plane.screenX(A.x), plane.screenY(A.y), plane.screenX(B.x), plane.screenY(B.y));
+    }
+
+    /**
+     * moves the stretch by certain vector
+     * @param dx - change of the x values
+     * @param dy - change of the y values
+     */
+    @Override
+    public void move(double dx, double dy) {
+        A.move(dx, dy);
+        B.move(dy, dy);
     }
 }
 
@@ -60,8 +72,22 @@ class Ring implements Shape {
         g2.setColor(color);
         DrawUtils.ring(plane.screenX(center.x), plane.screenY(center.y), radius*plane.scale);
     }
+
+    /**
+     * moves the ring by certain vector
+     * @param dx - change of the x values
+     * @param dy - change of the y values
+     */
+    @Override
+    public void move(double dx, double dy) {
+        center.move(dx, dy);
+    }
 }
 
+/**
+ * Graphical representation of the rectangle in coordinate system.
+ * Used in interfaces inside the coordinate systems visualizations ( such as tutorial)
+ */
 class Rectangle implements Shape {
     protected double x, y, width, height;
     protected Color color;
@@ -86,13 +112,24 @@ class Rectangle implements Shape {
         g2.fillRect((int)plane.screenX(x), (int)plane.screenY(y), (int)(plane.scale*width), (int)(plane.scale*height));
     }
 
-    void move(double dx, double dy) {
+    /**
+     * moves the rectangle by certain vector
+     * @param dx - change of x values
+     * @param dy - change of y values
+     */
+    @Override
+    public void move(double dx, double dy) {
         x += dx;
         y += dy;
     }
 }
 
-
+/**
+ * Graphical representation of the rectangle in coordinate system.
+ * This type of rectangle changes its trannsparency during the time.
+ * it goes from 0 to 255 and then back to 0 and so on.
+ * Used in interfaces inside the coordinate systems visualizations ( such as tutorial)
+ */
 class BlinkingRectangle extends Rectangle {
     private int transparency = 255;
     private int transChanges = -5;
@@ -104,6 +141,7 @@ class BlinkingRectangle extends Rectangle {
 
     /**
      * Draws a rectangle in the coordinate system simulation. Coordinates are consistent with the simulation.
+     * Changes the transaprency from 0 to 255 and then back to 0
      * @param g2 - graphics engine
      * @param plane - current coordinate system
      */
@@ -123,6 +161,10 @@ class BlinkingRectangle extends Rectangle {
     }
 }
 
+/**
+ * Graphical representation of the triangle in coordinate system.
+ * Used in interfaces inside the coordinate systems visualizations ( such as tutorial)
+ */
 class Triangle implements Shape {
     private Point2D A, B, C;
     private Color color;
@@ -134,6 +176,11 @@ class Triangle implements Shape {
         color = col;
     }
 
+    /**
+     * Draws a triangle in the coordinate system simulation. Coordinates are consistent with the simulation.
+     * @param g2 - graphics engine
+     * @param plane - current coordinate system
+     */
     @Override
     public void draw(Graphics2D g2, CoordinateSystem plane) {
         g2.setColor(color);
@@ -150,13 +197,23 @@ class Triangle implements Shape {
                 }, 3);
     }
 
-    void move(double dx, double dy) {
+    /**
+     * moves the triangle by certain vector
+     * @param dx - change of x values
+     * @param dy - change of y values
+     */
+    @Override
+    public void move(double dx, double dy) {
         A.move(dx, dy);
         B.move(dx, dy);
         C.move(dx, dy);
     }
 }
 
+/**
+ * TODO WARNING the length passed in constructor is not a real length of the arrow
+ * this class needs to be refactored!
+ */
 class Arrow implements Shape {
     Triangle dart;
     Rectangle body;
@@ -210,12 +267,16 @@ class Arrow implements Shape {
         body.draw(g2, plane);
 
         if(direction.equals("up") || direction.equals("down")) {
-            dart.move(0, positionChanges);
-            body.move(0, positionChanges);
+            move(0, positionChanges);
         } else {
-            dart.move(positionChanges, 0);
-            body.move(positionChanges, 0);
+            move(positionChanges, 0);
         }
+    }
+
+    @Override
+    public void move(double dx, double dy) {
+        dart.move(dx, dy);
+        body.move(dx, dy);
 
         positionShift += positionChanges;
         if(abs(positionShift) > abs(positionChanges)*25) {
@@ -223,5 +284,4 @@ class Arrow implements Shape {
             positionShift += positionChanges;
         }
     }
-
 }

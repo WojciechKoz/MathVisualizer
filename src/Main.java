@@ -13,6 +13,11 @@ public class Main {
         (usually works so its hard to find the cause)
  */
 
+/* Classes waiting for refactoring
+    - Shapes -> Arrow
+    - MathUtils ( split into small classes )
+ */
+
 /* TODO
     version 0.0
     - show plane origin in the center of the screen [checked]
