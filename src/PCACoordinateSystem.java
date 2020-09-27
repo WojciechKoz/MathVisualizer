@@ -26,7 +26,8 @@ public class PCACoordinateSystem extends CoordinateSystem {
      */
     @Override
     void initComponents() {
-        messageWindow = new MessageWindow(width, height, "data/PCA-Sim-About");
+        super.initComponents();
+        messageWindow = new MessageWindow(this, "data/PCA-Sim-About");
         covarianceMatrix = new GraphicsMatrix2x2(MathUtils.covarianceMatrix(samples));
         covarianceMatrix.setName("Cov");
     }
@@ -63,8 +64,7 @@ public class PCACoordinateSystem extends CoordinateSystem {
         drawSamples();
         if(projectedSamplesVisibility) { for(Sample s: projected) s.draw(camera, scale, g2); }
 
-        menu.draw();
-        messageWindow.draw(g2);
+        drawInterface();
     }
 
     /**

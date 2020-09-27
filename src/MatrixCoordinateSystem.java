@@ -33,7 +33,7 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
     void initComponents() {
         super.initComponents();
         matrix = new GraphicsMatrix2x2(1,0,0,1);
-        messageWindow = new MessageWindow(width, height, "data/Matrix-Sim-About");
+        messageWindow = new MessageWindow(this, "data/Matrix-Sim-About");
     }
 
     /**

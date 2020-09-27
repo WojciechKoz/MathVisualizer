@@ -24,7 +24,8 @@ public class LRCoordinateSystem extends CoordinateSystem {
      */
     @Override
     void initComponents() {
-        messageWindow = new MessageWindow(width, height, "data/Linear-Reg-Sim-About");
+        super.initComponents();
+        messageWindow = new MessageWindow(this, "data/Linear-Reg-Sim-About");
     }
 
     /**
@@ -54,8 +55,7 @@ public class LRCoordinateSystem extends CoordinateSystem {
             drawRegressionLine();
         }
 
-        menu.draw();
-        messageWindow.draw(g2);
+        drawInterface();
     }
 
     /**

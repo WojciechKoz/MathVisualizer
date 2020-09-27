@@ -8,7 +8,7 @@ public class Main {
 /* FIXME
     Known bugs:
     -   mouse position while key pressing is not relative to the program window but to the screen
-        (doesn't work when there is no fullscreen) [ probably fixed - now it uses previous values stored in panel ]
+        (doesn't work when there is no fullscreen) [ fixed - now it uses previous values stored in panel ]
     -   Sometimes side menu doesn't stop scrolling down and instead it scrolls a little bit up.
         (usually works so its hard to find the cause)
  */
@@ -16,6 +16,7 @@ public class Main {
 /* Classes waiting for refactoring
     - Shapes -> Arrow
     - MathUtils ( split into small classes )
+    - MessageWindow merge two constructors and introduce some constant and comments
  */
 
 /* TODO
@@ -66,7 +67,7 @@ public class Main {
     ...
     version 0.5
     - scrollbar
-    - dialog window when exiting the simulation
+    - dialog window when exiting the simulation [checked]
     - Theory of linear algebra chapter 1
     - Settings
     - polish language

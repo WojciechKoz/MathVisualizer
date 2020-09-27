@@ -39,7 +39,8 @@ public class LogTutorialCoordinateSystem extends LogCoordinateSystem {
      */
     @Override
     void initComponents() {
-        messageWindow = new MessageWindow(width, height, "data/Tutorial-Part-2-1-About");
+        super.initComponents();
+        messageWindow = new MessageWindow(this, "data/Tutorial-Part-2-1-About");
     }
 
 
@@ -196,7 +197,7 @@ public class LogTutorialCoordinateSystem extends LogCoordinateSystem {
         addInterface();
 
         if(state < 7) {
-            messageWindow = new MessageWindow(width, height, "data/Tutorial-Part-2-" + state + "-About");
+            messageWindow = new MessageWindow(this, "data/Tutorial-Part-2-" + state + "-About");
             messageWindow.toggleVisibility();
         }
     }

@@ -33,7 +33,8 @@ public class LRTutorialCoordinateSystem extends LRCoordinateSystem {
      */
     @Override
     void initComponents() {
-        messageWindow = new MessageWindow(width, height, "data/Tutorial-Part-1-1-About");
+        super.initComponents();
+        messageWindow = new MessageWindow(this, "data/Tutorial-Part-1-1-About");
     }
 
     /**
@@ -204,7 +205,7 @@ public class LRTutorialCoordinateSystem extends LRCoordinateSystem {
         addInterface();
 
         if(state < 10) {
-            messageWindow = new MessageWindow(width, height, "data/Tutorial-Part-1-" + state + "-About");
+            messageWindow = new MessageWindow(this, "data/Tutorial-Part-1-" + state + "-About");
             messageWindow.toggleVisibility();
         }
     }
@@ -248,7 +249,7 @@ public class LRTutorialCoordinateSystem extends LRCoordinateSystem {
                 areasShapes.add(new BlinkingRectangle(0, 4, 1, 1, DrawUtils.yellow));
             } break;
             case 9: {
-                autoMotion.setTargetPoint(new Point2D(-width/(2*scale) + 0.5, height/(2*scale) + 0.5), 30);
+                autoMotion.setTargetPoint(new Point2D(-5, 5), 30);
                 autoMotion.setTargetScale(100, 30);
             } break;
             case 10: {

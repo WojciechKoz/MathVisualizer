@@ -68,10 +68,10 @@ public class CoordinateSystem implements GraphicsInterface {
      * Initializes the message window since all simulations have other information.
      */
     void initComponents() {
-        exitWindow = new MessageWindow((int)(width*0.3), (int)(height*0.3), (int)(width*0.4), (int)(height*0.2));
-        exitWindow.toggleVisibility();
+        exitWindow = new MessageWindow((int)(width*0.25), (int)(height*0.3), (int)(width*0.5), (int)(height*0.25), this);
         exitWindow.setTitle("Are you sure you want to quit this simulation?");
-        // exitWindow.getButtons().add(new ClickableButton());
+        exitWindow.addButton((int)(width*0.35), (int)(height*0.45), (int)(width*0.12), (int)(height*0.05), "Yes");
+        exitWindow.addButton((int)(width*0.58), (int)(height*0.45), (int)(width*0.12), (int)(height*0.05), "No");
     }
 
     /**
@@ -355,7 +355,10 @@ public class CoordinateSystem implements GraphicsInterface {
     public boolean onLeftClick(double mouseX, double mouseY) {
         menu.focusingInputs(mouseX, mouseY);
 
-        if(messageWindow.hasInside(mouseX, mouseY)) {
+        if(exitWindow.hasInside(mouseX, mouseY)) {
+            exitWindow.onLeftClick(mouseX, mouseY);
+            return false;
+        } else if(messageWindow.hasInside(mouseX, mouseY)) {
             messageWindow.onLeftClick(mouseX, mouseY);
             return false;
         } else if(menu.hasInside(mouseX, mouseY)) {
@@ -379,7 +382,9 @@ public class CoordinateSystem implements GraphicsInterface {
      */
     @Override
     public void onLeftMouseButtonReleased(double mouseX, double mouseY) {
-        if(messageWindow.hasInside(mouseX, mouseY)) {
+        if(exitWindow.hasInside(mouseX, mouseY)) {
+            exitWindow.onMouseReleased(mouseX, mouseY);
+        } else if(messageWindow.hasInside(mouseX, mouseY)) {
             messageWindow.onMouseReleased(mouseX, mouseY);
         } else if(menu.hasInside(mouseX, mouseY)) {
             menuOptions(menu.onReleased(mouseX, mouseY));
@@ -401,7 +406,9 @@ public class CoordinateSystem implements GraphicsInterface {
         switch(label) {
             case "Grid": linesVisibility = !linesVisibility; break;
             case "About": messageWindow.toggleVisibility(); break;
-            case "Menu": panel.changeGraphics("", menuName);
+            case "Menu": exitWindow.toggleVisibility(); break;
+            case "Are you sure you want to quit this simulation? Yes": panel.changeGraphics("", menuName); break;
+            case "Are you sure you want to quit this simulation? No": exitWindow.toggleVisibility(); break;
         }
     }
 
@@ -421,6 +428,10 @@ public class CoordinateSystem implements GraphicsInterface {
      */
     @Override
     public boolean onMouseDragged(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
+        if(exitWindow.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY)) {
+            return false;
+        }
+
         if(messageWindow.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY)) {
             return false;
         }
@@ -433,7 +444,6 @@ public class CoordinateSystem implements GraphicsInterface {
         if(moveSamples(mouseX, mouseY)) return true;
 
         moveCamera(mouseX, mouseY, prevMouseX, prevMouseY);
-
 
         return false;
     }
@@ -451,6 +461,7 @@ public class CoordinateSystem implements GraphicsInterface {
     public void onMouseMoved(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
         menu.onMouseMoved(mouseX, mouseY, prevMouseX, prevMouseY, simulationX(mouseX), simulationY(mouseY));
 
+        exitWindow.onMouseMoved(mouseX, mouseY);
         messageWindow.onMouseMoved(mouseX, mouseY);
     }
 

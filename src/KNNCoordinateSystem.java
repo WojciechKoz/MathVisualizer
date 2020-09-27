@@ -25,7 +25,8 @@ public class KNNCoordinateSystem extends CoordinateSystem {
      */
     @Override
     void initComponents() {
-        messageWindow = new MessageWindow(width, height, "data/KNN-Sim-About");
+        super.initComponents();
+        messageWindow = new MessageWindow(this, "data/KNN-Sim-About");
     }
 
     /**

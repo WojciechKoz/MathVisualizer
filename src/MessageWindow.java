@@ -10,6 +10,8 @@ public class MessageWindow {
     private int y;
     private final int width;
     private int height;
+    // every message window has the same height of top bar
+    private static int heightOfTopBar = -1;
     // height of the single line
     private int lineHeight;
     // y coordinate of first line of text - lowerBound
@@ -24,8 +26,13 @@ public class MessageWindow {
     private final ArrayList<Button> buttons = new ArrayList<>();
     // visibility of message window. selected tells if window is dragged currently by the mouse
     private boolean visibility, selected;
+    private CoordinateSystem simulation;
 
-    MessageWindow(double screenWidth, double screenHeight, String filename) {
+    MessageWindow(CoordinateSystem sim, String filename) {
+        simulation = sim;
+        int screenWidth = sim.width;
+        int screenHeight = sim.height;
+
         // initial position and size of message window
         x = (int) (0.58*screenWidth);
         y = (int) (0.05*screenHeight);
@@ -33,6 +40,10 @@ public class MessageWindow {
         height = (int) (0.65*screenHeight);
         fontSize = (int) (screenWidth/70.0);
         scrollOffset = 0;
+
+        if(heightOfTopBar == -1) {
+            heightOfTopBar = (int)(0.0325*screenHeight);
+        }
 
         DrawUtils.setFont(new Font("Arial", Font.PLAIN, fontSize));
         text = TextManager.readMessageContent(width, filename);
@@ -43,7 +54,7 @@ public class MessageWindow {
         lowerBound = (int) (height*0.95);
 
         buttons.add(new ClickableButton((int)(x+0.8*width), y,
-                (int)(0.2*width), (int)(0.05*height), "Close", (int) (fontSize*1.2)));
+                (int)(0.2*width), heightOfTopBar, "Close", (int) (fontSize*1.2)));
 
         visibility = false;
         selected = false;
@@ -56,13 +67,21 @@ public class MessageWindow {
         }
     }
 
-    MessageWindow(int x, int y, int width, int height) {
+    MessageWindow(int x, int y, int width, int height, CoordinateSystem sim) {
+        simulation = sim;
+        int screenWidth = sim.width;
+        int screenHeight = sim.height;
+
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
 
-        fontSize = (int) (width/35.0);
+        if(heightOfTopBar == -1) {
+            heightOfTopBar = (int)(0.0325*screenHeight);
+        }
+
+        fontSize = screenWidth/70;
         scrollOffset = 0;
 
         text = new ArrayList<>();
@@ -72,6 +91,10 @@ public class MessageWindow {
         visibility = false;
         selected = false;
         title = "";
+
+        DrawUtils.setFont(new Font("David bold", Font.PLAIN, (int) (fontSize*1.7)));
+        buttons.add(new ClickableButton((int)(x+0.8*width), y,
+                (int)(0.2*width), heightOfTopBar, "Close", (int) (fontSize*1.2)));
     }
 
     /**
@@ -108,8 +131,8 @@ public class MessageWindow {
         g2.drawRect(x, y, width, height);
 
         g2.setColor(DrawUtils.darkGray);
-        g2.fillRect(x, y, width, (int)(0.05*height));
-        g2.drawRect(x, y, width, (int)(0.05*height));
+        g2.fillRect(x, y, width, heightOfTopBar);
+        g2.drawRect(x, y, width, heightOfTopBar);
 
         for(Button b: buttons) {
             b.draw(g2);
@@ -117,7 +140,7 @@ public class MessageWindow {
 
         g2.setColor(DrawUtils.white);
         DrawUtils.setFont(new Font("David bold", Font.PLAIN, (int) (fontSize*1.7)));
-        DrawUtils.drawCenteredString(title, x+width/2, (int) (y+0.1*height + DrawUtils.stringHeight(title)));
+        DrawUtils.drawCenteredString(title, x+width/2, (int) (y+1.5*heightOfTopBar + DrawUtils.stringHeight(title)));
 
         double yOffset = y + upperBound + scrollOffset;
         DrawUtils.setFont(new Font("Arial", Font.PLAIN, fontSize));
@@ -240,7 +263,9 @@ public class MessageWindow {
     void buttonsOptions(String label) {
         switch(label) {
             case "Close": toggleVisibility(); break;
-            case "Next": break; // TODO
+            default: {
+                simulation.menuOptions(title+" "+label);
+            }
         }
     }
 
@@ -249,7 +274,7 @@ public class MessageWindow {
     }
 
     boolean hasInsideTheTitleBar(double mouseX, double mouseY) {
-        return x < mouseX && mouseX < x+0.8*width && y < mouseY && mouseY < y+0.05*height;
+        return x < mouseX && mouseX < x+0.8*width && y < mouseY && mouseY < y+heightOfTopBar;
     }
 
     void toggleVisibility() {
@@ -257,6 +282,10 @@ public class MessageWindow {
     }
 
     ArrayList<Button> getButtons() { return buttons; }
+
+    void addButton(int x, int y, int width, int height, String text) {
+        buttons.add(new ClickableButton(x, y, width, height, text, (int)(fontSize*1.2)));
+    }
 
     void setTitle(String line) {
         this.title = line;

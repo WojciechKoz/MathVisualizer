@@ -27,7 +27,8 @@ public class LogCoordinateSystem extends CoordinateSystem {
      * Initializes the message window
      */
     void initComponents() {
-        messageWindow = new MessageWindow(width, height, "data/Logistic-Reg-Sim-About");
+        super.initComponents();
+        messageWindow = new MessageWindow(this, "data/Logistic-Reg-Sim-About");
     }
 
     /**
@@ -70,8 +71,7 @@ public class LogCoordinateSystem extends CoordinateSystem {
             }
         }
 
-        menu.draw();
-        messageWindow.draw(g2);
+        drawInterface();
     }
 
     /**
