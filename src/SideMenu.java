@@ -17,9 +17,9 @@ public class SideMenu extends Menu {
         currentY = 0;
         yOffset = 0;
 
-        smallFont = (int)(width/10.0);
-        normalFont = (int)(width/9.0);
-        bigFont = (int)(width/8.0);
+        smallFont = (int)(width/11.0);
+        normalFont = (int)(width/10.0);
+        bigFont = (int)(width/9.0);
 
         visibility = true;
     }

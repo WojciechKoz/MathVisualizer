@@ -37,7 +37,7 @@ class MatrixLabelButton extends Button {
         labelWidth += DrawUtils.stringWidth(text);
 
         // prints big square bracket representing matrix
-        DrawUtils.setFont(new Font("TimesRoman Plain", Font.PLAIN, fontSize*4));
+        DrawUtils.setFont(new Font("TimesRoman Plain", Font.PLAIN, fontSize*5));
         text = "[";
         DrawUtils.drawStringWithLeftAlignment(text, x+labelWidth, (int)(y+height*0.4));
         labelWidth += DrawUtils.stringWidth(text);
@@ -64,7 +64,7 @@ class MatrixLabelButton extends Button {
 
         // prints right bracket of the matrix
         g2.setColor(textCol);
-        DrawUtils.setFont(new Font("TimesRoman Plain", Font.PLAIN, fontSize*4));
+        DrawUtils.setFont(new Font("TimesRoman Plain", Font.PLAIN, fontSize*5));
         DrawUtils.drawStringWithRightAlignment("]", (int)(x+width*0.95), (int)(y+height*0.4));
     }
 

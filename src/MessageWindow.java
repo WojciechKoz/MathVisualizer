@@ -38,7 +38,7 @@ public class MessageWindow {
         y = (int) (0.05*screenHeight);
         width = (int) (0.4*screenWidth);
         height = (int) (0.65*screenHeight);
-        fontSize = (int) (screenWidth/70.0);
+        fontSize = (int) (screenWidth/80.0);
         scrollOffset = 0;
 
         if(heightOfTopBar == -1) {
