@@ -15,6 +15,7 @@ Simple app written in java to visualize some math problems.
 
 ## Screenshots
 ![submenu](./screenshots/submenu.png)
+![matrix](./screenshots/matrix.png)
 ![KNN](./screenshots/KNN.png)
 ![linear regression](./screenshots/linear_regression.png)
 ![logistic regression](./screenshots/logistic_regression.png)
