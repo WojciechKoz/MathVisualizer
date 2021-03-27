@@ -1,5 +1,6 @@
 
 public class Main {
+    public static String version = "V0.5";
     public static void main(String [] args) {
         new Window();
     }
@@ -11,6 +12,7 @@ public class Main {
         (doesn't work when there is no fullscreen) [ fixed - now it uses previous values stored in panel ]
     -   Sometimes side menu doesn't stop scrolling down and instead it scrolls a little bit up.
         (usually works so its hard to find the cause)
+    -   PCA when all samples are on the same line (vertical or horizontal) then there is a NaN bug
  */
 
 /* Classes waiting for refactoring

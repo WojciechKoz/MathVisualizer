@@ -41,8 +41,14 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
      */
     @Override
     void initSideMenu() {
-        String[] buttonsLabels = new String[] {"Matrix Grid", "Determinant", "Transpose",
-                "Inverse", "Eigenvectors", "Projected"};
+        String[] buttonsLabels = new String[] {
+                StringsResources.matrixGrid(),
+                StringsResources.determinant(),
+                StringsResources.transpose(),
+                StringsResources.inverse(),
+                StringsResources.eigenvectors(),
+                StringsResources.projected()
+        };
         Boolean[] buttonsValues = new Boolean[] {true, false, false, false, false, true};
 
         menu.addCheckBoxButtons(buttonsLabels, buttonsValues, height/20);
@@ -152,14 +158,20 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
      * @param label - label of pressed button
      */
     void menuOptions(String label) {
-        switch(label) {
-            case "Matrix Grid": gridVisibility = !gridVisibility; break;
-            case "Determinant": determinantVisibility = !determinantVisibility; break;
-            case "Transpose": transposeVisibility = !transposeVisibility; break;
-            case "Inverse": inverseVisibility = !inverseVisibility; break;
-            case "Eigenvectors": eigenvectorsVisibility = !eigenvectorsVisibility; break;
-            case "Projected": projectVisibility = !projectVisibility; break;
-            default: super.menuOptions(label);
+        if(label.equals(StringsResources.matrixGrid())) {
+            gridVisibility = !gridVisibility;
+        } else if(label.equals(StringsResources.determinant())) {
+            determinantVisibility = !determinantVisibility;
+        } else if(label.equals(StringsResources.transpose())) {
+            transposeVisibility = !transposeVisibility;
+        } else if(label.equals(StringsResources.inverse())) {
+            inverseVisibility = !inverseVisibility;
+        } else if(label.equals(StringsResources.eigenvectors())) {
+            eigenvectorsVisibility = !eigenvectorsVisibility;
+        } else if(label.equals(StringsResources.projected())) {
+            projectVisibility = !projectVisibility;
+        } else {
+            super.menuOptions(label);
         }
     }
 

@@ -26,7 +26,7 @@ public class MessageWindow {
     private final ArrayList<Button> buttons = new ArrayList<>();
     // visibility of message window. selected tells if window is dragged currently by the mouse
     private boolean visibility, selected;
-    private CoordinateSystem simulation;
+    private final CoordinateSystem simulation;
 
     MessageWindow(CoordinateSystem sim, String filename) {
         simulation = sim;
@@ -49,12 +49,12 @@ public class MessageWindow {
         text = TextManager.readMessageContent(width, filename);
         title = text.remove(0);
 
-        DrawUtils.setFont(new Font("David bold", Font.PLAIN, (int) (fontSize*1.7)));
+        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, (int) (fontSize*1.7)));
         upperBound = (int) (height*0.15 + DrawUtils.stringHeight(text.get(0))*1.2);
         lowerBound = (int) (height*0.95);
 
         buttons.add(new ClickableButton((int)(x+0.8*width), y,
-                (int)(0.2*width), heightOfTopBar, "Close", (int) (fontSize*1.2)));
+                (int)(0.2*width), heightOfTopBar, StringsResources.close(), (int) (fontSize*1.2)));
 
         visibility = false;
         selected = false;
@@ -92,9 +92,9 @@ public class MessageWindow {
         selected = false;
         title = "";
 
-        DrawUtils.setFont(new Font("David bold", Font.PLAIN, (int) (fontSize*1.7)));
+        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, (int) (fontSize*1.7)));
         buttons.add(new ClickableButton((int)(x+0.8*width), y,
-                (int)(0.2*width), heightOfTopBar, "Close", (int) (fontSize*1.2)));
+                (int)(0.2*width), heightOfTopBar, StringsResources.close(), (int) (fontSize*1.2)));
     }
 
     /**
@@ -139,7 +139,7 @@ public class MessageWindow {
         }
 
         g2.setColor(DrawUtils.white);
-        DrawUtils.setFont(new Font("David bold", Font.PLAIN, (int) (fontSize*1.7)));
+        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, (int) (fontSize*1.7)));
         DrawUtils.drawCenteredString(title, x+width/2, (int) (y+1.5*heightOfTopBar + DrawUtils.stringHeight(title)));
 
         double yOffset = y + upperBound + scrollOffset;
@@ -261,11 +261,10 @@ public class MessageWindow {
      * @param label - label of the pressed button
      */
     void buttonsOptions(String label) {
-        switch(label) {
-            case "Close": toggleVisibility(); break;
-            default: {
-                simulation.menuOptions(title+" "+label);
-            }
+        if(label.equals(StringsResources.close())) {
+            toggleVisibility();
+        } else {
+            simulation.menuOptions(title+" "+label);
         }
     }
 

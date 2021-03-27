@@ -40,7 +40,7 @@ public class CheckBoxButton extends ClickableButton {
         g2.fillRect(x, y, width, height);
 
         g2.setColor(textCol);
-        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize));
+        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, fontSize));
         DrawUtils.drawStringWithLeftAlignment(label, x+width/4, y+height/2);
 
         int side = min(3*height/4, width/8);

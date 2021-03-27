@@ -144,7 +144,7 @@ public class SideMenu extends Menu {
         for(Button button: buttons) {
             button.setHover(mouseX, mouseY, false);
             if(button.hasInside(mouseX, mouseY)) {
-                if(button.getLabel().equals("Visible")) {
+                if(button.getLabel().equals(StringsResources.hide())) {
                     visibility = !visibility;
                 }
                 return button.onClicked(mouseX, mouseY);

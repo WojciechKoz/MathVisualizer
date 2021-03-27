@@ -31,7 +31,7 @@ class MatrixLabelButton extends Button {
         String text;
 
         // first, prints matrix name and equal sign (and update labelWidth at the end)
-        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize));
+        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, fontSize));
         text = matrix.getName() + " = ";
         DrawUtils.drawStringWithLeftAlignment(text, x+labelWidth, y+height/2);
         labelWidth += DrawUtils.stringWidth(text);
@@ -46,7 +46,7 @@ class MatrixLabelButton extends Button {
         g2.setColor(DrawUtils.lightRed);
 
         // prints first column of matrix
-        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize));
+        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, fontSize));
         text = Double.toString(MathUtils.round(matrix.a, 2));
         DrawUtils.drawStringWithLeftAlignment(text, x+labelWidth, (int)(y+height*0.3));
         text = Double.toString(MathUtils.round(matrix.c, 2));

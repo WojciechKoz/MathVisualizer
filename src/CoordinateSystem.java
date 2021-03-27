@@ -53,9 +53,9 @@ public class CoordinateSystem implements GraphicsInterface {
 
         // initializes the side menu with that 4 most basic buttons
         menu = new SideMenu(g2, width/9, height);
-        menu.addCheckBoxButtons(new String[]{"Visible"}, new Boolean[] {true}, STANDARD_BUTTON_HEIGHT);
-        menu.addButtons(new String[]{"Menu", "About"}, STANDARD_BUTTON_HEIGHT);
-        menu.addCheckBoxButtons(new String[]{"Grid"}, new Boolean[] {true},STANDARD_BUTTON_HEIGHT);
+        menu.addCheckBoxButtons(new String[]{StringsResources.hide()}, new Boolean[] {false}, STANDARD_BUTTON_HEIGHT);
+        menu.addButtons(new String[]{StringsResources.menu(), StringsResources.help()}, STANDARD_BUTTON_HEIGHT);
+        menu.addCheckBoxButtons(new String[]{StringsResources.grid()}, new Boolean[] {true},STANDARD_BUTTON_HEIGHT);
 
         // adds more buttons depending which simulation is running
         initSideMenu();
@@ -69,9 +69,9 @@ public class CoordinateSystem implements GraphicsInterface {
      */
     void initComponents() {
         exitWindow = new MessageWindow((int)(width*0.25), (int)(height*0.3), (int)(width*0.5), (int)(height*0.25), this);
-        exitWindow.setTitle("Are you sure you want to quit this simulation?");
-        exitWindow.addButton((int)(width*0.35), (int)(height*0.45), (int)(width*0.12), (int)(height*0.05), "Yes");
-        exitWindow.addButton((int)(width*0.58), (int)(height*0.45), (int)(width*0.12), (int)(height*0.05), "No");
+        exitWindow.setTitle(StringsResources.areYouSure());
+        exitWindow.addButton((int)(width*0.35), (int)(height*0.45), (int)(width*0.12), (int)(height*0.05), StringsResources.yes());
+        exitWindow.addButton((int)(width*0.58), (int)(height*0.45), (int)(width*0.12), (int)(height*0.05), StringsResources.no());
     }
 
     /**
@@ -403,12 +403,14 @@ public class CoordinateSystem implements GraphicsInterface {
      * @param label - label of pressed button
      */
     void menuOptions(String label) {
-        switch(label) {
-            case "Grid": linesVisibility = !linesVisibility; break;
-            case "About": messageWindow.toggleVisibility(); break;
-            case "Menu": exitWindow.toggleVisibility(); break;
-            case "Are you sure you want to quit this simulation? Yes": panel.changeGraphics("", menuName); break;
-            case "Are you sure you want to quit this simulation? No": exitWindow.toggleVisibility(); break;
+        if(label.equals(StringsResources.grid())) {
+            linesVisibility = !linesVisibility;
+        } else if(label.equals(StringsResources.help())) {
+            messageWindow.toggleVisibility();
+        } else if(label.equals(StringsResources.menu()) || label.equals(StringsResources.areYouSure() + " " + StringsResources.no())) {
+            exitWindow.toggleVisibility();
+        } else if(label.equals(StringsResources.areYouSure() + " " + StringsResources.yes())) {
+            panel.changeGraphics("", menuName);
         }
     }
 

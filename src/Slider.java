@@ -33,7 +33,7 @@ class Slider extends Button {
         super.draw(g2);
 
         g2.setColor(textCol);
-        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize));
+        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, fontSize));
 
         // prints label+": "+roundedValue where roundedValue has two decimal places if discrete variable is false
         // or int(value) if discrete is true

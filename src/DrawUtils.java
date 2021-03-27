@@ -2,6 +2,8 @@ import java.awt.*;
 import java.awt.Rectangle;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Class that has a lot of utility functions for drawing on the screen.
@@ -9,6 +11,7 @@ import java.awt.font.GlyphVector;
 public class DrawUtils {
     static Font font;
     static Graphics2D g2;
+    static String regularFontName = "AbrilFatface-Regular";
 
     // All colors that are used in the program
     public static final Color orange = new Color(251, 139, 36);
@@ -128,6 +131,16 @@ public class DrawUtils {
 
         // Draw the String
         g2.drawString(text, leftSide, y);
+    }
+
+    static void registerFont(String fontName) {
+        try {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("fonts/"+fontName)));
+        } catch (IOException |FontFormatException e) {
+            //Handle exception
+            System.out.println("There is no fond " + fontName);
+        }
     }
 
     static void setFont(Font newFont) {

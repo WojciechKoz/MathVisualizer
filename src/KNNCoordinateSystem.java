@@ -33,7 +33,7 @@ public class KNNCoordinateSystem extends CoordinateSystem {
      * Initializes the specific buttons for the side menu
      */
     void initSideMenu() {
-        String[] buttonsLabels = new String[] {"Distances", "Rings"};
+        String[] buttonsLabels = new String[] {StringsResources.distances(), StringsResources.rings()};
         Boolean[] buttonsValues = new Boolean[] {false, false};
 
         menu.addCheckBoxButtons(buttonsLabels, buttonsValues, height/20);
@@ -117,10 +117,12 @@ public class KNNCoordinateSystem extends CoordinateSystem {
      * @param label - label of pressed button
      */
     void menuOptions(String label) {
-        switch(label) {
-            case "Distances": distancesVisibility = !distancesVisibility; break;
-            case "Rings": ringsVisibility = !ringsVisibility; break;
-            default: super.menuOptions(label);
+        if(label.equals(StringsResources.distances())) {
+            distancesVisibility = !distancesVisibility;
+        } else if(label.equals(StringsResources.rings())) {
+            ringsVisibility = !ringsVisibility;
+        } else {
+            super.menuOptions(label);
         }
     }
 

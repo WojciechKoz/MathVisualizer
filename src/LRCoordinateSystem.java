@@ -3,8 +3,7 @@ import static java.lang.StrictMath.abs;
 
 /**
  * Class that simulates linear regression algorithm.
- * Even if that class contains the whole linear regression model it hasn't got any math inside.
- * For the algorithms look at MathUtils class.
+ * For the math standing behind the algorithm look at MathUtils class.
  */
 public class LRCoordinateSystem extends CoordinateSystem {
     // a and b are coefficients of best fitting line
@@ -32,12 +31,12 @@ public class LRCoordinateSystem extends CoordinateSystem {
      * Initializes the buttons that are related to linear regression simulation
      */
     void initSideMenu() {
-        String[] buttonsLabels = new String[] {"Line", "Errors"};
+        String[] buttonsLabels = new String[] {StringsResources.line(), StringsResources.errors()};
         Boolean[] buttonsValues = new Boolean[] {true, true};
 
         menu.addCheckBoxButtons(buttonsLabels, buttonsValues, height/20);
         menu.addValueLabel("y", "0x + 0", height/20.0);
-        menu.addValueLabel("Error", "0", height/20.0);
+        menu.addValueLabel(StringsResources.error(), "0", height/20.0);
     }
 
     /**
@@ -96,10 +95,12 @@ public class LRCoordinateSystem extends CoordinateSystem {
      * @param label - label of pressed button
      */
     void menuOptions(String label) {
-        switch(label) {
-            case "Line": regressionLineVisibility = !regressionLineVisibility; break;
-            case "Errors": errorVisibility = !errorVisibility; break;
-            default: super.menuOptions(label);
+        if(label.equals(StringsResources.line())) {
+            regressionLineVisibility = !regressionLineVisibility;
+        } else if(label.equals(StringsResources.errors())) {
+            errorVisibility = !errorVisibility;
+        } else {
+            super.menuOptions(label);
         }
     }
 
@@ -151,6 +152,6 @@ public class LRCoordinateSystem extends CoordinateSystem {
         for(Sample sample: samples) {
             error += (sample.getY() - a*sample.getX()-b) * (sample.getY() - a*sample.getX()-b);
         }
-        menu.updateLabel("Error", Double.toString(MathUtils.round(error, 2)));
+        menu.updateLabel(StringsResources.error(), Double.toString(MathUtils.round(error, 2)));
     }
 }

@@ -19,7 +19,7 @@ class LabelButton extends Button {
         super.draw(g2);
 
         g2.setColor(textCol);
-        DrawUtils.setFont(new Font("David bold", Font.PLAIN, fontSize));
+        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, fontSize));
         DrawUtils.drawCenteredString(label, x+width/2, y+height/2);
     }
 

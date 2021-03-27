@@ -19,7 +19,6 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
     int prevMouseX= -1;
     int prevMouseY= -1;
     Window window;
-    final String appName = "Math Visualizer V0.5";
 
     public Panel(Window win) {
         this.window = win;
@@ -46,6 +45,8 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
 
         // initializes important pointers in static classes
         DrawUtils.setGraphicsContext(g2);
+        DrawUtils.registerFont("DAVIDBD.ttf");
+        DrawUtils.registerFont("AbrilFatface-Regular.otf");
         MenuScenarios.setPanel(this);
 
         // program starts with main menu
@@ -63,27 +64,17 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
      */
     void changeGraphics(String title, String buttonLabel) {
         // find out from which menu the button was pressed
-        switch(title) {
-            case "":
-                graphics = MenuScenarios.blankOptions(buttonLabel);
-                break;
-
-            case appName:
-                graphics = MenuScenarios.mainMenuOptions(buttonLabel);
-                break;
-
-            case "Visualizations":
-                graphics = MenuScenarios.visualizationsMenuOptions(buttonLabel);
-                break;
-
-            case "Theory":
-                graphics = MenuScenarios.theoryMenuOptions(buttonLabel);
-                break;
-
-            case "Linear Algebra":
-                graphics = MenuScenarios.LinearAlgebraMenuOptions(buttonLabel);
+        if(title.equals("")) {
+            graphics = MenuScenarios.blankOptions(buttonLabel);
+        } else if(title.equals(StringsResources.title())) {
+            graphics = MenuScenarios.mainMenuOptions(buttonLabel);
+        } else if(title.equals(StringsResources.visualizations())) {
+            graphics = MenuScenarios.visualizationsMenuOptions(buttonLabel);
+        } else if(title.equals(StringsResources.theory())) {
+            graphics = MenuScenarios.theoryMenuOptions(buttonLabel);
+        } else if(title.equals(StringsResources.linearAlgebra())) {
+            graphics = MenuScenarios.LinearAlgebraMenuOptions(buttonLabel);
         }
-
     }
 
     /**
@@ -234,7 +225,9 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
      */
     @Override
     public void mouseMoved(MouseEvent me) {
-        graphics.onMouseMoved(me.getX(), me.getY(), prevMouseX, prevMouseY);
+        if(graphics != null) {
+            graphics.onMouseMoved(me.getX(), me.getY(), prevMouseX, prevMouseY);
+        }
         prevMouseX = me.getX();
         prevMouseY = me.getY();
     }
@@ -249,10 +242,6 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
 
     public int getHeight() {
         return height;
-    }
-
-    String getAppName() {
-        return appName;
     }
 
     Window getWindow() {

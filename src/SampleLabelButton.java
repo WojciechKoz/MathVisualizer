@@ -43,7 +43,7 @@ class SampleLabelButton extends Button {
 
         // prints labels with input fields
         g2.setColor(textCol);
-        DrawUtils.setFont(new Font("David Bold", Font.PLAIN, fontSize));
+        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, fontSize));
         DrawUtils.drawStringWithLeftAlignment("X:", x+width/5, y+height/2);
         inputForX.draw(g2);
         g2.setColor(textCol);

@@ -35,16 +35,16 @@ public class LogCoordinateSystem extends CoordinateSystem {
      * Initializes the buttons in the side menu that are related to logistic regression simulation
      */
     void initSideMenu() {
-        String[] buttonsLabels = new String[] {"Line", "Weights"};
+        String[] buttonsLabels = new String[] {StringsResources.line(), StringsResources.weights()};
         Boolean[] buttonsValues = new Boolean[] {true, false};
         int heightOfButton = height/20;
 
         menu.addCheckBoxButtons(buttonsLabels, buttonsValues, heightOfButton);
-        menu.addSlider("ETA", 0.001, 1.2, 1.1*heightOfButton, false);
-        menu.addSlider("Epochs", 1, 200, 1.1*heightOfButton, true);
+        menu.addSlider(StringsResources.eta(), 0.001, 1.2, 1.1*heightOfButton, false);
+        menu.addSlider(StringsResources.epochs(), 1, 200, 1.1*heightOfButton, true);
 
         menu.addValueLabel("w", "[0, 0]", heightOfButton);
-        menu.addValueLabel("bias", "0", heightOfButton);
+        menu.addValueLabel(StringsResources.bias(), "0", heightOfButton);
         menu.addValueLabel("y", "0x + 0", heightOfButton);
     }
 
@@ -75,7 +75,7 @@ public class LogCoordinateSystem extends CoordinateSystem {
     }
 
     /**
-     * adds new Sample but always with '0' class which means that it's neutral and its color is gray.
+     * adds new Sample but always with '0' class which means that it's neutral and its color is gray therefore no update
      * @param x - Initial x coordinate (in cartesian plane simulation)
      * @param y - Initial y coordinate (in cartesian plane simulation)
      */
@@ -102,6 +102,7 @@ public class LogCoordinateSystem extends CoordinateSystem {
     /**
      * Performs onMouseDragged from Coordinate system and if it returns true (meaning that
      * something was changed and it might has an impact on the simulation) updates the whole simulation
+     * if neutral sample was moved then no update
      * @param mouseX - current mouse x position (in pixels)
      * @param mouseY - current mouse y position (in pixels)
      * @param prevMouseX - mouse x position in previous frame (in pixels)
@@ -111,7 +112,12 @@ public class LogCoordinateSystem extends CoordinateSystem {
     @Override
     public boolean onMouseDragged(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
         if(super.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY) && samples.size() > 1) {
-            update();
+            for(Sample s: samples) {
+                if(s.isMoving() && s.category() != 0) {
+                    update();
+                    return true;
+                }
+            }
         }
         return true;
     }
@@ -124,10 +130,12 @@ public class LogCoordinateSystem extends CoordinateSystem {
      * @param label - label of pressed button
      */
     void menuOptions(String label) {
-        switch(label) {
-            case "Line": separationLineVisibility = !separationLineVisibility; break;
-            case "Weights": weightsVisibility = !weightsVisibility; break;
-            default: super.menuOptions(label);
+        if(label.equals(StringsResources.line())) {
+            separationLineVisibility = !separationLineVisibility;
+        } else if(label.equals(StringsResources.weights())) {
+            weightsVisibility = !weightsVisibility;
+        } else {
+            super.menuOptions(label);
         }
     }
 
@@ -158,8 +166,8 @@ public class LogCoordinateSystem extends CoordinateSystem {
         }
 
         double[] neuron = MathUtils.fitLogisticRegressionModel(samples,
-                (int)menu.readValueFromSlider("Epochs"),
-                menu.readValueFromSlider("ETA"));
+                (int)menu.readValueFromSlider(StringsResources.epochs()),
+                menu.readValueFromSlider(StringsResources.eta()));
         wx = neuron[0];
         wy = neuron[1];
         double bias = neuron[2];
@@ -168,7 +176,7 @@ public class LogCoordinateSystem extends CoordinateSystem {
         b = -bias /wy;
 
         menu.updateLabel("w", "["+MathUtils.round(wx, 2)+", "+MathUtils.round(wy, 2)+"]");
-        menu.updateLabel("bias", Double.toString(MathUtils.round(bias, 2)));
+        menu.updateLabel(StringsResources.bias(), Double.toString(MathUtils.round(bias, 2)));
         menu.updateLabel("y", MathUtils.round(a, 2)+"x " + (b > 0 ? "+ " : "- ") + MathUtils.round(abs(b), 2));
 
         // predictions

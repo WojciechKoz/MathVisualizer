@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * Class that handles changing of menus when buttons are clicked
  */
@@ -5,43 +7,52 @@ class MenuScenarios {
     static Panel panel;
 
     // list of all buttons of all menus
-    private static final String[] mainMenuButtons = new String[] {
-            "First Steps",
-            "Visualizations",
-            "Theory",
-            "Settings",
-            "Exit"
-    };
+    private static String[] mainMenuButtons() {
+        return new String[] {
+                StringsResources.firstSteps(),
+                StringsResources.visualizations(),
+                StringsResources.theory(),
+                StringsResources.settings(),
+                StringsResources.exit()
+        };
+    }
 
-    private static final String[] visualizationButtons = new String[] {
-            "Matrix Simulation",
-            "Linear Regression",
-            "K-Nearest Neighbours",
-            "Logistic Regression",
-            "PCA Algorithm",
-            "Back"
-    };
 
-    private static final String[] theoryButtons = new String[] {
-            "Linear Algebra",
-            "Calculus",
-            "Sets & Graphs Theory",
-            "Probabilistic & Statistic",
-            "Machine Learning",
-            "Back"
-    };
+    private static String[] visualizationButtons() {
+        return new String[]{
+                StringsResources.matrixSimulation(),
+                StringsResources.linearRegression(),
+                StringsResources.logisticRegression(),
+                StringsResources.knn(),
+                StringsResources.PCAAlgorithm(),
+                StringsResources.back()
+        };
+    }
 
-    private static final String[] linearAlgebraButtons = new String[] {
-            "Vectors",
-            "Matrix as a system of equations",
-            "Matrices geometrically",
-            "Inverse of Matrix",
-            "Four Subspaces of Matrix",
-            "Determinant",
-            "Eigenvectors & Eigenvalues",
-            "Singular Value Decomposition",
-            "Back"
-    };
+    private static String[] theoryButtons() {
+        return new String[] {
+            StringsResources.linearAlgebra(),
+            StringsResources.calculus(),
+            StringsResources.setsAndGraphsTheory(),
+            StringsResources.probabilisticAndStatistic(),
+            StringsResources.machineLearning(),
+            StringsResources.back()
+        };
+    }
+
+    private static String[] linearAlgebraButtons() {
+        return new String[] {
+            StringsResources.vectors(),
+            StringsResources.matrixAsASystemOfEquation(),
+            StringsResources.matricesGeometrically(),
+            StringsResources.inverseOfMatrix(),
+            StringsResources.fourSubspacesOfMatrix(),
+            StringsResources.determinant(),
+            StringsResources.eigenVectorsAndEigenValues(),
+            StringsResources.singularValueDecomposition(),
+            StringsResources.back()
+        };
+    }
 
     /**
      * Creates the menu with given title and buttons labels and returns it
@@ -63,22 +74,24 @@ class MenuScenarios {
      * @return new menu or simulation that should appears after that button pressing
      */
     static GraphicsInterface mainMenuOptions(String buttonLabel) {
-        switch(buttonLabel) {
-            case "First Steps":
-                return new LRTutorialCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+        final String[] options = mainMenuButtons();
 
-            case "Visualizations":
-                return createMenu("Visualizations", visualizationButtons);
-
-            case "Theory":
-                return createMenu("Theory", theoryButtons);
-
-            case "Exit":
-                panel.getWindow().dispose(); System.exit(0);
-
-            default:
-                return panel.getCurrentGraphics();
+        if(buttonLabel.equals(options[0])) {
+            return new LRTutorialCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
         }
+        if(buttonLabel.equals(options[1])) {
+            return createMenu(StringsResources.visualizations(), visualizationButtons());
+        }
+        if(buttonLabel.equals(options[2])) {
+            return createMenu(StringsResources.theory(), theoryButtons());
+        }
+        if(buttonLabel.equals(options[3])) {
+            return createMenu(StringsResources.settings(), new String[]{});
+        }
+        if(buttonLabel.equals(options[4])) {
+            panel.getWindow().dispose(); System.exit(0);
+        }
+        return panel.getCurrentGraphics();
     }
 
     /**
@@ -87,25 +100,24 @@ class MenuScenarios {
      * @return new menu or simulation that should appears after that button pressing
      */
     static GraphicsInterface visualizationsMenuOptions(String buttonLabel) {
-        switch(buttonLabel) {
-            case "Matrix Simulation":
-                return new MatrixCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+        String[] options = visualizationButtons();
 
-            case "Linear Regression":
-                return new LRCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
-
-            case "Logistic Regression":
-                return new LogCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
-
-            case "PCA Algorithm":
-                return new PCACoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
-
-            case "K-Nearest Neighbours":
-                return new KNNCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
-
-            default: // "Back"
-                return createMenu(panel.getAppName(), mainMenuButtons);
+        if(buttonLabel.equals(options[0])) {
+            return new MatrixCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
         }
+        if(buttonLabel.equals(options[1])) {
+            return new LRCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+        }
+        if(buttonLabel.equals(options[2])) {
+            return new LogCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+        }
+        if(buttonLabel.equals(options[3])) {
+            return new KNNCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+        }
+        if(buttonLabel.equals(options[4])) {
+            return new PCACoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+        }
+        return createMenu(StringsResources.title(), mainMenuButtons());
     }
 
     /**
@@ -114,16 +126,13 @@ class MenuScenarios {
      * @return new menu or simulation that should appears after that button pressing
      */
     static GraphicsInterface theoryMenuOptions(String buttonLabel) {
-        switch(buttonLabel) {
-            case "Linear Algebra":
-                return createMenu("Linear Algebra", linearAlgebraButtons);
-
-            case "Back":
-                return createMenu(panel.getAppName(), mainMenuButtons);
-
-            default:
-                return panel.getCurrentGraphics();
+        if(buttonLabel.equals(StringsResources.linearAlgebra())) {
+            return createMenu(StringsResources.linearAlgebra(), linearAlgebraButtons());
         }
+        if(buttonLabel.equals(StringsResources.back())) {
+            return createMenu(StringsResources.title(), mainMenuButtons());
+        }
+        return panel.getCurrentGraphics();
     }
 
     /**
@@ -133,8 +142,8 @@ class MenuScenarios {
      * @return new menu or simulation that should appears after that button pressing
      */
     static GraphicsInterface LinearAlgebraMenuOptions(String buttonLabel) {
-        if(buttonLabel.equals("Back")) {
-            return createMenu("Theory", theoryButtons);
+        if(buttonLabel.equals(StringsResources.back())) {
+            return createMenu(StringsResources.theory(), theoryButtons());
         }
         return panel.getCurrentGraphics();
     }
@@ -146,12 +155,12 @@ class MenuScenarios {
      */
     static GraphicsInterface blankOptions(String buttonLabel) {
         if ("Visualizations".equals(buttonLabel)) {
-            return createMenu("Visualizations", visualizationButtons);
+            return createMenu(StringsResources.visualizations(), visualizationButtons());
         }
         if(buttonLabel.equals("tutorial-part-2")) {
             return new LogTutorialCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
         }
-        return createMenu(panel.getAppName(), mainMenuButtons);
+        return createMenu(StringsResources.title(), mainMenuButtons());
     }
 
 

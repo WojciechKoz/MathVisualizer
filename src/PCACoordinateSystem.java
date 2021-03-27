@@ -36,7 +36,11 @@ public class PCACoordinateSystem extends CoordinateSystem {
      * Initializes all side menu with buttons
      */
     void initSideMenu() {
-        String[] buttonsLabels = new String[] {"Cov Matrix", "Eigenvectors", "Projected"};
+        String[] buttonsLabels = new String[] {
+                StringsResources.covMatrix(),
+                StringsResources.eigenvectors(),
+                StringsResources.projected()
+        };
         Boolean[] buttonsValues = new Boolean[] {true, true, true};
 
         menu.addCheckBoxButtons(buttonsLabels, buttonsValues, height/20);
@@ -105,19 +109,16 @@ public class PCACoordinateSystem extends CoordinateSystem {
      * @param label - label of pressed button
      */
     void menuOptions(String label) {
-        switch(label) {
-            case "Cov Matrix": covToggle(); break;
-            case "Eigenvectors": eigToggle(); break;
-            case "Projected": prodToggle(); break;
-            default: super.menuOptions(label);
+        if(label.equals(StringsResources.covMatrix())) {
+            covarianceMatrixVisibility = !covarianceMatrixVisibility;
+        } else if(label.equals(StringsResources.eigenvectors())) {
+            eigenvectorsVisibility = !eigenvectorsVisibility;
+        } else if(label.equals(StringsResources.projected())) {
+            projectedSamplesVisibility = !projectedSamplesVisibility;
+        } else {
+            super.menuOptions(label);
         }
     }
-
-    void covToggle() { covarianceMatrixVisibility = !covarianceMatrixVisibility; }
-
-    void eigToggle() { eigenvectorsVisibility = !eigenvectorsVisibility; }
-
-    void prodToggle() { projectedSamplesVisibility = !projectedSamplesVisibility; }
 
     /**
      * tries to color a sample and if it succeed then refreshes simulation
