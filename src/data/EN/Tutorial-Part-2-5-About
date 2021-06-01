@@ -3,9 +3,6 @@ Since the neutral sample does not participate in finding
 the separation line, when you moved it the line stayed
 the same. What did change though is the predicted color
 of that neutral sample - now it's red.
-If you move one of the training samples the line will
-change, but you have done it already with the linear
-regression so let's focus on something new.
 
 As you may have seen, a new button type has appeared in the menu.
 It is a slider and it is very useful when some algorithms have
@@ -14,7 +11,7 @@ of the same algorithm. For example the most useful constants in
 logistic regression are eta and epochs amount. Eta is a size of
 a step in the stochastic gradient descent algorithm and epochs
 is a number how many iterations algorithm need to do. Not going
-into it, let's change the epochs value to 1 and ETA to 1.2 to
+into it, let's change the epochs value to 1 to
 see if one iteration will be enough to find a reasonable line.
 
 The usage is very simple - just drag the mouse to the left side of

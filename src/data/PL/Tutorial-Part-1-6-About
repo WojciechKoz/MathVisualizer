@@ -1,0 +1,11 @@
+Samouczek
+Teraz jesteśmy w stanie widzieć wszystkie punkty na raz. Jednak ten odstający punkt
+wszystko psuje. Linia stara się dopasować do wszystkich punktów, ale ten ostatni
+wydaje się mieć spory wpływ na położenie linii. Co więcej, patrząc po innych punktach
+ten punkt, który może reprezentować jakieś dane, może mieć błędną wartość y.
+Myślę, że powinniśmy go usunąć. Usuwanie punktów jest bardzo proste i podobne do ich dodawania.
+Także należy przycinąć prawy przycisk myszy. Jednak tym razem, zamiast klikać w pustkę, kliknij
+na punkt, który chcesz usunąć.
+
+Usuń punkt, który wskazują strzałki. Nie martw się jeśli nie trafisz w punkt.
+Dodawanie nowych punktów jest obecnie wyłączone, więc nic się nie stanie.

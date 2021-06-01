@@ -100,7 +100,7 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
         g.drawImage(context, 0, 0, null);
 
         if (g2 != null) {
-            g2.setColor(DrawUtils.black);
+            g2.setColor(DrawUtils.background);
             g2.fillRect(0,0, width, height);
 
             graphics.draw();
@@ -230,10 +230,6 @@ public class Panel extends JPanel implements ActionListener, MouseWheelListener,
         }
         prevMouseX = me.getX();
         prevMouseY = me.getY();
-    }
-
-    Graphics2D getG2() {
-        return g2;
     }
 
     public int getWidth() {

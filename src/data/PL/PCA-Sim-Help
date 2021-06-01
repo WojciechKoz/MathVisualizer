@@ -1,0 +1,20 @@
+Algorytm PCA
+Witaj w symulacji algorytmu analizy głównych składowych.
+
+Aby dodać nowe punkty naciśnij prawy przycisk myszy w wybranym miejscu.
+Aby przenieść punkt w inne miejsce przytrzymaj lewy przycisk myszy i przenieś punkt w wybrane miejsce.
+Aby usunąć wybrany punkt naciśnij prawy przycisk myszy na wybranym punkcie.
+Domyślny kolor punktu to niebieski.
+W celu zwiększenia czytelności można zmienić kolor punktu.
+By to zrobić najedź myszą na wybrany punkt i naciśnij wybrany klawisz od 1 do 6.
+Więcej informacji znajdziesz w "pierwszych krokach" dostępnych w menu głównym.
+
+Na podstawie dodawanych punktów, tworzona jest macierz kowariancji, reprezentowana przez
+dwa wektory: czerwony i zielony. Wektory własne tej macierzy sa zaznaczone kolorem
+kontrastującym z tłem (białe lub czarne) i są przemnożone przez odpowiadające wartości własne.
+
+Jako, że jest to redukcja wymiaru z 2D do 1D, punkty są rzutowane tylko na jeden z wektorów własnych
+(zgodnie z algorytmem PCA jest to ten, który ma największą wartość własną).
+Zrzutowane punkty mają tylko jedną koordynatę, więc są rysowane na osi X.
+
+Algorytm ma sens, gdy są conajmniej trzy punkty nieleżące na jednej linii.

@@ -3,8 +3,8 @@ import java.awt.*;
 import static java.lang.StrictMath.abs;
 
 interface Shape {
-    public void draw(Graphics2D g2, CoordinateSystem plane);
-    public void move(double dx, double dy);
+    void draw(CoordinateSystem plane);
+    void move(double dx, double dy);
 }
 
 /**
@@ -24,13 +24,12 @@ class Stretch implements Shape {
 
     /**
      * Draws a line in the coordinate system simulation. Coordinates are consistent with the simulation.
-     * @param g2 - graphics engine
      * @param plane - current coordinate system
      */
     @Override
-    public void draw(Graphics2D g2, CoordinateSystem plane) {
-        g2.setStroke(new BasicStroke(3));
-        g2.setColor(color);
+    public void draw(CoordinateSystem plane) {
+        DrawUtils.g2.setStroke(new BasicStroke(3));
+        DrawUtils.g2.setColor(color);
         DrawUtils.line(plane.screenX(A.x), plane.screenY(A.y), plane.screenX(B.x), plane.screenY(B.y));
     }
 
@@ -63,13 +62,12 @@ class Ring implements Shape {
 
     /**
      * Draws a ring in the coordinate system simulation. Coordinates are consistent with the simulation.
-     * @param g2 - graphics engine
      * @param plane - current coordinate system
      */
     @Override
-    public void draw(Graphics2D g2, CoordinateSystem plane) {
-        g2.setStroke(new BasicStroke(3));
-        g2.setColor(color);
+    public void draw(CoordinateSystem plane) {
+        DrawUtils.g2.setStroke(new BasicStroke(3));
+        DrawUtils.g2.setColor(color);
         DrawUtils.ring(plane.screenX(center.x), plane.screenY(center.y), radius*plane.scale);
     }
 
@@ -103,13 +101,12 @@ class Rectangle implements Shape {
 
     /**
      * Draws a rectangle in the coordinate system simulation. Coordinates are consistent with the simulation.
-     * @param g2 - graphics engine
      * @param plane - current coordinate system
      */
     @Override
-    public void draw(Graphics2D g2, CoordinateSystem plane) {
-        g2.setColor(color);
-        g2.fillRect((int)plane.screenX(x), (int)plane.screenY(y), (int)(plane.scale*width), (int)(plane.scale*height));
+    public void draw(CoordinateSystem plane) {
+        DrawUtils.g2.setColor(color);
+        DrawUtils.g2.fillRect((int)plane.screenX(x), (int)plane.screenY(y), (int)(plane.scale*width), (int)(plane.scale*height));
     }
 
     /**
@@ -142,12 +139,11 @@ class BlinkingRectangle extends Rectangle {
     /**
      * Draws a rectangle in the coordinate system simulation. Coordinates are consistent with the simulation.
      * Changes the transaprency from 0 to 255 and then back to 0
-     * @param g2 - graphics engine
      * @param plane - current coordinate system
      */
     @Override
-    public void draw(Graphics2D g2, CoordinateSystem plane) {
-        super.draw(g2, plane);
+    public void draw(CoordinateSystem plane) {
+        super.draw(plane);
 
         transparency += transChanges;
 
@@ -178,13 +174,12 @@ class Triangle implements Shape {
 
     /**
      * Draws a triangle in the coordinate system simulation. Coordinates are consistent with the simulation.
-     * @param g2 - graphics engine
      * @param plane - current coordinate system
      */
     @Override
-    public void draw(Graphics2D g2, CoordinateSystem plane) {
-        g2.setColor(color);
-        g2.fillPolygon(
+    public void draw(CoordinateSystem plane) {
+        DrawUtils.g2.setColor(color);
+        DrawUtils.g2.fillPolygon(
                 new int[] {
                     (int) plane.screenX(A.x),
                     (int) plane.screenX(B.x),
@@ -262,9 +257,9 @@ class Arrow implements Shape {
     }
 
     @Override
-    public void draw(Graphics2D g2, CoordinateSystem plane) {
-        dart.draw(g2, plane);
-        body.draw(g2, plane);
+    public void draw(CoordinateSystem plane) {
+        dart.draw(plane);
+        body.draw(plane);
 
         if(direction.equals("up") || direction.equals("down")) {
             move(0, positionChanges);

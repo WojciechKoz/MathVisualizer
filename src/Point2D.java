@@ -79,22 +79,21 @@ class Sample extends Point2D {
      * if point is selected then there is an orange ring round him
      * @param camera - left top corner of the screen position in the cartesian plane simulation.
      * @param scale - current scale of cartesian plane simulation
-     * @param g2 - graphics engine
      */
-    void draw(Point2D camera, double scale, Graphics2D g2) {
-        g2.setColor(col);
+    void draw(Point2D camera, double scale) {
+        DrawUtils.g2.setColor(col);
         double screenX = (x - camera.x)*scale;
         double screenY = -(y - camera.y)*scale;
 
         DrawUtils.circle(screenX, screenY, radius*scale);
         if(category == 0) {
-            g2.setColor(predictedColor);
+            DrawUtils.g2.setColor(predictedColor);
             DrawUtils.circle(screenX, screenY, radius*scale/2);
         }
 
         if(selected) {
-            g2.setColor(DrawUtils.orange);
-            g2.setStroke(new BasicStroke(2));
+            DrawUtils.g2.setColor(DrawUtils.orange);
+            DrawUtils.g2.setStroke(new BasicStroke(2));
             DrawUtils.ring(screenX, screenY, radius*scale*1.7);
         }
     }

@@ -12,25 +12,34 @@ import java.util.ArrayList;
 public class Menu implements GraphicsInterface {
     // lists of buttons that this menu contains
     protected ArrayList<Button> buttons = new ArrayList<>();
-    // graphical context
-    protected Graphics2D g2;
     // width and height of the menu (usually the entire screen)
     protected int width, height;
     // label that stands at the top of the menu
     protected String title;
+    protected Label titleLabel;
     // pointer to parent class which performs actions related to pressed buttons
     protected Panel panel;
     private final double upperTransparencyBound, lowerTransparencyBound;
+    protected Scrollbar scrollbar;
+    protected boolean visible;
 
-    Menu(Graphics2D g2, int width, int height, Panel mainPanel, String title) {
-        this.g2 = g2;
+    Menu(int width, int height, Panel mainPanel, String title) {
         this.width = width;
         this.height = height;
         this.title = title;
+        this.titleLabel = new Label(title, width/2, height/7, 70);
         this.panel = mainPanel;
+        visible = true;
 
         upperTransparencyBound = height*0.3;
         lowerTransparencyBound = height*0.85;
+
+        initScrollbar();
+    }
+
+    protected void initScrollbar() {
+        scrollbar = new Scrollbar((int)upperTransparencyBound, (int)lowerTransparencyBound, 0, (int)(0.8*width),
+                (int)upperTransparencyBound, 30, (int)(lowerTransparencyBound-upperTransparencyBound));
     }
 
     /**
@@ -47,9 +56,17 @@ public class Menu implements GraphicsInterface {
                     new ClickableButton(width/4, (int)(height*0.3) + i*height/8,
                             width/2, height/10, label, 30);
             buttons.add(button);
+            scrollbar.incrementTotalHeight(height/8);
 
             button.setTransparency(upperTransparencyBound, lowerTransparencyBound);
             i++;
+        }
+        scrollbar.decrementTotalHeight(height/8 - height/10, buttons);
+    }
+
+    protected void setTransparency() {
+        for(Button button: buttons) {
+            button.setTransparency(upperTransparencyBound, lowerTransparencyBound);
         }
     }
 
@@ -58,11 +75,10 @@ public class Menu implements GraphicsInterface {
      */
     @Override
     public void draw() {
-        g2.setColor(DrawUtils.orange);
-        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, 70));
-        DrawUtils.drawCenteredString(title, width/2, height/7);
+        titleLabel.draw();
 
-        for(Button button: buttons) button.draw(g2);
+        for(Button button: buttons) button.draw();
+        scrollbar.draw();
     }
 
     /**
@@ -86,6 +102,11 @@ public class Menu implements GraphicsInterface {
         for(Button button: buttons) {
             button.setHover(mouseX, mouseY, true);
         }
+
+        if(scrollbar.hasInside(mouseX, mouseY) && visible) {
+            scrollbar.setSelected(true);
+        }
+
         return true;
     }
 
@@ -121,6 +142,15 @@ public class Menu implements GraphicsInterface {
      */
     @Override
     public boolean onMouseDragged(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
+        if(scrollbar.getSelected()) {
+            if(!scrollbar.scrollable() || !visible) return false;
+            scrollbar.onMouseDragged(buttons, mouseY, prevMouseY);
+
+            setTransparency();
+
+            return false;
+        }
+
         for(Button button: buttons) {
             if(button instanceof ClickableButton) button.setHover(mouseX, mouseY, true);
             else if(button instanceof Slider && button.hasInside(mouseX, mouseY)) ((Slider) button).setValue(mouseX);
@@ -150,21 +180,12 @@ public class Menu implements GraphicsInterface {
      */
     @Override
     public void onMouseScrolled(int rotation) {
-        if(buttons.size() < 5) return;
-        double factor = -20*rotation;
-        Button last = buttons.get(buttons.size()-1);
+        // there is no need to scrolling
+        if(!scrollbar.scrollable() || !visible) return;
 
-        // aligns the outermost buttons to lower and upper bound
-        if(buttons.get(0).getY()+factor > upperTransparencyBound) {
-            factor = upperTransparencyBound - buttons.get(0).getY();
-        } else if(last.getY()+last.getHeight()+factor < lowerTransparencyBound) {
-            factor = lowerTransparencyBound - last.getY()-last.getHeight();
-        }
+        scrollbar.onMouseWheelMoved(buttons, rotation);
 
-        for(Button button: buttons) {
-            button.setY(button.getY()+factor);
-            button.setTransparency(upperTransparencyBound, lowerTransparencyBound);
-        }
+        setTransparency();
     }
 
     /**

@@ -1,0 +1,10 @@
+Tutorial
+We have complete training dataset.
+Now we can check whether the new point should be red, or the algorithm tells that
+it should be blue. Please, add two more points in those yellow square (one per square).
+To add the point use the right mouse button.
+
+For points that are laying on the same side of the line that red points, the algorithm
+will tell you that their color should be red as well, however if some points will be on the
+same side as blue points - blue color will be predicted for them. Only for gray points
+the algorithm predicts the color.

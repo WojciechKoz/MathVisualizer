@@ -27,28 +27,27 @@ class SampleLabelButton extends Button {
     /**
      * Draws rectangle symbolizing the button, small circle inside (using color of corresponding sample)
      * and two input fields
-     * @param g2 - object for drawing on the screen and responsible for the graphics
      */
     @Override
-    void draw(Graphics2D g2) {
+    void draw() {
         // draws button background
-        super.draw(g2);
+        super.draw();
 
         // draws small circle symbolizing chosen sample
-        g2.setColor(sample.getColor());
+        DrawUtils.g2.setColor(sample.getColor());
         DrawUtils.circle(x+width/10.0, y+height/2.0, min(width/12, height/4));
 
         inputForX.updateFromButton(MathUtils.round(sample.x, 3));
         inputForY.updateFromButton(MathUtils.round(sample.y, 3));
 
         // prints labels with input fields
-        g2.setColor(textCol);
+        DrawUtils.g2.setColor(textCol);
         DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, fontSize));
         DrawUtils.drawStringWithLeftAlignment("X:", x+width/5, y+height/2);
-        inputForX.draw(g2);
-        g2.setColor(textCol);
+        inputForX.draw();
+        DrawUtils.g2.setColor(textCol);
         DrawUtils.drawStringWithLeftAlignment("Y:", (int)(x+width*0.6), y+height/2);
-        inputForY.draw(g2);
+        inputForY.draw();
     }
 
     /**
@@ -59,11 +58,11 @@ class SampleLabelButton extends Button {
      */
     public void hoverFromSample(double mouseX, double mouseY) {
         if(sample.hasInside(mouseX, mouseY)) {
-            backgroundCol = DrawUtils.orange;
-            textCol = DrawUtils.darkGray;
+            backgroundCol = DrawUtils.primaryColor;
+            textCol = DrawUtils.secondaryColor;
         } else {
-            backgroundCol = DrawUtils.darkGray;
-            textCol = DrawUtils.orange;
+            backgroundCol = DrawUtils.secondaryColor;
+            textCol = DrawUtils.primaryColor;
         }
         inputForX.setColors(textCol, backgroundCol);
         inputForY.setColors(textCol, backgroundCol);
@@ -135,8 +134,8 @@ class SampleLabelButton extends Button {
         return sample;
     }
 
-    public void setY(double newY) {
-        y = (int)newY;
+    public void setY(int newY) {
+        y = newY;
         inputForX.y = y;
         inputForY.y = y;
     }

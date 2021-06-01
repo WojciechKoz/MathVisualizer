@@ -1,0 +1,12 @@
+Samouczek
+Okej, skupmy się na czymś innym niż dodawanie i usuwanie punktów.
+Teraz dowiemy się jak poruszać istniejące punkty. To bardzo użyteczne, jeśli będziesz
+chciał zobaczyć, jak pozycja wybranego punktu wpływa na całą symulację. Symulacja
+odświeża się za każdym razem, kiedy punkt jest poruszany, co daje wrażenie, że wszystko
+jest "na żywo".
+
+Poruszanie punktów też jest dość proste - po prostu naciśnij lewym przyciskiem myszy na
+punkt, który chcesz przenieść i przesuc mysz. Punkt będzie podążał za linią.
+
+Przenieśmy pierwszy punkt do żółtej strefy. To sprawi, że linia będzie bardzo blisko
+wszystkich punktów, bo wszystkie będą niemalże leżeć na jednej linii.

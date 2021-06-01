@@ -139,6 +139,13 @@ public class Matrix2x2 {
         return new ArrayList<>(Arrays.asList(eigenvectorsAndValues[2], eigenvectorsAndValues[3]));
     }
 
+    double slopeOfGreaterEigenvector() {
+        if(eigenvectorsAndValues[4] > eigenvectorsAndValues[5]) {
+            return eigenvectorsAndValues[1] / eigenvectorsAndValues[0];
+        }
+        return eigenvectorsAndValues[3] / eigenvectorsAndValues[2];
+    }
+
     /**
      * Checks if matrix is almost singular to avoid drawing numerous lines in matrix grid.
      * @return true if matrix is almost singular
@@ -271,28 +278,26 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
 
     /**
      * draws two vectors representing the basis of this matrix.
-     * @param g2 - graphical context
      * @param plane - cartesian plane
      * @param circleAtTheEnd - if true then at the end of vectors small circles are drawn
      */
-    void drawBasis(Graphics2D g2, CoordinateSystem plane, boolean circleAtTheEnd) {
-        g2.setColor(DrawUtils.red);
+    void drawBasis(CoordinateSystem plane, boolean circleAtTheEnd) {
+        DrawUtils.g2.setColor(DrawUtils.red);
         plane.drawVector(a, c);
         if(circleAtTheEnd) DrawUtils.circle(plane.screenX(a), plane.screenY(c), plane.scale*radius);
 
-        g2.setColor(DrawUtils.green);
+        DrawUtils.g2.setColor(DrawUtils.green);
         plane.drawVector(b, d);
         if(circleAtTheEnd) DrawUtils.circle(plane.screenX(b), plane.screenY(d), plane.scale*radius);
     }
 
     /**
      * Draws eigenvectors as a vector scaled by its eigenvalue.
-     * @param g2 - graphics context
      * @param plane - current cartesian plane
      */
-    void drawEigenvectors(Graphics2D g2, CoordinateSystem plane) {
-        g2.setColor(DrawUtils.white);
-        g2.setStroke(new BasicStroke(2));
+    void drawEigenvectors(CoordinateSystem plane) {
+        DrawUtils.g2.setColor(DrawUtils.fontColor);
+        DrawUtils.g2.setStroke(new BasicStroke(2));
 
         plane.drawVector(eigenvectorsAndValues[0], eigenvectorsAndValues[1]);
         plane.drawVector(eigenvectorsAndValues[2], eigenvectorsAndValues[3]);
@@ -300,14 +305,13 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
 
     /**
      * Draws x and y axis as lines. X-axis is red and Y-axis is blue.
-     * @param g2 - graphics context
      * @param plane - current cartesian plane
      */
-    void drawAxes(Graphics2D g2, CoordinateSystem plane) {
-        g2.setStroke(new BasicStroke(3));
-        g2.setColor(DrawUtils.red);
+    void drawAxes(CoordinateSystem plane) {
+        DrawUtils.g2.setStroke(new BasicStroke(3));
+        DrawUtils.g2.setColor(DrawUtils.red);
         plane.drawStraightLine(c/a, 0);
-        g2.setColor(DrawUtils.green);
+        DrawUtils.g2.setColor(DrawUtils.green);
         plane.drawStraightLine(d/b, 0);
     }
 
@@ -315,70 +319,83 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
      * Draws basis of transposition of this matrix using @code{drawOtherMatrixBasis}.
      * color of these basis is blue and at the end of each base there are small circles.
      * red circle ends the x-base and blue ends the y-base.
-     * @param g2 - graphics context
      * @param plane - current cartesian plane
      */
-    void drawTranspose(Graphics2D g2, CoordinateSystem plane) {
-        g2.setColor(DrawUtils.lightBlue);
-        g2.setStroke(new BasicStroke(2));
-        drawOtherMatrixBasis(transpose(), g2, plane);
+    void drawTranspose(CoordinateSystem plane) {
+        DrawUtils.g2.setColor(DrawUtils.lightBlue);
+        DrawUtils.g2.setStroke(new BasicStroke(2));
+        drawOtherMatrixBasis(transpose(), plane);
     }
 
     /**
      * Draws basis of inversion of this matrix using @code{drawOtherMatrixBasis}.
      * color of these basis is yellow and at the end of each base there are small circles.
      * red circle ends the x-base and blue ends the y-base.
-     * @param g2 - graphics context
      * @param plane - current cartesian plane
      */
-    void drawInverse(Graphics2D g2, CoordinateSystem plane) {
-        g2.setColor(DrawUtils.gold);
-        g2.setStroke(new BasicStroke(2));
-        drawOtherMatrixBasis(inverse(), g2, plane);
+    void drawInverse(CoordinateSystem plane) {
+        DrawUtils.g2.setColor(DrawUtils.gold);
+        DrawUtils.g2.setStroke(new BasicStroke(2));
+        drawOtherMatrixBasis(inverse(), plane);
     }
 
     /**
      * Draws vectors representing the basis of some matrix. At the end of these basis two circles are drawn
      * to distinguish x-base from y-base. x-base has red circle and y-base has blue one.
      * @param matrix - matrix to be drawn
-     * @param g2 - graphics context
      * @param plane - current cartesian plane
      */
-    private void drawOtherMatrixBasis(Matrix2x2 matrix, Graphics2D g2, CoordinateSystem plane) {
+    private void drawOtherMatrixBasis(Matrix2x2 matrix, CoordinateSystem plane) {
         plane.drawVector(matrix.a, matrix.c);
         plane.drawVector(matrix.b, matrix.d);
 
-        g2.setColor(DrawUtils.red);
+        DrawUtils.g2.setColor(DrawUtils.red);
         DrawUtils.circle(plane.screenX(matrix.a), plane.screenY(matrix.c), radius*plane.scale);
-        g2.setColor(DrawUtils.green);
+        DrawUtils.g2.setColor(DrawUtils.green);
         DrawUtils.circle(plane.screenX(matrix.b), plane.screenY(matrix.d), radius*plane.scale);
     }
 
     /**
      * draws every vector (line) that satisfy Ax = lx. If eigenvalues are imaginary or matrix is singular
      * then draws nothing
-     * @param g2 - graphics context
      * @param plane - current cartesian plane
      */
-    void drawEigenvectorsLines(Graphics2D g2, CoordinateSystem plane) {
+    void drawEigenvectorsLines(CoordinateSystem plane) {
         if(eigenvectorsAndValues[0] == 0 || eigenvectorsAndValues[2] == 0) {
             return; // matrix is singular or has imaginary eigenvalues
         }
-        g2.setColor(DrawUtils.transparentWhite);
-        g2.setStroke(new BasicStroke(2));
+        DrawUtils.g2.setColor(DrawUtils.fontColor);
+        DrawUtils.g2.setStroke(new BasicStroke(2));
         plane.drawStraightLine(eigenvectorsAndValues[1]/eigenvectorsAndValues[0], 0);
         plane.drawStraightLine(eigenvectorsAndValues[3]/eigenvectorsAndValues[2], 0);
     }
 
     /**
-     * draws a parallelogram which two of its sides are basis of matrix and the other two are parallel to them.
-     * Area of this quadrangle equals to absolute value of determinant of this matrix.
-     * @param g2 - graphics context
+     * draws every vector (line) that satisfy Ax = lx. If eigenvalues are imaginary or matrix is singular
+     * then draws nothing
      * @param plane - current cartesian plane
      */
-    void drawDeterminant(Graphics2D g2, CoordinateSystem plane) {
-        g2.setColor(DrawUtils.transparentYellow);
-        g2.fillPolygon(
+    void drawEigenvectorLineWithBiggerEigenvalue(CoordinateSystem plane) {
+        if(eigenvectorsAndValues[0] == 0 && eigenvectorsAndValues[2] == 0) {
+            return; // matrix is singular or has imaginary eigenvalues
+        }
+        DrawUtils.g2.setColor(DrawUtils.fontColor);
+        DrawUtils.g2.setStroke(new BasicStroke(2));
+        if(eigenvectorsAndValues[4] > eigenvectorsAndValues[5]) {
+            plane.drawStraightLine(eigenvectorsAndValues[1]/eigenvectorsAndValues[0], 0);
+        } else {
+            plane.drawStraightLine(eigenvectorsAndValues[3]/eigenvectorsAndValues[2], 0);
+        }
+    }
+
+    /**
+     * draws a parallelogram which two of its sides are basis of matrix and the other two are parallel to them.
+     * Area of this quadrangle equals to absolute value of determinant of this matrix.
+     * @param plane - current cartesian plane
+     */
+    void drawDeterminant(CoordinateSystem plane) {
+        DrawUtils.g2.setColor(DrawUtils.transparentYellow);
+        DrawUtils.g2.fillPolygon(
                 new int[] {(int)plane.screenX(0), (int)plane.screenX(a), (int)plane.screenX(a+b), (int)plane.screenX(b)},
                 new int[]{(int)plane.screenY(0), (int)plane.screenY(c), (int)plane.screenY(c+d), (int)plane.screenY(d)}, 4);
     }
@@ -388,23 +405,22 @@ class GraphicsMatrix2x2 extends Matrix2x2 {
      * separated from each other by length of the base of this matrix.
      * Draws only lines which are visible on the screen.
      * lines parallel to x-axis are reddish and ones which are parallel to y-axis are greenish
-     * @param g2 - graphics context
      * @param scale - scale in the cartesian plane simulation
      * @param camera - point where lies top left corner of the screen in cartesian plane simulation units.
      * @param plane - current cartesian plane
      */
-    void drawGrid(Graphics2D g2, double scale, Point2D camera, CoordinateSystem plane) {
+    void drawGrid(double scale, Point2D camera, CoordinateSystem plane) {
         if(almostSingular()) {
             return;
         }
-        g2.setStroke(new BasicStroke(1));
+        DrawUtils.g2.setStroke(new BasicStroke(1));
 
-        g2.setColor(DrawUtils.transparentRed);
+        DrawUtils.g2.setColor(DrawUtils.transparentRed);
         double direction = c/a;
         double y_intercept = abs(b*c/a-d);
         drawParallelLines(direction, y_intercept, camera, scale, plane);
 
-        g2.setColor(DrawUtils.transparentGreen);
+        DrawUtils.g2.setColor(DrawUtils.transparentGreen);
         direction = d/b;
         y_intercept = abs(c-a*d/b);
         drawParallelLines(direction, y_intercept, camera, scale, plane);

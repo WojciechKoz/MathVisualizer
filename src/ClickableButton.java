@@ -24,12 +24,11 @@ class ClickableButton extends Button {
 
     /**
      * Draws the rectangle using parent's draw method and in the middle of the button prints centered label
-     * @param g2 - object for drawing on the screen and responsible for the graphics
      */
-    void draw(Graphics2D g2) {
-        super.draw(g2);
+    void draw() {
+        super.draw();
 
-        g2.setColor(textCol);
+        DrawUtils.g2.setColor(textCol);
         DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, fontSize));
         DrawUtils.drawCenteredString(label, x+width/2, y+height/2);
     }

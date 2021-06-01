@@ -13,8 +13,8 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
     private boolean gridVisibility, eigenvectorsVisibility, projectVisibility,
             determinantVisibility, transposeVisibility, inverseVisibility;
 
-    MatrixCoordinateSystem(Graphics2D g2, int width, int height, Panel panel) {
-        super(g2, width, height, panel);
+    MatrixCoordinateSystem(int width, int height, Panel panel) {
+        super(width, height, panel);
         menuName = "Visualizations";
 
         gridVisibility = true;
@@ -33,7 +33,7 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
     void initComponents() {
         super.initComponents();
         matrix = new GraphicsMatrix2x2(1,0,0,1);
-        messageWindow = new MessageWindow(this, "data/Matrix-Sim-About");
+        messageWindow = new MessageWindow(this, "data/"+StringsResources.languageShortcut()+"/Matrix-Sim-Help");
     }
 
     /**
@@ -51,11 +51,11 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
         };
         Boolean[] buttonsValues = new Boolean[] {true, false, false, false, false, true};
 
-        menu.addCheckBoxButtons(buttonsLabels, buttonsValues, height/20);
-        menu.addMatrixLabel(matrix, height/10.0);
-        menu.addValueLabel("Det", "1", height/20.0);
-        menu.addValueLabel("Lambda 1", "0", height/20.0);
-        menu.addValueLabel("Lambda 2", "0", height/20.0);
+        menu.addCheckBoxButtons(buttonsLabels, buttonsValues, STANDARD_BUTTON_HEIGHT);
+        menu.addMatrixLabel(matrix, STANDARD_BUTTON_HEIGHT*2);
+        menu.addValueLabel("Det", "1", STANDARD_BUTTON_HEIGHT);
+        menu.addValueLabel("Lambda 1", "0", STANDARD_BUTTON_HEIGHT);
+        menu.addValueLabel("Lambda 2", "0", STANDARD_BUTTON_HEIGHT);
     }
 
     /**
@@ -73,16 +73,16 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
     public void draw() {
         drawLines();
 
-        if(determinantVisibility) matrix.drawDeterminant(g2, this);
-        matrix.drawBasis(g2, this, true);
-        matrix.drawAxes(g2, this);
-        if(gridVisibility) matrix.drawGrid(g2, scale, camera, this);
-        if(eigenvectorsVisibility) matrix.drawEigenvectorsLines(g2, this);
-        if(transposeVisibility) matrix.drawTranspose(g2, this);
-        if(inverseVisibility) matrix.drawInverse(g2, this);
+        if(determinantVisibility) matrix.drawDeterminant(this);
+        matrix.drawBasis(this, true);
+        matrix.drawAxes(this);
+        if(gridVisibility) matrix.drawGrid(scale, camera, this);
+        if(eigenvectorsVisibility) matrix.drawEigenvectorsLines(this);
+        if(transposeVisibility) matrix.drawTranspose(this);
+        if(inverseVisibility) matrix.drawInverse(this);
 
         drawSamples();
-        if(projectVisibility) { for(Sample s: projected) s.draw(camera, scale, g2); }
+        if(projectVisibility) { for(Sample s: projected) s.draw(camera, scale); }
 
         drawInterface();
     }
@@ -131,7 +131,7 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
             matrix.moveBase(simulationX(mouseX), simulationY(mouseY));
         } else if(!super.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY)) {
             return true; // if super.onMouseDragged returned false then there is no need to update
-                         // since sample has been changed
+                         // since sample has not been changed
         }
         update();
         return true;
@@ -207,7 +207,7 @@ public class MatrixCoordinateSystem extends CoordinateSystem {
             Sample s_prod = matrix.project(s);
             s_prod.setColor(new Color(s.getColor().getRed(), s.getColor().getGreen(), s.getColor().getBlue(), 130));
             projected.add(s_prod);
-            menu.addSampleLabel(s_prod, height/20.0, false);
+            menu.addSampleLabel(s_prod, STANDARD_BUTTON_HEIGHT, false);
         }
 
         menu.updateLabel("Det", Double.toString(MathUtils.round(matrix.det(), 2)));

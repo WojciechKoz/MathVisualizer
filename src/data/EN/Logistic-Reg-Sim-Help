@@ -1,0 +1,31 @@
+Logistic Regression
+Welcome to the simulation of logistic regression.
+
+To add new point press the right mouse button at chosen place.
+To move a point to a different place hold left mouse button and move the point to chosen place.
+To delete a point press right mouse button on the point you wish to delete.
+The default color of every point is gray, meaning that this point is a test sample (not the training one).
+To change the color of the point and also the class of the sample move the mouse over chosen point
+and press number between 1 and 6. To make the point neutral again press the 0 button with the mouse over the point.
+The predicted color of the neutral point is representing by the small circle inside the point.
+For mor information please check out the "First steps" available in the main menu.
+
+Temporarily the algorithm handles only two colors of samples: red and blue.
+The line separating red points from blue points is calculated using
+stochastic gradient descent algorithm (with batch size equals to 1).
+
+The step size (ETA) and number of iterations (Epochs) are the hyperparameters
+of the model and they can be changed at the left side of the screen.
+The output of the algorithm is a 2-dimensional vector [wx, wy] and bias value.
+Their exact values are printed at the left hand side of the screen with the coefficients
+of the separating line.
+
+Red points mean positive samples and blue - negative, meaning that
+the dot product of the weight vector and some point plus the bias is greater than
+0 indicates that the point should be red, otherwise blue.
+
+Before the line is computed all samples are centering to (0,0) point by subtracting
+the mean value of samples of each sample.
+Then the algorithm is far more stable and the parameters are calculated more precisely.
+At the end the line is shifted by the old mean value and all samples are moved back to
+the previous place, so it's not visible in the simulation.

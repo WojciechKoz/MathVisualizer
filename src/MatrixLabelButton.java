@@ -15,13 +15,12 @@ class MatrixLabelButton extends Button {
 
     /**
      * Draws button with matrix components.
-     * @param g2 - object for drawing on the screen and responsible for the graphics
      */
     @Override
-    void draw(Graphics2D g2) {
-        super.draw(g2);
+    void draw() {
+        super.draw();
 
-        g2.setColor(textCol);
+        DrawUtils.g2.setColor(textCol);
 
         // value to accumulate all labels widths to avoid writing multiple strings in the same place
         // the initial offset is 4% of button's width
@@ -43,7 +42,7 @@ class MatrixLabelButton extends Button {
         labelWidth += DrawUtils.stringWidth(text);
 
         // sets color to color of matrix's x-axis
-        g2.setColor(DrawUtils.lightRed);
+        DrawUtils.g2.setColor(DrawUtils.lightRed);
 
         // prints first column of matrix
         DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, fontSize));
@@ -53,7 +52,7 @@ class MatrixLabelButton extends Button {
         DrawUtils.drawStringWithLeftAlignment(text, x+labelWidth, (int)(y+height*0.7));
 
         // sets color to color of matrix's y-axis
-        g2.setColor(DrawUtils.lightGreen);
+        DrawUtils.g2.setColor(DrawUtils.lightGreen);
 
         // prints second column of the matrix (always starts with the same X) and
         // labelWidth is no longer necessary)
@@ -63,7 +62,7 @@ class MatrixLabelButton extends Button {
         DrawUtils.drawStringWithLeftAlignment(text, (int)(x+width*0.65), (int)(y+height*0.7));
 
         // prints right bracket of the matrix
-        g2.setColor(textCol);
+        DrawUtils.g2.setColor(textCol);
         DrawUtils.setFont(new Font("TimesRoman Plain", Font.PLAIN, fontSize*5));
         DrawUtils.drawStringWithRightAlignment("]", (int)(x+width*0.95), (int)(y+height*0.4));
     }

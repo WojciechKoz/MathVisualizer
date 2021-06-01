@@ -8,11 +8,12 @@ import java.util.List;
  */
 public class PCACoordinateSystem extends CoordinateSystem {
     private final ArrayList<Sample> projected = new ArrayList<>();
+    private ArrayList<Projection> projections = new ArrayList<>();
     private GraphicsMatrix2x2 covarianceMatrix;
     private boolean covarianceMatrixVisibility, eigenvectorsVisibility, projectedSamplesVisibility;
 
-    PCACoordinateSystem(Graphics2D g2, int width, int height, Panel panel) {
-        super(g2, width, height, panel);
+    PCACoordinateSystem(int width, int height, Panel panel) {
+        super(width, height, panel);
         menuName = "Visualizations";
 
         covarianceMatrixVisibility = true;
@@ -27,7 +28,7 @@ public class PCACoordinateSystem extends CoordinateSystem {
     @Override
     void initComponents() {
         super.initComponents();
-        messageWindow = new MessageWindow(this, "data/PCA-Sim-About");
+        messageWindow = new MessageWindow(this, "data/"+StringsResources.languageShortcut()+"/PCA-Sim-Help");
         covarianceMatrix = new GraphicsMatrix2x2(MathUtils.covarianceMatrix(samples));
         covarianceMatrix.setName("Cov");
     }
@@ -43,8 +44,8 @@ public class PCACoordinateSystem extends CoordinateSystem {
         };
         Boolean[] buttonsValues = new Boolean[] {true, true, true};
 
-        menu.addCheckBoxButtons(buttonsLabels, buttonsValues, height/20);
-        menu.addMatrixLabel(covarianceMatrix, height/10.0);
+        menu.addCheckBoxButtons(buttonsLabels, buttonsValues, STANDARD_BUTTON_HEIGHT);
+        menu.addMatrixLabel(covarianceMatrix, STANDARD_BUTTON_HEIGHT*2);
     }
 
     /**
@@ -58,15 +59,18 @@ public class PCACoordinateSystem extends CoordinateSystem {
         drawLines();
 
         if(covarianceMatrixVisibility) {
-            covarianceMatrix.drawBasis(g2, this, false);
+            covarianceMatrix.drawBasis(this, false);
         }
 
         if(eigenvectorsVisibility) {
-            covarianceMatrix.drawEigenvectors(g2, this);
+            covarianceMatrix.drawEigenvectors(this);
+            covarianceMatrix.drawEigenvectorLineWithBiggerEigenvalue(this);
         }
 
         drawSamples();
-        if(projectedSamplesVisibility) { for(Sample s: projected) s.draw(camera, scale, g2); }
+        if(projectedSamplesVisibility) { for(Sample s: projected) s.draw(camera, scale); }
+
+        for(Projection p: projections) p.draw(this);
 
         drawInterface();
     }
@@ -150,6 +154,7 @@ public class PCACoordinateSystem extends CoordinateSystem {
         }
 
         projected.clear();
+        projections.clear();
 
         // choose eigenvector which has bigger eigenvalue
         List<Double> projection = covarianceMatrix.greaterEigenvector();
@@ -159,7 +164,9 @@ public class PCACoordinateSystem extends CoordinateSystem {
             Sample newSample = new Sample(projected_x, 0,
                     new Color(s.getColor().getRed(), s.getColor().getGreen(), s.getColor().getBlue(), 130));
             projected.add(newSample);
-            menu.addSampleLabel(newSample, height/20.0, false);
+            menu.addSampleLabel(newSample, STANDARD_BUTTON_HEIGHT, false);
+
+            projections.add(new Projection(s, covarianceMatrix.slopeOfGreaterEigenvector(), 0));
         }
     }
 }

@@ -1,0 +1,16 @@
+Samouczek
+Ponieważ neutralne (szare) punktu nie biorą udziału w znajdowaniu linii rozdzielającej,
+to kiedy jeden z nich został poruszony, linia nie poruszyła się. To co się z kolei zmieniło
+to predykowany kolor poruszanego punktu - teraz jest czerwony.
+
+Jak mogłeś zauważyć, w regresji logistycznej w panelu bocznym są nowe przyciski.
+Jest także slider, który jest bardzo przydatny, gdy algorytm posiada jakieś stałe.
+Przykładowo tutaj mamy ETA i Epoki. ETA to rozmiar kroku w algorytmie stochastycznego
+spadku, a epoki mówią ile iteracji algorytm ma wykonać, by ostatecznie zwrócić linię
+rozdzielającą. Nie wchodząc w szczegóły zmieńmy ilość epok do 1, by sprawdzić, czy
+jedna iteracja wystarczy do znalezienia dobrej linii.
+
+Użycie slidera jest bardzo proste - po prostu przesuń myszą suwak. Symulacja zmieni się
+automatycznie.
+
+Nie zmieniaj wartości ETA, jeśli ją zmieniłeś ustaw z powrotem na wartość 0.59 lub wyższą.

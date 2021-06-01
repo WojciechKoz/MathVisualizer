@@ -1,0 +1,18 @@
+Tutorial
+As you can see, the side menu has changed. Now we are no
+longer in linear regression, but in logistic regression simulation.
+It sounds similar, but it's a completely different algorithm.
+This time the simulation tries to find the best line that
+separates all blue samples from the red ones. Again you don't have
+to know how it works, you are just learning how to use it.
+
+You can see that there are four point in the coordinate system.
+Let's color them red and later we will add some blue points and
+check if line separates them.
+
+To change the color of the sample you have to keep the mouse over this
+point and press 0-6 buttons on the keyboard which are responsible for
+coloring samples. To color these points red you should press the '2' button.
+
+BTW for now those points are gray (0 button) and it means that they are not visible
+for the line, so they don't have any impact on the algorithm,

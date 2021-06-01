@@ -1,0 +1,34 @@
+Symulacja Macierzy 2x2
+Witaj w symulacji macierzy 2x2.
+
+Aby dodać nowe punkty naciśnij prawy przycisk myszy w wybranym miejscu.
+Aby przenieść punkt w inne miejsce przytrzymaj lewy przycisk myszy i przenieś punkt w wybrane miejsce.
+Aby usunąć wybrany punkt naciśnij prawy przycisk myszy na wybranym punkcie.
+Domyślny kolor punktu to niebieski.
+W celu zwiększenia czytelności można zmienić kolor punktu.
+By to zrobić najedź myszą na wybrany punkt i naciśnij wybrany klawisz od 1 do 6.
+Więcej informacji znajdziesz w "pierwszych krokach" dostępnych w menu głównym.
+
+Macierz składa się z dwóch wektorów: czerwonego i zielonego.
+Można zmieniać ich wartości, przyciskając lewy przycisk myszy i przesuwając wektory w inne miejsca.
+Początkowe wartości wektorów to (1,0) oraz (0,1).
+Dodatkowo rysowana jest także siatka macierzy, pokazująca jak wygląda przestrzeń stworzona przez macierz.
+
+Wyznacznik reprezentowany jest jako równoległobok rozpinający się na podstawach macierzy.
+Pole tego równoległoboku to wartość bezwzględna z wyznacznika macierzy.
+
+Transozycja macierzy przestawiona jest w formie dwóch wektorów zakończonych niebieskim kołem.
+Macierz odwrotna przestawiona jest w formie dwóch wektorów zakończonych żółtym kołem.
+
+Wektory własne macierzy reprezentowane są jako linie kontrastujące z tłem. Są one rysowane tylko wtedy, gdy
+ich wartości są rzeczywiste.
+
+Wektory zrzutowane to wynik mnożenia macierzy i wektora będącego jednym z dodanych punktów.
+
+$w = M \cdot v$
+
+Wartości macierzy, wyznacznika oraz wartości własnych można odczytać po lewej stronie ekranu.
+Jeśli wartości własne są nierzeczywiste, ich wartości w menu wynoszą 0.
+
+Jeżeli macierz jest niemal osobliwa tzn. wyznacznik jest prawie równy zero, siatka macierzy
+nie jest rysowana, w celach optymalizacyjnych symulacji

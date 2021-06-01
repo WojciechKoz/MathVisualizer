@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.awt.event.KeyEvent;
 
 
@@ -6,22 +5,20 @@ import java.awt.event.KeyEvent;
  * Small menu at the left hand side of the screen, inside the cartesian plane simulations.
  */
 public class SideMenu extends Menu {
-    // currentY is an offset of the last added button. next button is added in that place
-    // yOffset is related with scrolling the menu. (its a y coordinate of first button) it is 0 or negative.
-    private int currentY, yOffset;
     private final int smallFont, normalFont, bigFont;
-    private boolean visibility;
 
-    SideMenu(Graphics2D g2, int width, int height) {
-        super(g2, width, height, null, "");
-        currentY = 0;
-        yOffset = 0;
+    SideMenu(int width, int height) {
+        super(width, height, null, "");
 
-        smallFont = (int)(width/11.0);
-        normalFont = (int)(width/10.0);
-        bigFont = (int)(width/9.0);
+        smallFont = 19;
+        normalFont = 21;
+        bigFont = 23;
 
-        visibility = true;
+    }
+
+    @Override
+    protected void initScrollbar() {
+        scrollbar = new Scrollbar(0, height, 0, width, 0, 20, height);
     }
 
     /**
@@ -32,17 +29,21 @@ public class SideMenu extends Menu {
      */
     void addButtons(String[] labels, int heightOfButton) {
         for (String label : labels) {
-            buttons.add(new ClickableButton(0, currentY + yOffset, width, heightOfButton, label, bigFont));
-            currentY += heightOfButton;
+            buttons.add(new ClickableButton(0, scrollbar.getTotalHeight() + scrollbar.getCurrentShift(),
+                    width, heightOfButton, label, bigFont));
+            scrollbar.incrementTotalHeight(heightOfButton);
         }
     }
 
     @Override
+    protected void setTransparency() { }
+
+    @Override
     public void draw() {
-        if(visibility) {
+        if(visible) {
             super.draw();
         } else {
-            buttons.get(0).draw(g2);
+            buttons.get(0).draw();
         }
     }
 
@@ -55,8 +56,9 @@ public class SideMenu extends Menu {
      */
     void addCheckBoxButtons(String[] labels, Boolean[] values, int heightOfButton) {
         for (int i = 0; i < labels.length; i++) {
-            buttons.add(new CheckBoxButton(0, currentY + yOffset, width, heightOfButton, labels[i], bigFont, values[i]));
-            currentY += heightOfButton;
+            buttons.add(new CheckBoxButton(0, scrollbar.getTotalHeight() + scrollbar.getCurrentShift(),
+                    width, heightOfButton, labels[i], bigFont, values[i]));
+            scrollbar.incrementTotalHeight(heightOfButton);
         }
     }
 
@@ -79,38 +81,6 @@ public class SideMenu extends Menu {
                 ((SampleLabelButton)button).hoverFromSample(simulatedX, simulatedY);
             }
         }
-    }
-
-    /**
-     * moves each button in the direction of scrolling.
-     * updates yOffset
-     * @param rotation direction of scrolling. Can be either 1 [down] or -1 [up]
-     */
-    @Override
-    public void onMouseScrolled(int rotation) {
-        // there is no need to scrolling
-        if(currentY <= height || !visibility) return;
-
-        // scrolls 30 pixel per event
-        double factor = -30*rotation;
-        Button last = buttons.get(buttons.size()-1);
-
-        // checks if top of first button is under the screen top
-        // or if bottom of last button is above the screen bottom
-        // if so then aligns all button to that bounds.
-        if(buttons.get(0).getY()+factor > 0) {
-            factor = -buttons.get(0).getY();
-        } else if(last.getY()+last.getHeight()+factor < height) {
-            factor = last.getY()+last.getHeight() - height;
-        }
-
-        // moves each button by that factor
-        for(Button button: buttons) {
-            button.setY(button.getY()+factor);
-        }
-
-        // update the offset
-        yOffset = (int)buttons.get(0).getY();
     }
 
     /**
@@ -141,11 +111,12 @@ public class SideMenu extends Menu {
      * @return label of pressed button or empty string if any button was pressed or pressed button has not any action
      */
     String onReleased(double mouseX, double mouseY) {
+        scrollbar.setSelected(false);
         for(Button button: buttons) {
             button.setHover(mouseX, mouseY, false);
             if(button.hasInside(mouseX, mouseY)) {
                 if(button.getLabel().equals(StringsResources.hide())) {
-                    visibility = !visibility;
+                    visible = !visible;
                 }
                 return button.onClicked(mouseX, mouseY);
             }
@@ -162,9 +133,9 @@ public class SideMenu extends Menu {
      * @param discrete - if true then only integers can be returned from this slider else any real number.
      */
     public void addSlider(String title, double lowerBound, double upperBound, double height, boolean discrete) {
-        buttons.add(new Slider(0, currentY+yOffset, width, (int)height, title, normalFont, 
+        buttons.add(new Slider(0, scrollbar.getTotalHeight() + scrollbar.getCurrentShift(), width, (int)height, title, normalFont,
                     lowerBound, upperBound, discrete));
-        currentY += height;
+        scrollbar.incrementTotalHeight((int)height);
     }
 
     /**
@@ -173,8 +144,8 @@ public class SideMenu extends Menu {
      * @param height - height of the button
      */
     public void addSampleLabel(Sample sample, double height, boolean available) {
-        buttons.add(new SampleLabelButton(0, currentY+yOffset, width, (int)height, sample, smallFont, available));
-        currentY += height;
+        buttons.add(new SampleLabelButton(0, scrollbar.getTotalHeight() + scrollbar.getCurrentShift(), width, (int)height, sample, smallFont, available));
+        scrollbar.incrementTotalHeight((int)height);
     }
 
     /**
@@ -184,7 +155,7 @@ public class SideMenu extends Menu {
     public void removeSampleLabel(Sample sample) {
         boolean buttonsAfter = false;
         int toRemove = -1;
-        double heightOfRemovedButton = 0;
+        int heightOfRemovedButton = 0;
 
         for(int i = 0; i < buttons.size(); i++) {
             if(buttons.get(i) instanceof SampleLabelButton && ((SampleLabelButton)buttons.get(i)).getSample() == sample) {
@@ -198,7 +169,7 @@ public class SideMenu extends Menu {
             }
         }
         buttons.remove(toRemove);
-        currentY -= heightOfRemovedButton;
+        scrollbar.decrementTotalHeight(heightOfRemovedButton, buttons);
     }
 
     /**
@@ -207,8 +178,8 @@ public class SideMenu extends Menu {
      * @param height - height of that button
      */
     public void addMatrixLabel(Matrix2x2 matrix, double height) {
-        buttons.add(new MatrixLabelButton(0, currentY+yOffset, width, (int)height, matrix, smallFont));
-        currentY += height;
+        buttons.add(new MatrixLabelButton(0, scrollbar.getTotalHeight() + scrollbar.getCurrentShift(), width, (int)height, matrix, smallFont));
+        scrollbar.incrementTotalHeight((int)height);
     }
 
     /**
@@ -233,8 +204,8 @@ public class SideMenu extends Menu {
      * @return - true if mouse is inside the menu otherwise false
      */
     public boolean hasInside(double mouseX, double mouseY) {
-        if(visibility) {
-            return mouseX < width && mouseY < currentY;
+        if(visible) {
+            return mouseX < width + scrollbar.getWidth() && mouseY < scrollbar.getTotalHeight();
         }
         return mouseX < width && mouseY < buttons.get(0).getHeight();
     }
@@ -246,8 +217,8 @@ public class SideMenu extends Menu {
      * @param buttonHeight - height of the button
      */
     public void addValueLabel(String title, String value, double buttonHeight) {
-        buttons.add(new ValueLabelButton(0, currentY+yOffset, width, (int) buttonHeight, title, value, normalFont));
-        currentY += buttonHeight;
+        buttons.add(new ValueLabelButton(0, scrollbar.getTotalHeight() + scrollbar.getCurrentShift(), width, (int) buttonHeight, title, value, normalFont));
+        scrollbar.incrementTotalHeight((int)buttonHeight);
     }
 
     /**
@@ -283,9 +254,17 @@ public class SideMenu extends Menu {
                 ((CheckBoxButton)b).toggleValue();
 
                 if(label.equals("Visible")) {
-                    visibility = !visibility;
+                    visible = !visible;
                 }
             }
         }
+    }
+
+    public Scrollbar getScrollbar() {
+        return scrollbar;
+    }
+
+    public void disableScrollbar() {
+        scrollbar.setSelected(false);
     }
 }

@@ -1,5 +1,5 @@
 Tutorial
-Finally we added the last point. But look at that!
+Finally we added the last point. But there is a problem.
 We are not able to see the line and all the samples at
 the same time. Sometimes its better to zoom out rather than
 move the camera. Let's see how all points look like.
@@ -13,8 +13,3 @@ to scroll the text.
 While scrolling, your mouse position moves slightly the
 camera. The effect is similar to google maps scrolling.
 Hopefully this will be intuitive for you.
-
-TIP: If you want to see what is below te screen when zooming
-out, it's better to have the mouse at the top of the screen.
-But when you want to zoom in, the camera will move towards the
-mouse position.

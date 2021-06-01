@@ -12,8 +12,8 @@ public class KNNCoordinateSystem extends CoordinateSystem {
     private boolean distancesVisibility, ringsVisibility;
     private ArrayList<KNNInterface> interfaces = new ArrayList<>();
 
-    KNNCoordinateSystem(Graphics2D g2, int width, int height, Panel mainPanel) {
-        super(g2, width, height, mainPanel);
+    KNNCoordinateSystem(int width, int height, Panel mainPanel) {
+        super(width, height, mainPanel);
         menuName = "Visualizations";
 
         distancesVisibility = false;
@@ -26,7 +26,7 @@ public class KNNCoordinateSystem extends CoordinateSystem {
     @Override
     void initComponents() {
         super.initComponents();
-        messageWindow = new MessageWindow(this, "data/KNN-Sim-About");
+        messageWindow = new MessageWindow(this, "data/"+StringsResources.languageShortcut()+"/KNN-Sim-Help");
     }
 
     /**
@@ -36,8 +36,8 @@ public class KNNCoordinateSystem extends CoordinateSystem {
         String[] buttonsLabels = new String[] {StringsResources.distances(), StringsResources.rings()};
         Boolean[] buttonsValues = new Boolean[] {false, false};
 
-        menu.addCheckBoxButtons(buttonsLabels, buttonsValues, height/20);
-        menu.addSlider("k", 1, 10, height/10.0, true);
+        menu.addCheckBoxButtons(buttonsLabels, buttonsValues, STANDARD_BUTTON_HEIGHT);
+    menu.addSlider("k", 1, 10, STANDARD_BUTTON_HEIGHT*2, true);
     }
 
     /**
@@ -150,8 +150,8 @@ public class KNNCoordinateSystem extends CoordinateSystem {
         }
 
         for(KNNInterface inter: interfaces) {
-            inter.drawDistances(g2, this, distancesVisibility);
-            inter.drawRing(g2, this, ringsVisibility);
+            inter.drawDistances(this, distancesVisibility);
+            inter.drawRing(this, ringsVisibility);
         }
     }
 

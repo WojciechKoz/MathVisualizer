@@ -7,7 +7,7 @@ import java.awt.*;
  *  It's drawn as a rectangle with given x, y, width, height and color
  *  Things drawn inside rectangle are different for various subclasses
  */
-public abstract class Button {
+public abstract class Button implements Container {
     protected int x, y, width, height, fontSize;
     protected String label;
     protected Color backgroundCol, textCol; // current background and text colors (could be change in some subclasses)
@@ -23,8 +23,8 @@ public abstract class Button {
         this.fontSize = fontSize;
 
         // standard colors for background and foreground (they might be changed while the program is running)
-        backgroundCol = DrawUtils.darkGray;
-        textCol = DrawUtils.orange;
+        backgroundCol = DrawUtils.secondaryColor;
+        textCol = DrawUtils.primaryColor;
 
         // by default visible has maximum value (it changes while scrolling in menu)
         visibility = 255;
@@ -50,11 +50,10 @@ public abstract class Button {
 
     /**
      * draws a rectangle (symbolizing a button) coloured in a current background color
-     * @param g2 - object for drawing on the screen and responsible for the graphics
      */
-    void draw(Graphics2D g2) {
-        g2.setColor(backgroundCol);
-        g2.fillRect(x, y, width, height);
+    void draw() {
+        DrawUtils.g2.setColor(backgroundCol);
+        DrawUtils.g2.fillRect(x, y, width, height);
     }
 
     /**
@@ -101,11 +100,13 @@ public abstract class Button {
 
     String getLabel() { return label; }
 
-    public double getHeight() { return height; }
+    public int getHeight() { return height; }
 
-    public void setY(double newY) { y = (int)newY; }
+    public void setY(int newY) {
+        y = newY;
+    }
 
-    public double getY() { return y; }
+    public int getY() { return y; }
 
     public void move(double dx, double dy) {
         x += dx;

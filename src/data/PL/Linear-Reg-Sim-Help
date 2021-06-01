@@ -1,0 +1,16 @@
+Regresja Liniowa
+Witaj w symulacji regresji liniowej.
+
+Aby dodać nowe punkty naciśnij prawy przycisk myszy w wybranym miejscu.
+Aby przenieść punkt w inne miejsce przytrzymaj lewy przycisk myszy i przenieś punkt w wybrane miejsce.
+Aby usunąć wybrany punkt naciśnij prawy przycisk myszy na wybranym punkcie.
+Domyślny kolor punktu to niebieski.
+W celu zwiększenia czytelności można zmienić kolor punktu.
+By to zrobić najedź myszą na wybrany punkt i naciśnij wybrany klawisz od 1 do 6.
+Więcej informacji znajdziesz w "pierwszych krokach" dostępnych w menu głównym.
+
+Do dodawanych punktów dopasowuje się, najlepiej jak to możliwe, zielona linia regresji.
+Jej dokładny wzór znajduje się po lewej stronie ekranu.
+
+Błąd SSE (sum of squared error) jest reprezentowany przez czerwone kwadraty.
+Suma pól wszystkich kwadratów to błąd regresji.

@@ -12,7 +12,7 @@ some features like coordinate system grid or graphical interpretation
 of the error! Check them out. Be careful with the "menu" button though,
 since it will take you back to the main menu.
 
-About button will show/hide the information about current visualization.
+Help button will show/hide the information about current visualization.
 You can press it twice to hide and show again this message box.
 
 The great thing about the menu is ability to move the samples using
@@ -21,7 +21,7 @@ keyboard. When you test all buttons you should check that out as well.
 To move the sample using the keyboard - press the left mouse button
 when the mouse will be above the button related to the sample you wish
 to move. If you don't know which button it is, you can hover the mouse
-over the button and see that around one sample there is an orange
+over the button and see that around one sample there is a
 ring. You can do it another way - move the mouse over the point you wish to
 move and corresponding button will light up.
 

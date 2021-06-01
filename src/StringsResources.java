@@ -11,12 +11,18 @@ public class StringsResources {
     private static int language = ENGLISH;
 
     // menus
-    static String title() { return new String[]{"Math Visualizer", "Wizualizator matematyki"}[language] + " " + Main.version; }
+    static String title() { return new String[]{"Math Visualizer", "Wizualizator matematyki"}[language] + " " + Main.VERSION; }
     static String firstSteps() { return new String[]{"First Steps", "Pierwsze kroki"}[language]; }
     static String visualizations() { return new String[]{"Visualizations", "Wizualizacje"}[language]; }
     static String theory() { return new String[]{"Theory", "Teoria"}[language]; }
     static String settings() { return new String[]{"Settings", "Ustawienia"}[language]; }
+    static String languages() { return new String[]{"Languages", "Języki"}[language]; }
+    static String english() { return "English"; }
+    static String polish() { return "Polish"; }
     static String exit() { return new String[]{"Exit", "Wyjście"}[language]; }
+    static String themes() { return new String[]{"Themes", "Motywy"}[language]; }
+    static String dark() { return new String[]{"Dark", "Ciemny"}[language]; }
+    static String light() { return new String[]{"Light", "Jasny"}[language]; }
     static String matrixSimulation() { return new String[]{"Matrix Simulation", "Symulacja macierzy"}[language]; }
     static String linearRegression() { return new String[] {"Linear Regression", "Regresja liniowa"}[language]; }
     static String knn() { return new String[] {"K-Nearest Neighbours", "K-Najbliższych sąsiadów"}[language]; }
@@ -72,11 +78,23 @@ public class StringsResources {
     // pca
     static String covMatrix() { return new String[]{"Cov Matrix", "Macierz Kow."}[language]; }
 
+    static boolean inEnglish() {
+        return language == ENGLISH;
+    }
     static void goEnglish() {
         language = ENGLISH;
     }
 
+    static boolean inPolish() {
+        return language == POLISH;
+    }
+
     static void goPolish() {
         language = POLISH;
+    }
+
+    // TODO with more languages change it to switch
+    static String languageShortcut() {
+        return (language == ENGLISH) ? "EN" : "PL";
     }
 }

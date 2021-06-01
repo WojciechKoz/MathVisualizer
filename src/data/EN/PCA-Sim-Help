@@ -1,0 +1,22 @@
+Principal Component Analysis
+Welcome to the PCA algorithm simulation.
+
+To add new point press the right mouse button at chosen place.
+To move a point to a different place hold left mouse button and move the point to chosen place.
+To delete a point press right mouse button on the point you wish to delete.
+The default color of every point is blue.
+In order to make the simulation more clear you can change the colour of every point.
+To change the color of the point move the mouse over chosen point
+and press number between 1 and 6.
+For mor information please check out the "First steps" available in the main menu.
+
+Using added by the user points, the algorithm computes the covariance matrix, which is representing
+by two vectors: red and green.
+The eigenvectors of this matrix has color that has contrast to the background color (white or black).
+and they are multiply by corresponding eigenvalues.
+
+Because this is the reduction from 2D to 1D, all points are projected to only one eigenvector
+(according to the PCA algorithm rules - this with the highest eigenvalue).
+Projected points have only one coordinate so they are drawn onto X axis.
+
+Using this algorithm makes sense only if there are three points that are not laying on the same line.

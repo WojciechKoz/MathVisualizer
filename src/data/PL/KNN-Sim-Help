@@ -1,0 +1,23 @@
+Algorytm K-Najbliższych sąsiadów
+Witaj w symulacji KNN.
+
+Aby dodać nowe punkty naciśnij prawy przycisk myszy w wybranym miejscu.
+Aby przenieść punkt w inne miejsce przytrzymaj lewy przycisk myszy i przenieś punkt w wybrane miejsce.
+Aby usunąć wybrany punkt naciśnij prawy przycisk myszy na wybranym punkcie.
+Domyślny kolor punktu to szary, reprezentujący, że punkt jest próbką testową a nie treningową.
+Aby zmienić kolor punktu oraz jego klasę najedź myszą na wybrany punkt i naciśnij wybrany
+klawisz od 1 do 6. By sprawić, by punkt znów stał się neutralny naciśnij klawisz 0.
+Predykowany kolor testowej próbki reprezentuje mniejszy okrąg wewnątrz punktu.
+Więcej informacji znajdziesz w "pierwszych krokach" dostępnych w menu głównym.
+
+Interface algorytmu KNN składa się z dwóch elementów - połączeń oraz pierścieni.
+Połączenia symbolizują odległości między neutralną próbką, a najbliższymi treningowymi punktami (sąsiadami).
+Odległość on najdalszego sąsiada kreśli pierścień, pokazujący obszar, w którym znajduje się k najbliższych sąsiadów,
+na podstawie których, przeprowadzane jest głosowanie co do predykcji koloru neutralnej próbki.
+Kolor pierścienia jest ten sam, co kolor predykowany.
+
+Algorytm posiada hiperparametr K, oznaczający ile najbliższych punktów bierze udział w głosowaniu.
+Można go zmieniać od 1 do 10 za pomocą suwaka po lewej stronie.
+
+Jeśli jeśli nie da się rozstrzygnąć głosowania (kilka kolorów na pierwszym miejscu), algorytm zmniejsza k o jeden,
+czyli usuwa najdalszego sąsiada z głosowania i ponawia głosowanie.

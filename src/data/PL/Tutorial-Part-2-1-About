@@ -1,0 +1,16 @@
+Samouczek
+Jak mogłeś zauważyć, panel boczny się zmienił. Już nie jesteśmy w symulacji
+regresji liniowej, tylko w regresji logistycznej. Brzmi podobnie, ale to zupełnie
+inny algorytm. Tym razem staramy się znaleźć linię, która najlepiej oddziela niebieskie
+punkty od czerwonych. Oczywiście nie musisz wiedzieć jak algorytm działa, chodzi jedynie o
+nauczenie się obsługi.
+
+Jak zapewne zauważyłeś, na układzie współrzędnych pojawiły się cztery punkty.
+Pokolorujmy je na czerwono a później dodamy kilka niebieskich punktów i zobaczymy, czy
+linia będzie je rozdzielać.
+
+By zmienić kolor punktu, najedź na niego myszą i przyciśnij klawisz od 0 do 6.
+Każda liczba odpowiada innemu kolorowi. By pokolorować punkty na czerwono, wciśnij klawisz 2.
+
+Obecnie punkty są szare (odpowiadający przycisk - 0) a to oznacza, że są niewidoczne dla
+linii rozdzielającej, czyli nie mają żadnego wpływu na algorytm.

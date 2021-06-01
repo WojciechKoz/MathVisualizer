@@ -9,7 +9,7 @@ import java.util.Scanner;
  */
 public class TextManager {
     /**
-     * Reads text which is inside the "About" message window.
+     * Reads text which is inside the "Help" message window.
      * Checks the width of the message window and cuts the
      * text to fit the window and not sticking out.
      * Every line is the element in the output list.
@@ -30,6 +30,9 @@ public class TextManager {
                 if(line.equals("")) {
                     output.add("");
                     output.add("");
+                } else if(line.charAt(0) == '$') {
+                    output.add(line);
+                    output.add("");
                 } else {
                     String[] words = line.split(" ");
                     StringBuilder last = new StringBuilder(output.get(output.size() - 1));
@@ -45,6 +48,7 @@ public class TextManager {
                     }
                 }
             }
+
             for(int i = 0; i < output.size(); i++) {
                 output.set(i, output.get(i).trim());
             }
@@ -53,5 +57,16 @@ public class TextManager {
         } catch(Exception e) {
             return new ArrayList<>(Collections.singletonList("File "+filename+" not found"));
         }
+    }
+
+    static ArrayList<TextLine> transformStringsToLines(ArrayList<String> texts, int fontSize, int baseX, int baseY) {
+        final int HEIGHT = fontSize + 5;
+        ArrayList<TextLine> output = new ArrayList<>();
+
+        for(int i = 0; i < texts.size(); i++) {
+            output.add(new TextLine(texts.get(i), baseX, baseY + HEIGHT*i, fontSize));
+        }
+
+        return output;
     }
 }

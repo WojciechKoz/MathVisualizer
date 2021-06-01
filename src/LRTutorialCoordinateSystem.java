@@ -14,8 +14,8 @@ public class LRTutorialCoordinateSystem extends LRCoordinateSystem {
     private final ArrayList<Shape> arrows = new ArrayList<>();
     private final AutoMotion autoMotion = new AutoMotion(this);
 
-    LRTutorialCoordinateSystem(Graphics2D g2, int width, int height, Panel mainPanel) {
-        super(g2, width, height, mainPanel);
+    LRTutorialCoordinateSystem(int width, int height, Panel mainPanel) {
+        super(width, height, mainPanel);
         menuName = "Menu";
 
         // side menu is hide at the beginning but the message window is visible all the time
@@ -34,7 +34,7 @@ public class LRTutorialCoordinateSystem extends LRCoordinateSystem {
     @Override
     void initComponents() {
         super.initComponents();
-        messageWindow = new MessageWindow(this, "data/Tutorial-Part-1-1-About");
+        messageWindow = new MessageWindow(this, "data/"+StringsResources.languageShortcut()+"/Tutorial-Part-1-1-About");
     }
 
     /**
@@ -45,9 +45,9 @@ public class LRTutorialCoordinateSystem extends LRCoordinateSystem {
      */
     @Override
     public void draw() {
-        for(Shape s: areasShapes) s.draw(g2, this);
+        for(Shape s: areasShapes) s.draw(this);
         super.draw();
-        for(Shape a: arrows) a.draw(g2, this);
+        for(Shape a: arrows) a.draw(this);
 
         autoMotion.proceed();
     }
@@ -205,7 +205,7 @@ public class LRTutorialCoordinateSystem extends LRCoordinateSystem {
         addInterface();
 
         if(state < 10) {
-            messageWindow = new MessageWindow(this, "data/Tutorial-Part-1-" + state + "-About");
+            messageWindow = new MessageWindow(this, "data/"+StringsResources.languageShortcut()+"/Tutorial-Part-1-" + state + "-About");
             messageWindow.toggleVisibility();
         }
     }

@@ -32,23 +32,22 @@ public class CheckBoxButton extends ClickableButton {
      * The square is empty if corresponding logical value is equal to false
      * otherwise inside that square the tick image is drawn.
      * Text alignment is to the left, NOT centered like in ClickableButton.
-     * @param g2 - object for drawing on the screen and responsible for the graphics
      */
     @Override
-    void draw(Graphics2D g2) {
-        g2.setColor(backgroundCol);
-        g2.fillRect(x, y, width, height);
+    void draw() {
+        DrawUtils.g2.setColor(backgroundCol);
+        DrawUtils.g2.fillRect(x, y, width, height);
 
-        g2.setColor(textCol);
+        DrawUtils.g2.setColor(textCol);
         DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, fontSize));
         DrawUtils.drawStringWithLeftAlignment(label, x+width/4, y+height/2);
 
         int side = min(3*height/4, width/8);
-        g2.setStroke(new BasicStroke(3));
-        g2.drawRect(x+width/15, y+(height-side)/2, side, side);
+        DrawUtils.g2.setStroke(new BasicStroke(3));
+        DrawUtils.g2.drawRect(x+width/15, y+(height-side)/2, side, side);
 
         if(value) {
-            g2.drawImage(tick, x+width/15, y+(height-side)/2, side, side,null);
+            DrawUtils.g2.drawImage(tick, x+width/15, y+(height-side)/2, side, side,null);
         }
     }
 

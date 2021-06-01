@@ -44,18 +44,17 @@ public class NumberInput {
      * Draws text field with value inside. Depending on selected value it paints
      * various background color. Cannot use parent method because the
      * alignment is to the left - not centered.
-     * @param g2 - graphics engine
      */
-    void draw(Graphics2D g2) {
-        g2.setColor(selected ? backgroundActive : background);
-        g2.fillRect(x, y, width, height);
-        g2.setColor(foreground);
+    void draw() {
+        DrawUtils.g2.setColor(selected ? backgroundActive : background);
+        DrawUtils.g2.fillRect(x, y, width, height);
+        DrawUtils.g2.setColor(foreground);
         DrawUtils.drawStringWithLeftAlignment(text, x+width/15, y+height/2);
 
         if(selected) {
             int caretX = x + width/15 + DrawUtils.stringWidth(text.substring(0,caret));
-            g2.setStroke(new BasicStroke(2));
-            g2.drawLine(caretX, y+height/4, caretX, y+3*height/4);
+            DrawUtils.g2.setStroke(new BasicStroke(2));
+            DrawUtils.g2.drawLine(caretX, y+height/4, caretX, y+3*height/4);
         }
     }
 

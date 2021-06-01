@@ -26,13 +26,12 @@ class Slider extends Button {
     /**
      * draws a rectangle using parent's draw method. @see Button#draw(Graphics2D g2)
      * In the upper half of the button, draws label with its value and in the lower half draws bar
-     * @param g2 - object for drawing on the screen and responsible for the graphics
      */
     @Override
-    void draw(Graphics2D g2) {
-        super.draw(g2);
+    void draw() {
+        super.draw();
 
-        g2.setColor(textCol);
+        DrawUtils.g2.setColor(textCol);
         DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, fontSize));
 
         // prints label+": "+roundedValue where roundedValue has two decimal places if discrete variable is false
@@ -43,10 +42,11 @@ class Slider extends Button {
         // draws a bar
         int sliderWidth = width/20;
         int position = (int)((value-lowerBound)/(upperBound-lowerBound)*0.8*width);
-        g2.setColor(DrawUtils.black);
-        g2.drawLine(x+width/10, (int)(y+height*0.6), (int)(x+width*0.9), (int)(y+height*0.6));
-        g2.setColor(textCol);
-        g2.fillRect(x+width/10+position-sliderWidth/2, (int)(y+height*0.54), sliderWidth, (int)(0.15*height));
+
+        DrawUtils.g2.setColor(DrawUtils.black);
+        DrawUtils.g2.drawLine(x+width/10, (int)(y+height*0.6), (int)(x+width*0.9), (int)(y+height*0.6));
+        DrawUtils.g2.setColor(textCol);
+        DrawUtils.g2.fillRect(x+width/10+position-sliderWidth/2, (int)(y+height*0.54), sliderWidth, (int)(0.15*height));
     }
 
     /**

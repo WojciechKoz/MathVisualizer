@@ -19,8 +19,6 @@ public class CoordinateSystem implements GraphicsInterface {
     protected double scale;
     // visibility of lines that represent the integer value of one of the axes of the coordinate system
     protected boolean linesVisibility;
-    // Graphics engine
-    protected Graphics2D g2;
     // width and height of the screen
     protected int width, height;
     // reference to the upper layer
@@ -33,13 +31,12 @@ public class CoordinateSystem implements GraphicsInterface {
     protected String menuName;
     protected final int STANDARD_BUTTON_HEIGHT;
 
-    CoordinateSystem(Graphics2D g2, int width, int height, Panel mainPanel) {
-        this.g2 = g2;
+    CoordinateSystem(int width, int height, Panel mainPanel) {
         this.width = width;
         this.height = height;
         this.panel = mainPanel;
         menuName = "Menu";
-        STANDARD_BUTTON_HEIGHT = height/20;
+        STANDARD_BUTTON_HEIGHT = 55;
 
         // 100 pixels = unit in axes
         scale = 100;
@@ -51,8 +48,9 @@ public class CoordinateSystem implements GraphicsInterface {
         // for some matrices and message window
         initComponents();
 
-        // initializes the side menu with that 4 most basic buttons
-        menu = new SideMenu(g2, width/9, height);
+        // initializes the side menu with 3 most basic buttons
+        final int SIDE_MENU_WIDTH = 220;
+        menu = new SideMenu(SIDE_MENU_WIDTH, height);
         menu.addCheckBoxButtons(new String[]{StringsResources.hide()}, new Boolean[] {false}, STANDARD_BUTTON_HEIGHT);
         menu.addButtons(new String[]{StringsResources.menu(), StringsResources.help()}, STANDARD_BUTTON_HEIGHT);
         menu.addCheckBoxButtons(new String[]{StringsResources.grid()}, new Boolean[] {true},STANDARD_BUTTON_HEIGHT);
@@ -91,8 +89,8 @@ public class CoordinateSystem implements GraphicsInterface {
 
     void drawInterface() {
         menu.draw();
-        messageWindow.draw(g2);
-        exitWindow.draw(g2);
+        messageWindow.draw();
+        exitWindow.draw();
     }
 
     /**
@@ -100,8 +98,8 @@ public class CoordinateSystem implements GraphicsInterface {
      */
     void drawLines() {
         if(linesVisibility) {
-            g2.setStroke(new BasicStroke(1));
-            g2.setColor(new Color(50, 50, 50));
+            DrawUtils.g2.setStroke(new BasicStroke(1));
+            DrawUtils.g2.setColor(DrawUtils.darkGray);
             for (int i = (int) ceil(camera.x); i < ceil(camera.x) + floor(width / scale) + 1; i++) {
                 DrawUtils.line((i - camera.x) * scale, 0, (i - camera.x) * scale, height);
             }
@@ -110,8 +108,8 @@ public class CoordinateSystem implements GraphicsInterface {
             }
         }
 
-        g2.setStroke(new BasicStroke(3));
-        g2.setColor(DrawUtils.white);
+        DrawUtils.g2.setStroke(new BasicStroke(3));
+        DrawUtils.g2.setColor(DrawUtils.fontColor);
         DrawUtils.line(-camera.x*scale, 0, -camera.x*scale, height);
         DrawUtils.line(0, camera.y*scale, width, camera.y*scale);
     }
@@ -123,7 +121,7 @@ public class CoordinateSystem implements GraphicsInterface {
      */
     void drawSamples() {
         for(int i = samples.size()-1; i >= 0; i--) {
-            samples.get(i).draw(camera, scale, g2);
+            samples.get(i).draw(camera, scale);
         }
     }
 
@@ -262,7 +260,7 @@ public class CoordinateSystem implements GraphicsInterface {
             x2 = screenX((camera.y - b)/a);
             y2 = 0;
         }
-        g2.drawLine((int)x1, (int)y1, (int)x2, (int)y2);
+        DrawUtils.g2.drawLine((int)x1, (int)y1, (int)x2, (int)y2);
     }
 
     /**
@@ -272,6 +270,17 @@ public class CoordinateSystem implements GraphicsInterface {
      */
     void drawVector(double x, double y) {
         DrawUtils.line(screenX(0), screenY(0), screenX(x), screenY(y));
+    }
+
+    /**
+     * draws a line between two points in cartesian plane.
+     * @param x1 - x value of the first point
+     * @param y1 - y value of the first point
+     * @param x2 - x value of the second point
+     * @param y2 - y value of the second point
+     */
+    void drawSection(double x1, double y1, double x2, double y2) {
+        DrawUtils.line(screenX(x1), screenY(y1), screenX(x2), screenY(y2));
     }
 
     /**
@@ -393,6 +402,8 @@ public class CoordinateSystem implements GraphicsInterface {
                 sample.setMoving(false);
             }
         }
+        menu.disableScrollbar();
+        messageWindow.disableScrollbar();
     }
 
     /**
@@ -438,9 +449,8 @@ public class CoordinateSystem implements GraphicsInterface {
             return false;
         }
 
-        if(menu.hasInside(mouseX, mouseY)) {
-            menu.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY);
-            return true;
+        if(menu.hasInside(mouseX, mouseY) || menu.getScrollbar().getSelected()) {
+            return menu.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY);
         }
 
         if(moveSamples(mouseX, mouseY)) return true;

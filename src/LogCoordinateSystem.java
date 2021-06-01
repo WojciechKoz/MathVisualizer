@@ -10,13 +10,17 @@ public class LogCoordinateSystem extends CoordinateSystem {
     // a and b are coefficient of separation line
     private double a;
     private double b;
-    // wx and wy are weights of that model
+    // wx and wy are weights of that model, bias is a free coefficient
     private double wx;
     private double wy;
+    private double bias;
     private boolean separationLineVisibility, weightsVisibility;
+    // important to keep track if changes occurred
+    private int epochs = 0;
+    private double eta = 0.0;
 
-    LogCoordinateSystem(Graphics2D g2, int width, int height, Panel mainPanel) {
-        super(g2, width, height, mainPanel);
+    LogCoordinateSystem(int width, int height, Panel mainPanel) {
+        super(width, height, mainPanel);
         menuName = "Visualizations";
 
         separationLineVisibility = true;
@@ -28,7 +32,7 @@ public class LogCoordinateSystem extends CoordinateSystem {
      */
     void initComponents() {
         super.initComponents();
-        messageWindow = new MessageWindow(this, "data/Logistic-Reg-Sim-About");
+        messageWindow = new MessageWindow(this, "data/"+StringsResources.languageShortcut()+"/Logistic-Reg-Sim-Help");
     }
 
     /**
@@ -37,15 +41,14 @@ public class LogCoordinateSystem extends CoordinateSystem {
     void initSideMenu() {
         String[] buttonsLabels = new String[] {StringsResources.line(), StringsResources.weights()};
         Boolean[] buttonsValues = new Boolean[] {true, false};
-        int heightOfButton = height/20;
 
-        menu.addCheckBoxButtons(buttonsLabels, buttonsValues, heightOfButton);
-        menu.addSlider(StringsResources.eta(), 0.001, 1.2, 1.1*heightOfButton, false);
-        menu.addSlider(StringsResources.epochs(), 1, 200, 1.1*heightOfButton, true);
+        menu.addCheckBoxButtons(buttonsLabels, buttonsValues, STANDARD_BUTTON_HEIGHT);
+        menu.addSlider(StringsResources.eta(), 0.001, 1.2, 1.1*STANDARD_BUTTON_HEIGHT, false);
+        menu.addSlider(StringsResources.epochs(), 1, 200, 1.1*STANDARD_BUTTON_HEIGHT, true);
 
-        menu.addValueLabel("w", "[0, 0]", heightOfButton);
-        menu.addValueLabel(StringsResources.bias(), "0", heightOfButton);
-        menu.addValueLabel("y", "0x + 0", heightOfButton);
+        menu.addValueLabel("w", "[0, 0]", STANDARD_BUTTON_HEIGHT);
+        menu.addValueLabel(StringsResources.bias(), "0", STANDARD_BUTTON_HEIGHT);
+        menu.addValueLabel("y", "0x + 0", STANDARD_BUTTON_HEIGHT);
     }
 
     /**
@@ -65,8 +68,8 @@ public class LogCoordinateSystem extends CoordinateSystem {
             if(separationLineVisibility) drawSeparationLine();
 
             if(weightsVisibility) {
-                g2.setStroke(new BasicStroke(2));
-                g2.setColor(DrawUtils.lightGreen);
+                DrawUtils.g2.setStroke(new BasicStroke(2));
+                DrawUtils.g2.setColor(DrawUtils.lightGreen);
                 drawVector(wx, wy);
             }
         }
@@ -112,12 +115,24 @@ public class LogCoordinateSystem extends CoordinateSystem {
     @Override
     public boolean onMouseDragged(double mouseX, double mouseY, double prevMouseX, double prevMouseY) {
         if(super.onMouseDragged(mouseX, mouseY, prevMouseX, prevMouseY) && samples.size() > 1) {
+            // hyperparameters are different - have to update
+            if((int)menu.readValueFromSlider(StringsResources.epochs()) != epochs ||
+                    menu.readValueFromSlider(StringsResources.eta()) != eta) {
+                update();
+                return true;
+            }
+
             for(Sample s: samples) {
-                if(s.isMoving() && s.category() != 0) {
-                    update();
+                if(s.isMoving()) {
+                    if(s.category() != 0) {
+                        update();
+                    } else {
+                        predict();
+                    }
                     return true;
                 }
             }
+
         }
         return true;
     }
@@ -165,12 +180,14 @@ public class LogCoordinateSystem extends CoordinateSystem {
             return;
         }
 
-        double[] neuron = MathUtils.fitLogisticRegressionModel(samples,
-                (int)menu.readValueFromSlider(StringsResources.epochs()),
-                menu.readValueFromSlider(StringsResources.eta()));
+        epochs = (int)menu.readValueFromSlider(StringsResources.epochs());
+        eta = menu.readValueFromSlider(StringsResources.eta());
+
+        double[] neuron = MathUtils.fitLogisticRegressionModel(samples, epochs, eta);
+
         wx = neuron[0];
         wy = neuron[1];
-        double bias = neuron[2];
+        bias = neuron[2];
 
         a = -wx/wy;
         b = -bias /wy;
@@ -180,6 +197,14 @@ public class LogCoordinateSystem extends CoordinateSystem {
         menu.updateLabel("y", MathUtils.round(a, 2)+"x " + (b > 0 ? "+ " : "- ") + MathUtils.round(abs(b), 2));
 
         // predictions
+        predict();
+    }
+
+    /**
+     *  Predicts class of all neutral samples
+     *  Used at the end of update method and when neutral sample was moved
+     */
+    void predict() {
         for(Sample sample: samples) {
             if(sample.category() == 0) {
                 int predictedCategory = MathUtils.sigmoid(wx*sample.getX() + wy*sample.getY() + bias) > 0.5 ? 1:0;
@@ -210,8 +235,8 @@ public class LogCoordinateSystem extends CoordinateSystem {
      * draws line which separates red and blue samples
      */
     void drawSeparationLine() {
-        g2.setColor(DrawUtils.yellow);
-        g2.setStroke(new BasicStroke(3));
+        DrawUtils.g2.setColor(DrawUtils.yellow);
+        DrawUtils.g2.setStroke(new BasicStroke(3));
         drawStraightLine(a, b);
     }
 }

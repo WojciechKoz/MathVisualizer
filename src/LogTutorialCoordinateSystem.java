@@ -23,8 +23,8 @@ public class LogTutorialCoordinateSystem extends LogCoordinateSystem {
     // are unknown so it stores this index
     private int indexOfMovedSample;
 
-    LogTutorialCoordinateSystem(Graphics2D g2, int width, int height, Panel mainPanel) {
-        super(g2, width, height, mainPanel);
+    LogTutorialCoordinateSystem(int width, int height, Panel mainPanel) {
+        super(width, height, mainPanel);
         menuName = "Menu";
 
         // side menu is hide at the beginning but the message window is visible all the time
@@ -40,7 +40,7 @@ public class LogTutorialCoordinateSystem extends LogCoordinateSystem {
     @Override
     void initComponents() {
         super.initComponents();
-        messageWindow = new MessageWindow(this, "data/Tutorial-Part-2-1-About");
+        messageWindow = new MessageWindow(this, "data/"+StringsResources.languageShortcut()+"/Tutorial-Part-2-1-About");
     }
 
 
@@ -52,9 +52,9 @@ public class LogTutorialCoordinateSystem extends LogCoordinateSystem {
      */
     @Override
     public void draw() {
-        for(Shape s: areasShapes) s.draw(g2, this);
+        for(Shape s: areasShapes) s.draw(this);
         super.draw();
-        for(Shape a: arrows) a.draw(g2, this);
+        for(Shape a: arrows) a.draw(this);
 
         autoMotion.proceed();
     }
@@ -197,7 +197,7 @@ public class LogTutorialCoordinateSystem extends LogCoordinateSystem {
         addInterface();
 
         if(state < 7) {
-            messageWindow = new MessageWindow(this, "data/Tutorial-Part-2-" + state + "-About");
+            messageWindow = new MessageWindow(this, "data/"+StringsResources.languageShortcut()+"/Tutorial-Part-2-" + state + "-About");
             messageWindow.toggleVisibility();
         }
     }

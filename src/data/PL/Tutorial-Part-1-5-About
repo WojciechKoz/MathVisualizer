@@ -1,0 +1,11 @@
+Samouczek
+Wreszcie dodaliśmy ostatni punkt. Ale mamy teraz inny problem.
+Nie możemy zobaczyć linii oraz wszystkich punktów w tym samym czasie.
+Czasem lepiej jest oddalić kamerę, niż nią poruszać. zobaczmy jak to działa.
+
+By oddalić ekran, należy scrollować mysz w swoją stronę. Scorolluj dopóki
+nie będziesz widział wszystkich punktów, a wtedy okienko z instrukcjami zmieni treść.
+Pamiętaj, że mysz nie może być wewnątrz tego okna, gdyż to oznaczałoby, że chcesz scrollować tekst.
+
+Podczas scrollowania, pozycja twojej myszy porusza nieznacznie kamerę. Efekt jest podobny do
+scrollowania w google maps. Mam nadzieję, że jest to dość intuicyjne.

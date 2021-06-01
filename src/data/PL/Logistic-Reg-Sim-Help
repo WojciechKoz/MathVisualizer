@@ -1,0 +1,30 @@
+Regresja Logistyczna
+Witaj w symulacji regresji logistycznej.
+
+Aby dodać nowe punkty naciśnij prawy przycisk myszy w wybranym miejscu.
+Aby przenieść punkt w inne miejsce przytrzymaj lewy przycisk myszy i przenieś punkt w wybrane miejsce.
+Aby usunąć wybrany punkt naciśnij prawy przycisk myszy na wybranym punkcie.
+Domyślny kolor punktu to szary, reprezentujący, że punkt jest próbką testową a nie treningową.
+Aby zmienić kolor punktu oraz jego klasę najedź myszą na wybrany punkt i naciśnij wybrany
+klawisz od 1 do 6. By sprawić, by punkt znów stał się neutralny naciśnij klawisz 0.
+Predykowany kolor testowej próbki reprezentuje mniejszy okrąg wewnątrz punktu.
+Więcej informacji znajdziesz w "pierwszych krokach" dostępnych w menu głównym.
+
+Tymczasowo algorytm obłsuguje jedynie dwa kolory punktów: czerwony i niebieski.
+Linia rozdzielająca punkty koloru czerwonego i niebieskiego liczona jest za pomocą
+algorytmu stochastycznego spadku gradientowego (z rozmiarem "paczek" równym 1).
+
+Skala uczenia się (ETA) i ilość iteracji (Epoki) są hiperparametrami modelu i mogą być
+zmienianie za pomocą sliderów po lewej stronie ekranu.
+Wynik algorytmu to dwuwymiarowy wektor wag [wx, wy] oraz wartość progowa.
+Ich dokładne wartości znajdują się po lewej stronie wraz z dokładnym wzorem prostej,
+która oddziela dwie klasy punktów.
+
+Czerwone wektory oznaczają próbki pozytywne, a niebieskie negatywne, czyli jeśli
+iloczyn skalarny wektora wag oraz pewnego punktu plus wartość progowa jest większa niż 0,
+to próbka jest klasyfikowana jako czerwona, w przeciwnym wypadku - niebieska.
+
+Przed wykonaniem algorytmu wszystkie punkty są centrowane do środka układu współrzędnych,
+poprzez odjęcie od każdej próbki wektora średniego wszystkich próbek.
+Dzięki temu algorytm jest o wiele stabilniejszy, a całość na końcu jest przesuwana do pierwotnego stanu,
+więc centrowanie nie jest widoczne w symulacji.

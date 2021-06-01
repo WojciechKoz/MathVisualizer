@@ -1,0 +1,12 @@
+Samouczek
+Popatrz na te liczby! Teraz możesz być bardzo precyzyjny. Podsumowując, potrafisz
+już oddalać i przybliżać ekran, ruszać kamerą, dodawać i usuwać punkty, a także przemieszczać je
+(korzystając z myszy oraz klawiatury). Wiesz także, gdzie szukać wartości powiązanych z
+obecną symulacją oraz przycisków, które sterują widzialnością pewnych efektów.
+Ale to nie wszystko.
+
+Dla algorytmów predykcyjnych, najważniejszą rzeczą jest klasa punktu. Musimy potrafić
+odróżnić, który punkt należy do której klasy, więc będziemy kolorować punkty.
+
+Jednak zanim zaczniemy kolorować, usuńmy wszystkie obecne punkty. Jeśli zapomniałeś jak to się
+robi, najedź na punkt i przyciśnij prawy przycisk myszy.

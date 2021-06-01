@@ -1,6 +1,6 @@
 
 public class Main {
-    public static String version = "V0.5";
+    public static final String VERSION = "V0.5";
     public static void main(String [] args) {
         new Window();
     }
@@ -11,7 +11,7 @@ public class Main {
     -   mouse position while key pressing is not relative to the program window but to the screen
         (doesn't work when there is no fullscreen) [ fixed - now it uses previous values stored in panel ]
     -   Sometimes side menu doesn't stop scrolling down and instead it scrolls a little bit up.
-        (usually works so its hard to find the cause)
+        (usually works so its hard to find the cause) [ fixed - scrolling formula was changed ]
     -   PCA when all samples are on the same line (vertical or horizontal) then there is a NaN bug
  */
 
@@ -68,17 +68,18 @@ public class Main {
     - show/hide side menu [checked]
     ...
     version 0.5
-    - scrollbar
+    - scrollbar [checked]
     - dialog window when exiting the simulation [checked]
-    - Theory of linear algebra chapter 1
-    - Settings
-    - polish language
-    - Improve PCA (add 2d transformation), matrix (inverse will be drawn), LogReg (background of areas)
+    - themes [checked]
+    - Settings [checked]
+    - polish language [checked]
+    - Improve PCA (add 2d transformation), matrix (info about inverse in sidemenu), LogReg (background of areas)
     - ID-tree
     ...
     version 0.6
     - curve lines
     - sounds
-    - photos in message boxes
+    - latex support in message boxes
     - Simulation of RB-Tree
+    - Theory of linear algebra chapter 1
  */

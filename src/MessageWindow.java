@@ -11,18 +11,16 @@ public class MessageWindow {
     private final int width;
     private int height;
     // every message window has the same height of top bar
-    private static int heightOfTopBar = -1;
-    // height of the single line
-    private int lineHeight;
-    // y coordinate of first line of text - lowerBound
-    private int scrollOffset;
+    private static final int heightOfTopBar = 35;
     // height of all lines of text
     private int heightOfAllText;
     // max and min y of visibility lines
     private int lowerBound, upperBound;
-    private final ArrayList<String> text;
+    private Scrollbar scrollbar;
+    private final ArrayList<TextLine> text;
     private String title;
-    private final int fontSize;
+    private final int FONT_SIZE = 24;
+    private final int HEADER_FONT_SIZE = 40;
     private final ArrayList<Button> buttons = new ArrayList<>();
     // visibility of message window. selected tells if window is dragged currently by the mouse
     private boolean visibility, selected;
@@ -38,51 +36,38 @@ public class MessageWindow {
         y = (int) (0.05*screenHeight);
         width = (int) (0.4*screenWidth);
         height = (int) (0.65*screenHeight);
-        fontSize = (int) (screenWidth/80.0);
-        scrollOffset = 0;
-
-        if(heightOfTopBar == -1) {
-            heightOfTopBar = (int)(0.0325*screenHeight);
-        }
-
-        DrawUtils.setFont(new Font("Arial", Font.PLAIN, fontSize));
-        text = TextManager.readMessageContent(width, filename);
-        title = text.remove(0);
-
-        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, (int) (fontSize*1.7)));
-        upperBound = (int) (height*0.15 + DrawUtils.stringHeight(text.get(0))*1.2);
+        upperBound = (int) (height*0.15 + 48);
         lowerBound = (int) (height*0.95);
 
+        DrawUtils.setFont(new Font("Arial", Font.PLAIN, FONT_SIZE));
+        ArrayList<String> lines = TextManager.readMessageContent(width, filename);
+        title = lines.remove(0);
+
+        text = TextManager.transformStringsToLines(lines, FONT_SIZE, (int)(x + 0.025*width), y + upperBound);
+
         buttons.add(new ClickableButton((int)(x+0.8*width), y,
-                (int)(0.2*width), heightOfTopBar, StringsResources.close(), (int) (fontSize*1.2)));
+                (int)(0.2*width), heightOfTopBar, StringsResources.close(), (int) (FONT_SIZE *1.2)));
 
         visibility = false;
         selected = false;
 
-        findAverageLineHeight();
+        heightOfAllText = calculateHeightOfText();
 
         if(upperBound + heightOfAllText < lowerBound) {
             lowerBound = upperBound+heightOfAllText;
             height = upperBound+heightOfAllText+(int)(0.1*height);
         }
+
+        scrollbar = new Scrollbar(y + upperBound, y + lowerBound, heightOfAllText, x + width - 23, y + upperBound, 20, lowerBound - upperBound);
     }
 
     MessageWindow(int x, int y, int width, int height, CoordinateSystem sim) {
         simulation = sim;
-        int screenWidth = sim.width;
-        int screenHeight = sim.height;
 
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-
-        if(heightOfTopBar == -1) {
-            heightOfTopBar = (int)(0.0325*screenHeight);
-        }
-
-        fontSize = screenWidth/70;
-        scrollOffset = 0;
 
         text = new ArrayList<>();
         upperBound = 0;
@@ -92,74 +77,54 @@ public class MessageWindow {
         selected = false;
         title = "";
 
-        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, (int) (fontSize*1.7)));
+        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, (int) (FONT_SIZE *1.7)));
         buttons.add(new ClickableButton((int)(x+0.8*width), y,
-                (int)(0.2*width), heightOfTopBar, StringsResources.close(), (int) (fontSize*1.2)));
+                (int)(0.2*width), heightOfTopBar, StringsResources.close(), (int) (FONT_SIZE *1.2)));
     }
 
-    /**
-     * Sometimes the lines have higher letters.
-     * The average height provides that all lines are separated by
-     * the same distance which looks more aesthetically pleasing.
-     */
-    void findAverageLineHeight() {
-        ArrayList<Double> heights = new ArrayList<>();
-        DrawUtils.setFont(new Font("Arial", Font.PLAIN, fontSize));
-
-        for(String s: text) {
-            if(s.equals("")) continue;
-            heights.add((double) DrawUtils.stringHeight(s));
+    int calculateHeightOfText() {
+        int output = 0;
+        for(TextLine line: text) {
+            output += line.getHeight();
         }
-        lineHeight = (int) (1.2*MathUtils.mean(heights));
-        heightOfAllText = lineHeight*text.size();
+        return output;
     }
 
     /**
      * Draws a rectangular window and prints text inside it.
-     * @param g2 - graphics engine
      */
-    void draw(Graphics2D g2) {
+    void draw() {
         if(!visibility) {
             return;
         }
 
-        g2.setColor(DrawUtils.transparentBlack);
-        g2.fillRect(x, y, width, height);
+        DrawUtils.g2.setColor(DrawUtils.transparentBlack);
+        DrawUtils.g2.fillRect(x, y, width, height);
 
-        g2.setColor(DrawUtils.orange);
-        g2.setStroke(new BasicStroke(3));
-        g2.drawRect(x, y, width, height);
+        DrawUtils.g2.setColor(DrawUtils.primaryColor);
+        DrawUtils.g2.setStroke(new BasicStroke(3));
+        DrawUtils.g2.drawRect(x, y, width, height);
 
-        g2.setColor(DrawUtils.darkGray);
-        g2.fillRect(x, y, width, heightOfTopBar);
-        g2.drawRect(x, y, width, heightOfTopBar);
+        DrawUtils.g2.setColor(DrawUtils.secondaryColor);
+        DrawUtils.g2.fillRect(x, y, width, heightOfTopBar);
+        DrawUtils.g2.drawRect(x, y, width, heightOfTopBar);
 
         for(Button b: buttons) {
-            b.draw(g2);
+            b.draw();
         }
 
-        g2.setColor(DrawUtils.white);
-        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, (int) (fontSize*1.7)));
+        DrawUtils.g2.setColor(DrawUtils.white);
+        DrawUtils.setFont(new Font(DrawUtils.regularFontName, Font.PLAIN, (int) (FONT_SIZE *1.7)));
         DrawUtils.drawCenteredString(title, x+width/2, (int) (y+1.5*heightOfTopBar + DrawUtils.stringHeight(title)));
 
-        double yOffset = y + upperBound + scrollOffset;
-        DrawUtils.setFont(new Font("Arial", Font.PLAIN, fontSize));
 
-        for (String s : text) {
-            if(yOffset < y+upperBound) {
-                yOffset += lineHeight;
-                continue;
-            }
-            if(yOffset > y+lowerBound) {
-                break;
-            }
+        DrawUtils.setFont(new Font("Arial", Font.PLAIN, FONT_SIZE));
+        for (TextLine line: text) {
+            line.draw(y + upperBound, y + lowerBound);
+        }
 
-            if (s.equals("")) {
-                yOffset += lineHeight;
-                continue;
-            }
-            DrawUtils.drawStringWithLeftAlignment(s, (int) (x + width * 0.03), (int) (yOffset));
-            yOffset += lineHeight;
+        if(scrollbar != null) {
+            scrollbar.draw();
         }
     }
 
@@ -179,6 +144,10 @@ public class MessageWindow {
 
         if(hasInsideTheTitleBar(mouseX, mouseY)) {
             selected = true;
+        }
+
+        if(scrollbar != null) {
+            scrollbar.setSelected(scrollbar.hasInside(mouseX, mouseY));
         }
     }
 
@@ -207,6 +176,11 @@ public class MessageWindow {
             b.setHover(mouseX, mouseY, true);
         }
 
+        if(scrollbar != null && scrollbar.getSelected()) {
+            scrollbar.onMouseDragged(text, mouseY, prevMouseY);
+            return true;
+        }
+
         if(selected) {
             x += mouseX - prevMouseX;
             y += mouseY - prevMouseY;
@@ -214,9 +188,16 @@ public class MessageWindow {
             for(Button b: buttons) {
                 b.move( mouseX - prevMouseX, mouseY - prevMouseY);
             }
+            for(TextLine line: text) {
+                line.move((int)(mouseX - prevMouseX), (int)(mouseY - prevMouseY));
+            }
+
+            if(scrollbar != null) {
+                scrollbar.shiftEverything((int)(mouseX - prevMouseX), (int)(mouseY - prevMouseY));
+            }
             return true;
         }
-        return false;
+        return hasInside(mouseX, mouseY);
     }
 
     /**
@@ -224,18 +205,9 @@ public class MessageWindow {
      * @param rotation direction of scrolling. Can be either 1 [down] or -1 [up]
      */
     void onMouseScrolled(int rotation) {
-        if(!visibility || heightOfAllText < lowerBound-upperBound) return;
+        if(!visibility || heightOfAllText < lowerBound-upperBound || scrollbar == null) return;
 
-        double factor = -20*rotation;
-
-        // aligns the text to lower and upper bound
-        if(scrollOffset+factor > 0) {
-            factor = -scrollOffset;
-        } else if(scrollOffset+heightOfAllText+upperBound+factor < lowerBound) {
-            factor = lowerBound-scrollOffset-heightOfAllText-upperBound;
-        }
-
-        scrollOffset += factor;
+        scrollbar.onMouseWheelMoved(text, rotation);
     }
 
     /**
@@ -280,13 +252,17 @@ public class MessageWindow {
         visibility = !visibility;
     }
 
-    ArrayList<Button> getButtons() { return buttons; }
-
     void addButton(int x, int y, int width, int height, String text) {
-        buttons.add(new ClickableButton(x, y, width, height, text, (int)(fontSize*1.2)));
+        buttons.add(new ClickableButton(x, y, width, height, text, (int)(FONT_SIZE *1.2)));
     }
 
     void setTitle(String line) {
         this.title = line;
+    }
+
+    public void disableScrollbar() {
+        if(scrollbar != null) {
+            scrollbar.setSelected(false);
+        }
     }
 }

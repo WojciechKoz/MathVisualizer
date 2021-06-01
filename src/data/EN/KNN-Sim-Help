@@ -1,0 +1,23 @@
+K Nearest Neighbours
+Welcome to KNN Simulation.
+
+To add new point press the right mouse button at chosen place.
+To move a point to a different place hold left mouse button and move the point to chosen place.
+To delete a point press right mouse button on the point you wish to delete.
+The default color of every point is gray, meaning that this point is a test sample (not the training one).
+To change the color of the point and also the class of the sample move the mouse over chosen point
+and press number between 1 and 6. To make the point neutral again press the 0 button with the mouse over the point.
+The predicted color of the neutral point is representing by the small circle inside the point.
+For mor information please check out the "First steps" available in the main menu.
+
+The user interface of KNN has two elements - connections and rings.
+Connections symbolize distances between neutral point and nearest training points (neighbours).
+The connection to the furthest neighbour makes a ring, showing the area contains all neighbours of this neutral point.
+Those training samples in the area make the prediction of the neutral sample using voting.
+The color of the ring is the same as the predicted color.
+
+This algorithm has one hyperparameter k, indicates how many nearest neighbours take part in voting.
+You can change the value of k from 1 to 10 using the slider on the left side of the screen.
+
+If it's impossible to decide the vote (a few class on the first place), algorithm decreases the k value by one,
+which means that it deletes the farthest neighbour and then it votes again.

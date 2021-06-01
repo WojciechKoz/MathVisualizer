@@ -10,8 +10,8 @@ public class LRCoordinateSystem extends CoordinateSystem {
     protected double a, b;
     protected boolean regressionLineVisibility, errorVisibility;
 
-    LRCoordinateSystem(Graphics2D g2, int width, int height, Panel mainPanel) {
-        super(g2, width, height, mainPanel);
+    LRCoordinateSystem(int width, int height, Panel mainPanel) {
+        super(width, height, mainPanel);
         menuName = "Visualizations";
 
         regressionLineVisibility = true;
@@ -24,7 +24,7 @@ public class LRCoordinateSystem extends CoordinateSystem {
     @Override
     void initComponents() {
         super.initComponents();
-        messageWindow = new MessageWindow(this, "data/Linear-Reg-Sim-About");
+        messageWindow = new MessageWindow(this, "data/"+StringsResources.languageShortcut()+"/Linear-Reg-Sim-Help");
     }
 
     /**
@@ -34,9 +34,9 @@ public class LRCoordinateSystem extends CoordinateSystem {
         String[] buttonsLabels = new String[] {StringsResources.line(), StringsResources.errors()};
         Boolean[] buttonsValues = new Boolean[] {true, true};
 
-        menu.addCheckBoxButtons(buttonsLabels, buttonsValues, height/20);
-        menu.addValueLabel("y", "0x + 0", height/20.0);
-        menu.addValueLabel(StringsResources.error(), "0", height/20.0);
+        menu.addCheckBoxButtons(buttonsLabels, buttonsValues, STANDARD_BUTTON_HEIGHT);
+        menu.addValueLabel("y", "0x + 0", STANDARD_BUTTON_HEIGHT);
+        menu.addValueLabel(StringsResources.error(), "0", STANDARD_BUTTON_HEIGHT);
     }
 
     /**
@@ -110,8 +110,8 @@ public class LRCoordinateSystem extends CoordinateSystem {
      */
     void drawRegressionLine() {
         if(regressionLineVisibility){
-            g2.setColor(DrawUtils.green);
-            g2.setStroke(new BasicStroke(3));
+            DrawUtils.g2.setColor(DrawUtils.green);
+            DrawUtils.g2.setStroke(new BasicStroke(3));
             drawStraightLine(a, b);
         }
 
@@ -125,14 +125,14 @@ public class LRCoordinateSystem extends CoordinateSystem {
      * of y value of the line with the same x as sample.
      */
     void drawErrors() {
-        g2.setColor(DrawUtils.transparentRed);
+        DrawUtils.g2.setColor(DrawUtils.transparentRed);
         for(Sample sample: samples) {
             int difference =  (int)((a*sample.getX() + b - sample.getY())*scale);
 
             if(difference > 0) {
-                g2.fillRect((int) screenX(sample.getX()), (int) screenY(a * sample.getX() + b), difference, difference);
+                DrawUtils.g2.fillRect((int) screenX(sample.getX()), (int) screenY(a * sample.getX() + b), difference, difference);
             } else {
-                g2.fillRect((int) screenX(sample.getX()) + difference, (int) screenY(sample.getY()), -difference, -difference);
+                DrawUtils.g2.fillRect((int) screenX(sample.getX()) + difference, (int) screenY(sample.getY()), -difference, -difference);
             }
         }
     }

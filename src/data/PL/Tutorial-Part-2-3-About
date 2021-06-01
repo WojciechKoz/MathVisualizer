@@ -1,0 +1,10 @@
+Samouczek
+Mamy gotowy zbiór uczący.
+Teraz możemy sprawdzać, czy nowy punkt powinien być czerwony czy algorytm stwierdzi, że
+powinien być niebieski. Dodaj dwa nowe punkty w żółte kwadraty. Użyj prawego przycisku
+myszy.
+
+Dla punktów, które są po tej samej stronie linii co punkty czerwone, algorytm będzie predykował
+ich kolor także na czerwony, jeśli będzie po stronie niebieskich, to zostanie oznaczony jako
+punkt niebieski małym kółeczkiem w środku punktu. Tylko dla szarych punktów sprawdzany jest
+predykowany kolor.

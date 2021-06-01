@@ -37,6 +37,7 @@ public class DrawUtils {
     public static final Color lightGreen = new Color(100, 255, 100);
     public static final Color darkGreen = new Color(50, 100, 50);
     public static final Color lightBlue = new Color(100, 100, 255);
+    public static final Color darkBlue = new Color(30, 30, 220);
 
     // colors of samples
     static Color[] sampleColors = new Color[] {
@@ -48,6 +49,35 @@ public class DrawUtils {
             new Color(200, 50, 200),
             new Color(50, 200, 200)
     };
+
+    static Color[] darkPalette = new Color[] { black, transparentBlack, white, orange, darkGray };
+    static Color[] lightPalette = new Color[] { white, transparentWhite, black, lightRed, darkRed};
+
+    static Color background = black;
+    static Color windowsBackground = transparentBlack;
+    static Color fontColor = white;
+    static Color primaryColor = orange;
+    static Color secondaryColor = darkGray;
+    static boolean darkMode = true;
+
+    static void goDarkMode() {
+        background = darkPalette[0];
+        windowsBackground= darkPalette[1];
+        fontColor = darkPalette[2];
+        primaryColor = darkPalette[3];
+        secondaryColor = darkPalette[4];
+        darkMode = true;
+    }
+
+    static void goLightMode() {
+        background = lightPalette[0];
+        windowsBackground= lightPalette[1];
+        fontColor = lightPalette[2];
+        primaryColor = lightPalette[3];
+        secondaryColor = lightPalette[4];
+        darkMode = false;
+    }
+
 
 
     /**
@@ -139,7 +169,7 @@ public class DrawUtils {
             ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("fonts/"+fontName)));
         } catch (IOException |FontFormatException e) {
             //Handle exception
-            System.out.println("There is no fond " + fontName);
+            System.out.println("There is no font " + fontName);
         }
     }
 

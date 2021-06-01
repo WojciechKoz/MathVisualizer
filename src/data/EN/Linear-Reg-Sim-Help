@@ -1,0 +1,17 @@
+Linear Regression
+Welcome to 2x2 Matrix Simulation.
+
+To add new point press the right mouse button at chosen place.
+To move a point to a different place hold left mouse button and move the point to chosen place.
+To delete a point press right mouse button on the point you wish to delete.
+The default color of every point is blue.
+In order to make the simulation more clear you can change the colour of every point.
+To change the color of the point move the mouse over chosen point
+and press number between 1 and 6.
+For mor information please check out the "First steps" available in the main menu.
+
+The regression line is that green line that tries to fit all added points the best as possible.
+Its exact formula is printed on the left hand side of the screen.
+
+The SSE (sum of squared errors) is represented by red squares.
+The sum of the areas of all squares is the regression error.

@@ -1,0 +1,33 @@
+2x2 Matrix Simulation
+Welcome to 2x2 Matrix Simulation.
+
+To add new point press the right mouse button at chosen place.
+To move a point to a different place hold left mouse button and move the point to chosen place.
+To delete a point press right mouse button on the point you wish to delete.
+The default color of every point is blue.
+In order to make the simulation more clear you can change the colour of every point.
+To change the color of the point move the mouse over chosen point
+and press number between 1 and 6.
+For mor information please check out the "First steps" available in the main menu.
+
+The matrix consists of two vectors: red and green.
+You can change the values of them, pressing the left mouse button and move the vector to the different place.
+Initial values of vectors are (1,0) and (0,1).
+Additionally the simulation draws a grid that shows how the matrix space looks like.
+
+The determinant of the matrix is represented by a parallelogram spanning the
+bases of that matrix. Its area is the absolute value of the determinant of that matrix.
+The exact value of the determinant is displayed in the
+side menu on the left side of the screen under the matrix values.
+
+Transposition and inverse of this matrix are represented by another matrices.
+Color of basis of the transpose is blue and color of the inverse matrix is yellow.
+
+Eigenvectors if exist are drawn as straight white lines. However if the eigenvalues are
+not real eigenvectors are not drawn at all. Eigenvalues are displayed below the determinant.
+
+Projected vectors are the outcome of the multiplication of the matrix and vectors added by the user.
+
+If the matrix is almost singular, the simulation does not draw
+the matrix grid because the number of lines goes to infinity and
+this can slow down the entire program considerably.

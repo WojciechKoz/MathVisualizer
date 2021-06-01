@@ -61,7 +61,7 @@ class MenuScenarios {
      * @return new menu
      */
     private static GraphicsInterface createMenu(String title, String [] buttons) {
-        Menu graphics = new Menu(panel.getG2(), panel.getWidth(), panel.getHeight(), panel, title);
+        Menu graphics = new Menu(panel.getWidth(), panel.getHeight(), panel, title);
 
         graphics.addButtons(buttons);
 
@@ -77,7 +77,7 @@ class MenuScenarios {
         final String[] options = mainMenuButtons();
 
         if(buttonLabel.equals(options[0])) {
-            return new LRTutorialCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+            return new LRTutorialCoordinateSystem(panel.getWidth(), panel.getHeight(), panel);
         }
         if(buttonLabel.equals(options[1])) {
             return createMenu(StringsResources.visualizations(), visualizationButtons());
@@ -86,7 +86,7 @@ class MenuScenarios {
             return createMenu(StringsResources.theory(), theoryButtons());
         }
         if(buttonLabel.equals(options[3])) {
-            return createMenu(StringsResources.settings(), new String[]{});
+            return new SettingsMenu(panel.getWidth(), panel.getHeight(), panel);
         }
         if(buttonLabel.equals(options[4])) {
             panel.getWindow().dispose(); System.exit(0);
@@ -103,19 +103,19 @@ class MenuScenarios {
         String[] options = visualizationButtons();
 
         if(buttonLabel.equals(options[0])) {
-            return new MatrixCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+            return new MatrixCoordinateSystem(panel.getWidth(), panel.getHeight(), panel);
         }
         if(buttonLabel.equals(options[1])) {
-            return new LRCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+            return new LRCoordinateSystem(panel.getWidth(), panel.getHeight(), panel);
         }
         if(buttonLabel.equals(options[2])) {
-            return new LogCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+            return new LogCoordinateSystem(panel.getWidth(), panel.getHeight(), panel);
         }
         if(buttonLabel.equals(options[3])) {
-            return new KNNCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+            return new KNNCoordinateSystem(panel.getWidth(), panel.getHeight(), panel);
         }
         if(buttonLabel.equals(options[4])) {
-            return new PCACoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+            return new PCACoordinateSystem(panel.getWidth(), panel.getHeight(), panel);
         }
         return createMenu(StringsResources.title(), mainMenuButtons());
     }
@@ -157,8 +157,11 @@ class MenuScenarios {
         if ("Visualizations".equals(buttonLabel)) {
             return createMenu(StringsResources.visualizations(), visualizationButtons());
         }
+        if("Main Menu".equals(buttonLabel)) {
+            return createMenu(StringsResources.title(), mainMenuButtons());
+        }
         if(buttonLabel.equals("tutorial-part-2")) {
-            return new LogTutorialCoordinateSystem(panel.getG2(), panel.getWidth(), panel.getHeight(), panel);
+            return new LogTutorialCoordinateSystem(panel.getWidth(), panel.getHeight(), panel);
         }
         return createMenu(StringsResources.title(), mainMenuButtons());
     }

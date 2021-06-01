@@ -1,0 +1,25 @@
+Samouczek
+Dobrze sobie radzisz! Następny etap, to menu po lewej stronie ekranu. Przyciśnij pierwszy
+przycisk, by zobaczyć co znajduje się w menu.
+
+Można tutaj zobaczyć dokładne wartości linii, punktów, które dodaliśmy a nawet błąd regresji
+liniowej, który mówi jak daleko linia jest od wszystkich punktów.
+
+Są tu też przyciski odpowiedzialne, za widoczność pewnych graficznych wizualizacji, takich jak
+siatka systemu albo graficzna interpretacja błędu regresji.
+Pobaw się chwile z panelem, jednak uważaj na przycisk "Menu Główne", by nie zakończyć
+przedwcześnie samouczka.
+
+Przycisk "Pomoc" pokazuje i ukrywa informację o obecnej wizualizacji.
+Możesz przycisnąć go dwa razy, by schować, a następnie pokazać okienko z tekstem, który czytasz.
+
+Świetną rzeczą w panelu bocznym jest możliwość poruszania punktów za pomocą klawiatury.
+
+By poruszyć punkt używając klawiatury - naciśnij lewy przycisk myszy na informacje o punkcie, który
+chcesz poruszyć. Jeśli nie jesteś pewny, który to punkt, to gdy najedziesz myszą na napis, to
+wokół odpowiadającego punktu pojawi się pierścień. Można to wykorzystać także w drugą stronę -
+najedź na punkt, a odpowiadające informacje o tym punkcie w panelu podświetlą się.
+
+Twoje zadanie to poruszyć punkty za pomocą klawiatury, tak by miały takie wartości:
+(-1.5, 1.5), (-0.5, 2.5), (0.5, 3.5). Nie przejmuj się kolejnością.
+Zrób to używając klawiatury.
